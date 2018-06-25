@@ -1,0 +1,135 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "node-occ@^0.2.1",
+        "scope": null,
+        "escapedName": "node-occ",
+        "name": "node-occ",
+        "rawSpec": "^0.2.1",
+        "spec": ">=0.2.1 <0.3.0",
+        "type": "range"
+      },
+      "C:\\Users\\antony\\projects\\cartoonline_06_06"
+    ]
+  ],
+  "_from": "node-occ@>=0.2.1 <0.3.0",
+  "_id": "node-occ@0.2.1",
+  "_inCache": true,
+  "_location": "/node-occ",
+  "_nodeVersion": "6.11.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/node-occ-0.2.1.tgz_1497371227035_0.09952269261702895"
+  },
+  "_npmUser": {
+    "name": "erossignon",
+    "email": "etienne.rossignon@gadz.org"
+  },
+  "_npmVersion": "5.0.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "node-occ@^0.2.1",
+    "scope": null,
+    "escapedName": "node-occ",
+    "name": "node-occ",
+    "rawSpec": "^0.2.1",
+    "spec": ">=0.2.1 <0.3.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-occ/-/node-occ-0.2.1.tgz",
+  "_shasum": "be4f5e8a1576ae1ffdf3fd9e92549cf19780ce6f",
+  "_shrinkwrap": null,
+  "_spec": "node-occ@^0.2.1",
+  "_where": "C:\\Users\\antony\\projects\\cartoonline_06_06",
+  "author": {
+    "name": "Etienne Rossignon"
+  },
+  "binary": {
+    "module_name": "occ",
+    "module_path": "./lib/binding/",
+    "host-aws": "https://nodeocc.s3-us-west-1.amazonaws.com",
+    "host": "https://github.com/openwebcad/node-occ/releases/download/",
+    "remote_path": "{version}"
+  },
+  "bugs": {
+    "url": "https://github.com/openwebcad/node-occ/issues"
+  },
+  "dependencies": {
+    "async": "^2.4.1",
+    "colors": "*",
+    "gettemporaryfilepath": "1.0.0",
+    "nan": "^2.6.2",
+    "node-pre-gyp": "^0.6.36",
+    "pace": "~0.0.4",
+    "progress": "~2.0.0"
+  },
+  "description": "OpenCascade OCCT Wrapper for Node js",
+  "devDependencies": {
+    "aws-sdk": "2.x",
+    "electron-rebuild": "^1.5.11",
+    "eslint": "^4.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-require-path-exists": "^1.1.7",
+    "eslint-plugin-standard": "^3.0.1",
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-nodeunit": "~1.0.0",
+    "grunt-contrib-uglify": "3.0.1",
+    "grunt-docco": "~0.5.0",
+    "grunt-mocha-cli": "~3.0.0",
+    "mocha": "~3.4.2",
+    "should": "~11.2.1"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dist": {
+    "integrity": "sha512-SEvuVh5JJYahErjFxP/9eama4sJmk6kJWczI9IzhMIUwXs7xGY9Fv2XDDeOjKnROfvbPR8asnHbPCWIPIie7Vg==",
+    "shasum": "be4f5e8a1576ae1ffdf3fd9e92549cf19780ce6f",
+    "tarball": "https://registry.npmjs.org/node-occ/-/node-occ-0.2.1.tgz"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "gitHead": "e157b5b8f3b9b6f1127835d1cb7dadd99ffe9d51",
+  "gypfile": true,
+  "homepage": "https://github.com/openwebcad/node-occ#readme",
+  "keywords": [
+    "3D",
+    "CAD",
+    "OpenCascade",
+    "OCE",
+    "Solid Modeler",
+    "geometry",
+    "BRep"
+  ],
+  "license": "MIT",
+  "main": "index",
+  "maintainers": [
+    {
+      "name": "erossignon",
+      "email": "etienne.rossignon@gadz.org"
+    }
+  ],
+  "name": "node-occ",
+  "optionalDependencies": {},
+  "preferGlobal": "true",
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openwebcad/node-occ.git"
+  },
+  "scripts": {
+    "doc": "grunt doc",
+    "install": "node-pre-gyp install --fallback-to-build",
+    "lint": "eslint lib test bin",
+    "test": "mocha -R spec"
+  },
+  "version": "0.2.1"
+}
