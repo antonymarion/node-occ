@@ -72,7 +72,7 @@ df
 
 
 IF NOT DEFINED electron_version (
-   SET electron_version=1.4.14
+   SET electron_version=2.1.0
 )
 
 SET npm_config_target=%electron_version%
