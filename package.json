@@ -1,5 +1,5 @@
 {
-  "name": "node-occ-",
+  "name": "@antonymarion/node-occ",
   "version": "0.3.0",
   "description": "OpenCascade OCCT Wrapper for Node js",
   "preferGlobal": "true",
@@ -28,7 +28,7 @@
   },
   "main": "index",
   "author": {
-    "name": "Etienne Rossignon"
+    "name": "Antony MARION"
   },
   "engines": {
     "node": "*"
