@@ -1,0 +1,134 @@
+# ---------------------------------------------------------------------------------
+#
+# ---------------------------------------------------------------------------------
+init:
+  - git config --global core.autocrlf input
+
+environment:
+
+  node_pre_gyp_accessKeyId:
+    secure: 6NwB/CPB/FsDOcPZUoJIQQc751Vkj3LYc2oPxGXo/Uw=
+  node_pre_gyp_secretAccessKey:
+    secure: FcV0jIJp3lNZR/6fGNf8xNjZ13s2pkubaYlmtFkplZYfGQgSPguUMS/CqjjRWteD
+  NODE_PRE_GYP_GITHUB_TOKEN:
+    secure: qa898q4P1jnKsCJ507wNDTaQV52i/qDV0mp9DxsC321ZujDEZDvHKR+pOqRT6GJY
+
+  # these variables are common to all jobs
+  # -------------- 14 Visual Studio 2015
+  #  msvs_toolset: 14
+  # -------------- 12 VisualStudio 2013
+  msvs_toolset: 12
+  VisualStudioVersion: "12"
+  matrix:
+
+    # - nodejs_version: 6
+    #   platform: x86
+
+    - nodejs_version: 6
+      platform: x64
+
+    # - nodejs_version: 7
+    #   platform: x86
+
+    - nodejs_version: 7
+      platform: x64
+
+    - nodejs_version: 8
+      platform: x64
+
+    # - electron_version: "1.4.14"
+    #   nodejs_version: 6
+    #   platform: x86
+
+    - electron_version: "1.4.14"
+      nodejs_version: 6
+      platform: x64
+
+    # - electron_version: "1.6.10"
+    #   nodejs_version: 6
+    #   platform: x86
+
+    - electron_version: "1.6.10"
+      nodejs_version: 6
+      platform: x64
+
+    # - electron_version: "1.6.10"
+    #   nodejs_version: 7.4
+    #   platform: x86
+    
+    - electron_version: "2.0.4"
+      nodejs_version: 10.6.0
+      platform: x64
+
+    # - electron_version: "2.0.4"
+    #   nodejs_version: 10.6.0
+    #   platform: x86
+
+
+
+# clone directory
+clone_folder: c:\projects\node-occ
+
+clone_depth: 5
+
+matrix:
+  fast_finish: false
+  allow_failures:
+    - nodejs_version: 7
+
+
+install:
+#- ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) $env:platform;
+- ps: Install-Product node $env:nodejs_version $env:platform;
+- ps: $env:Path += ";$(pwd)\node_modules\.bin";
+
+# Check if we're building the latest tag, if so
+# then we publish the binaries if tests pass.
+- ps: >
+    if ($env:appveyor_repo_tag -match "true" -and ("$(git describe --tags --always HEAD)" -eq $env:appveyor_repo_tag_name)) {
+      $env:publish_binary = 1;
+    } else {
+      $env:publish_binary = 0;
+    }
+    true;
+- ps: >
+    if ($env:publish_binary -eq 1) {
+      "We're publishing a binary!" | Write-Host
+    } else {
+      "We're not publishing a binary" | Write-Host
+    }
+    true;
+
+
+- cmd: npm install mocha node-pre-gyp-github -g
+- cmd: setenv.bat 64
+- cmd: build.bat %PLATFORM%
+
+
+build_script:
+- cmd: node --version
+# - npm install --build-from-source --target_arch=%npm_config_arch%
+
+cache:
+  # - c:\projects\node-occ\occt-7.1.0
+
+
+configuration:
+  - Release
+
+test_script:
+  - IF DEFINED electron_version     (electron test_electron)
+  - IF NOT DEFINED electron_version (npm test)
+
+after_test:
+  - IF %PUBLISH_BINARY% == 1        (node-pre-gyp package 2>&1)
+  - # IF %PUBLISH_BINARY% == 1        (node-pre-gyp publish 2>&1)
+  - # IF %PUBLISH_BINARY% == 1        (node-pre-gyp-github publish --release 2>&1)
+  - IF %PUBLISH_BINARY% == 1        (node-pre-gyp-github publish)
+  -  # IF %PUBLISH_BINARY% == 1        (node-pre-gyp-github publish  2>&1)
+  - IF %PUBLISH_BINARY% == 1        (node-pre-gyp clean)
+  - IF %PUBLISH_BINARY% == 1        (npm install --fallback-to-build=false)
+
+deploy: off
+
+build: off
