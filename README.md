@@ -1,4 +1,3 @@
-[![NSP Status](https://nodesecurity.io/orgs/node-opcua/projects/cb2eff26-fb17-4d6b-ab89-7fafafdc88bc/badge)](https://nodesecurity.io/orgs/node-opcua/projects/cb2eff26-fb17-4d6b-ab89-7fafafdc88bc)
 
 # node-occ
 
@@ -10,8 +9,8 @@ It provides a simple yet powerful javascript api to construct 3D geometry models
 This project comes with a set of V8 wrappers around OpenCascade API and a sample web application.
 
 [![Build Status](https://travis-ci.org/OpenWebCAD/node-occ.png?branch=master)](https://travis-ci.org/OpenWebCAD/node-occ)
-[![Build status](https://ci.appveyor.com/api/projects/status/s5eaux89v2c0wmu4?svg=true)](https://ci.appveyor.com/project/erossignon/node-occ-6ktv4)
-
+[![Build status](https://ci.appveyor.com/api/projects/status/ksmdiboa4meeq4k9?svg=true)](https://ci.appveyor.com/project/antonymarion/node-occ)
+[![NSP Status](https://nodesecurity.io/orgs/node-occ/projects/d9eaf6fe-2910-424c-b2ff-aa9bf16fcfad/badge)](https://nodesecurity.io/orgs/node-occ/projects/d9eaf6fe-2910-424c-b2ff-aa9bf16fcfad)
 
 ### quick example
 
