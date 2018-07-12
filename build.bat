@@ -99,14 +99,13 @@ if  NOT '%ERRORLEVEL%'=='0'   goto handle_test_error
 node_modules\.bin\electron-mocha test
 if  NOT '%ERRORLEVEL%'=='0'   goto handle_test_error
 
-goto done
 
 REM REM ----------------------------------------------------------
 REM REM  PACKAGE
 REM REM ----------------------------------------------------------
-REM SET PACKAGE=node-occ-package.zip
-REM 7z a %PACKAGE% .\build\Release\*.*
-REM appveyor PushArtifact %PACKAGE%
+SET PACKAGE=node-occ-package.zip
+7z a %PACKAGE% .\build\Release\*.*
+appveyor PushArtifact %PACKAGE%
 
 goto done
 :handle_npm_install_error
