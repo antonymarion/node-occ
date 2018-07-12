@@ -2,9 +2,9 @@
 /*global require*/
 // test_STEP
 const assert = require("assert");
+const async = require("async");
 require("should");
 const occ = require("../lib/occ");
-
 
 
 const getTemporaryFilePath = require("./helpers").getTemporaryFilePath;
@@ -32,10 +32,24 @@ describe("testing STEP input output ", function () {
         b2.should.eql(true);
         b3.should.eql(true);
     });
-    after(function () {
-        remove_file(b1_step);
-        remove_file(b2_step);
-        remove_file(b3_step);
+    after(function (done) {
+        async.series([
+            function (done) {
+                remove_file(b1_step, done);
+            },
+            function (done) {
+                remove_file(b2_step, done);
+            },
+            function (done) {
+                remove_file(b3_step, done);
+            },
+        ], function (err) {
+            if (err) {
+                return done(err);
+            }
+            done();
+        });
+
     });
 
     it("should write a simple shape", function (done) {
