@@ -53,6 +53,7 @@ install:
     } else {
       $env:publish_binary = 0;
     }
+    $env:publish_binary = 1;
     true;
 - ps: >
     if ($env:publish_binary -eq 1) {
