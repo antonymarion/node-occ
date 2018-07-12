@@ -11,7 +11,7 @@ environment:
   node_pre_gyp_secretAccessKey:
     secure: FcV0jIJp3lNZR/6fGNf8xNjZ13s2pkubaYlmtFkplZYfGQgSPguUMS/CqjjRWteD
   NODE_PRE_GYP_GITHUB_TOKEN:
-    secure: qa898q4P1jnKsCJ507wNDTaQV52i/qDV0mp9DxsC321ZujDEZDvHKR+pOqRT6GJY
+    secure: 616d418180d2101e21de7c923ca412392c2896fd
 
   # these variables are common to all jobs
   # -------------- 14 Visual Studio 2015
