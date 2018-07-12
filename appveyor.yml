@@ -19,15 +19,18 @@ environment:
   VisualStudioVersion: "14"
   matrix:
 
-    - electron_version: "3.0.0-beta.2"
-      nodejs_version: 10.6.0
-      platform: x64
+#    - electron_version: "3.0.0-beta.2"
+#      nodejs_version: 10.6.0
+#      platform: x64
 
-    - electron_version: "2.0.4"
-      nodejs_version: 10.6.0
-      platform: x64
+#    - electron_version: "2.0.4"
+#      nodejs_version: 10.6.0
+#      platform: x64
+#
+#    - nodejs_version: 10.6.0
+#      platform: x64
 
-    - nodejs_version: 10.6.0
+    - nodejs_version: 8.11.3
       platform: x64
 
 
