@@ -1,3 +1,5 @@
+[![NSP Status](https://nodesecurity.io/orgs/node-opcua/projects/cb2eff26-fb17-4d6b-ab89-7fafafdc88bc/badge)](https://nodesecurity.io/orgs/node-opcua/projects/cb2eff26-fb17-4d6b-ab89-7fafafdc88bc)
+
 # node-occ
 
 OpenCascade nodejs extension for solid modeling.
