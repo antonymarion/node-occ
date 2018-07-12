@@ -7,11 +7,11 @@ init:
 environment:
 
   node_pre_gyp_accessKeyId:
-    secure: 6NwB/CPB/FsDOcPZUoJIQQc751Vkj3LYc2oPxGXo/Uw=
+    secure: cJ/7hswSDcWkayNf2FzgrU5hiPD3779PTNwUQwpC4mNXSTpjj0GRLrCTMM+bG9+4
   node_pre_gyp_secretAccessKey:
-    secure: FcV0jIJp3lNZR/6fGNf8xNjZ13s2pkubaYlmtFkplZYfGQgSPguUMS/CqjjRWteD
+    secure: cJ/7hswSDcWkayNf2FzgrU5hiPD3779PTNwUQwpC4mNXSTpjj0GRLrCTMM+bG9+4
   NODE_PRE_GYP_GITHUB_TOKEN:
-    secure: A8MBLFw4xKasxJc5nWBwIVxiQorgLGFb/2RAAP+Fyir/9CbXvKOSmQHgmuTv9tjh
+    secure: cJ/7hswSDcWkayNf2FzgrU5hiPD3779PTNwUQwpC4mNXSTpjj0GRLrCTMM+bG9+4
 
   # these variables are common to all jobs
   # -------------- 14 Visual Studio 2015
