@@ -1,6 +1,6 @@
 {
   "name": "@antonymarion/node-occ",
-  "version": "0.3.24",
+  "version": "0.3.25",
   "description": "OpenCascade OCCT Wrapper for Node js",
   "preferGlobal": "true",
   "dependencies": {
@@ -55,7 +55,6 @@
   "binary": {
     "module_name": "occ",
     "module_path": "./lib/binding/",
-    "host-aws": "https://nodeocc.s3-us-west-1.amazonaws.com",
     "host": "https://github.com/antonymarion/node-occ/releases/download/",
     "remote_path": "{version}"
   },
