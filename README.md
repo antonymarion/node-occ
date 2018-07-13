@@ -10,7 +10,7 @@ This project comes with a set of V8 wrappers around OpenCascade API and a sample
 
 [![Build Status](https://travis-ci.org/OpenWebCAD/node-occ.png?branch=master)](https://travis-ci.org/OpenWebCAD/node-occ)
 [![Build status](https://ci.appveyor.com/api/projects/status/ksmdiboa4meeq4k9?svg=true)](https://ci.appveyor.com/project/antonymarion/node-occ)
-[![NSP Status](https://nodesecurity.io/orgs/node-occ/projects/d9eaf6fe-2910-424c-b2ff-aa9bf16fcfad/badge)](https://nodesecurity.io/orgs/node-occ/projects/d9eaf6fe-2910-424c-b2ff-aa9bf16fcfad)
+[![NSP Status](https://nodesecurity.io/orgs/node-occ/projects/2fc97cba-1e71-4d43-b837-2b0c33a3de08/badge)](https://nodesecurity.io/orgs/node-occ/projects/2fc97cba-1e71-4d43-b837-2b0c33a3de08)
 
 ### quick example
 
