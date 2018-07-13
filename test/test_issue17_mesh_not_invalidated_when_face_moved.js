@@ -35,7 +35,7 @@ describe("issue#17 testing that mesh get invalidated ", function () {
         return face;
     }
 
-    it("should translate a face", function (done) {
+    xit("should translate a face", function (done) {
         let face = constructFaceWithWire();
 
         const vertices_before = face.getWires()[0].getVertices();
