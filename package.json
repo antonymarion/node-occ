@@ -54,7 +54,7 @@
   },
   "binary": {
     "module_name": "occ",
-    "module_path": "./lib/binding/",
+    "module_path": "./lib/",
     "host": "https://github.com/antonymarion/node-occ/releases/download/",
     "remote_path": "{version}"
   },
