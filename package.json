@@ -1,6 +1,6 @@
 {
   "name": "@antonymarion/node-occ",
-  "version": "0.3.25",
+  "version": "0.3.26",
   "description": "OpenCascade OCCT Wrapper for Node js",
   "preferGlobal": "true",
   "dependencies": {
