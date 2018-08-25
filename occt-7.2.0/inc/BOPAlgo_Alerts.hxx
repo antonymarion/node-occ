@@ -100,4 +100,11 @@ DEFINE_ALERT_WITH_SHAPE(BOPAlgo_AlertUnableToRemoveTheFeature)
 //! The Feature Removal algorithm has failed
 DEFINE_SIMPLE_ALERT(BOPAlgo_AlertRemoveFeaturesFailed)
 
+//! Some of the faces passed to the Solid Builder algorithm have not been classified
+//! and not used for solids creation
+DEFINE_ALERT_WITH_SHAPE(BOPAlgo_AlertSolidBuilderUnusedFaces)
+
+//! Unable to orient the shape correctly
+DEFINE_ALERT_WITH_SHAPE(BOPAlgo_AlertUnableToOrientTheShape)
+
 #endif // _BOPAlgo_Alerts_HeaderFile
