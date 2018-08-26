@@ -35,7 +35,7 @@ describe("issue#17 testing that mesh get invalidated ", function () {
         return face;
     }
 
-    xit("should translate a face", function (done) {
+    it("should translate a face", function (done) {
         let face = constructFaceWithWire();
 
         const vertices_before = face.getWires()[0].getVertices();
@@ -62,7 +62,7 @@ describe("issue#17 testing that mesh get invalidated ", function () {
         done();
     });
 
-    xit("#17-B should provide a translated mesh when face is translated", function (done) {
+    it("#17-B should provide a translated mesh when face is translated", function (done) {
 
         let face = constructFaceWithWire();
         face.hasMesh.should.equal(false);
