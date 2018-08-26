@@ -15,16 +15,18 @@ environment:
 
   # these variables are common to all jobs
   # -------------- 14 Visual Studio 2015
-  msvs_toolset: 14
-  VisualStudioVersion: "14"
+#  msvs_toolset: 14
+#  VisualStudioVersion: "14"
+  msvs_toolset: 12
+  VisualStudioVersion: "12"
   matrix:
 
     - electron_version: "3.0.0-beta.2"
-      nodejs_version: 10.6.0
+      nodejs_version: 10.9.0
       platform: x64
 
     - electron_version: "2.0.4"
-      nodejs_version: 10.6.0
+      nodejs_version: 10.9.0
       platform: x64
 
 #    - electron_version: "3.0.0-beta.2"
@@ -35,10 +37,10 @@ environment:
 #      nodejs_version: 10.6.0
 #      platform: x86
 
-    - nodejs_version: 10.6.0
+    - nodejs_version: 10.9.0
       platform: x64
 
-    - nodejs_version: 8.11.3
+    - nodejs_version: 8.11.4
       platform: x64
 
     - nodejs_version: 7.10.1
