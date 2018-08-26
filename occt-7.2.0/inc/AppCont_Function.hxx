@@ -28,55 +28,56 @@ class AppCont_Function
 {
 public:
 
-  AppCont_Function()
+  Standard_EXPORT AppCont_Function()
   {
     myNbPnt = -1;
     myNbPnt2d = -1;
   }
 
   //! Get number of 3d and 2d points returned by "Value" and "D1" functions.
-  void GetNumberOfPoints(Standard_Integer& theNbPnt, Standard_Integer& theNbPnt2d) const
+  Standard_EXPORT void GetNumberOfPoints(Standard_Integer& theNbPnt,
+                                         Standard_Integer& theNbPnt2d) const
   {
     theNbPnt = myNbPnt;
     theNbPnt2d = myNbPnt2d;
   }
 
   //! Get number of 3d points returned by "Value" and "D1" functions.
-  Standard_Integer GetNbOf3dPoints() const
+  Standard_EXPORT Standard_Integer GetNbOf3dPoints() const
   {
     return myNbPnt;
   }
 
   //! Get number of 2d points returned by "Value" and "D1" functions.
-  Standard_Integer GetNbOf2dPoints() const
+  Standard_EXPORT Standard_Integer GetNbOf2dPoints() const
   {
     return myNbPnt2d;
   }
 
   //! Destructor
-  virtual ~AppCont_Function() {}
+  Standard_EXPORT virtual ~AppCont_Function() {}
 
   //! Returns the first parameter of the function.
-  virtual Standard_Real FirstParameter() const = 0;
+  Standard_EXPORT virtual Standard_Real FirstParameter() const = 0;
 
   //! Returns the last parameter of the function.
-  virtual Standard_Real LastParameter() const = 0;
+  Standard_EXPORT virtual Standard_Real LastParameter() const = 0;
 
   //! Returns the point at parameter <theU>.
-  virtual Standard_Boolean Value (const Standard_Real   theU,
-                                  NCollection_Array1<gp_Pnt2d>& thePnt2d,
-                                  NCollection_Array1<gp_Pnt>&   thePnt) const = 0;
+  Standard_EXPORT virtual Standard_Boolean Value(const Standard_Real   theU,
+                                                 NCollection_Array1<gp_Pnt2d>& thePnt2d,
+                                                 NCollection_Array1<gp_Pnt>&   thePnt) const = 0;
 
   //! Returns the derivative at parameter <theU>.
-  virtual Standard_Boolean D1 (const Standard_Real   theU,
-                               NCollection_Array1<gp_Vec2d>& theVec2d,
-                               NCollection_Array1<gp_Vec>&   theVec) const = 0;
+  Standard_EXPORT virtual Standard_Boolean D1(const Standard_Real   theU,
+                                              NCollection_Array1<gp_Vec2d>& theVec2d,
+                                              NCollection_Array1<gp_Vec>&   theVec) const = 0;
 
   //! Return information about peridicity in output paramateters space. 
   //! @param theDimIdx Defines index in output parameters space. 1 <= theDimIdx <= 3 * myNbPnt + 2 * myNbPnt2d.
-  virtual void PeriodInformation (const Standard_Integer /*theDimIdx*/,
-                                  Standard_Boolean&      IsPeriodic,
-                                  Standard_Real&         thePeriod) const
+  Standard_EXPORT virtual void PeriodInformation(const Standard_Integer /*theDimIdx*/,
+                                                 Standard_Boolean&      IsPeriodic,
+                                                 Standard_Real&         thePeriod) const
   {
     IsPeriodic = Standard_False;
     thePeriod = 0.0;

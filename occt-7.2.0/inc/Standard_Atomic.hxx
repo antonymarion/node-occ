@@ -61,7 +61,7 @@ extern "C" {
   long _InterlockedDecrement (volatile long* lpAddend);
 }
 
-#if defined(_MSC_VER) && ! defined(__INTEL_COMPILER)
+#if defined(_MSC_VER)
   // force intrinsic instead of WinAPI calls
   #pragma intrinsic (_InterlockedIncrement)
   #pragma intrinsic (_InterlockedDecrement)

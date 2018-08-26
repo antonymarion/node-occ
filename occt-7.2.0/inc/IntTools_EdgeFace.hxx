@@ -38,148 +38,113 @@ class gp_Pnt;
 class BRepAdaptor_Surface;
 class IntTools_CommonPrt;
 
-//! The class provides Edge/Face intersection algorithm to determine
-//! common parts between edge and face in 3-d space.
-//! Common parts between Edge and Face can be:
-//! - Vertices - in case of intersection or touching;
-//! - Edge - in case of full coincidence of the edge with the face.
+
+//! The  class  provides  Edge/Face  algorithm  to  determine
+//! common  parts  between edge and face in  3-d space.
+//! Common  parts can be :  Vertices  or Edges.
 class IntTools_EdgeFace 
 {
 public:
 
   DEFINE_STANDARD_ALLOC
 
-public: //! @name Constructors
+  
 
   //! Empty Constructor
   Standard_EXPORT IntTools_EdgeFace();
+  
 
-public: //! @name Setters/Getters
+  //! Initializes algorithm by the edge anEdge
+  Standard_EXPORT void SetEdge (const TopoDS_Edge& anEdge);
+  
 
-  //! Sets the edge for intersection
-  void SetEdge(const TopoDS_Edge& theEdge)
-  {
-    myEdge = theEdge;
-  }
+  //! Initializes algorithm by the face aFace
+  Standard_EXPORT void SetFace (const TopoDS_Face& aFace);
+  
 
-  //! Returns the edge
-  const TopoDS_Edge& Edge() const
-  {
-    return myEdge;
-  }
+  //! Returns edge
+  Standard_EXPORT const TopoDS_Edge& Edge() const;
+  
 
-  //! Sets the face for intersection
-  void SetFace(const TopoDS_Face& theFace)
-  {
-    myFace = theFace;
-  }
+  //! Returns face
+  Standard_EXPORT const TopoDS_Face& Face() const;
+  
 
-  //! Returns the face
-  const TopoDS_Face& Face() const
-  {
-    return myFace;
-  }
+  //! Initializes algorithm by discretization value
+  Standard_EXPORT void SetDiscretize (const Standard_Integer aDiscret);
+  
 
-  //! Sets the boundaries for the edge.
+  //! Initializes algorithm by deflection value
+  Standard_EXPORT void SetDeflection (const Standard_Real aDeflection);
+  
+
+  //! Initializes algorithm by parameter tolerance
+  Standard_EXPORT void SetEpsilonT (const Standard_Real anEpsT);
+  
+  //! Sets boundaries for edge.
   //! The algorithm processes edge inside these boundaries.
-  void SetRange(const IntTools_Range& theRange)
-  {
-    myRange = theRange;
-  }
+  Standard_EXPORT void SetRange (const IntTools_Range& aRange);
+  
 
-  //! Sets the boundaries for the edge.
+  //! Sets boundaries for edge.
   //! The algorithm processes edge inside these boundaries.
-  void SetRange(const Standard_Real theFirst, const Standard_Real theLast)
-  {
-    myRange.SetFirst(theFirst);
-    myRange.SetLast(theLast);
-  }
+  Standard_EXPORT void SetRange (const Standard_Real aFirst, const Standard_Real aLast);
+  
 
-  //! Returns intersection range of the edge
-  const IntTools_Range& Range() const
-  {
-    return myRange;
-  }
+  //! Sets the intersecton context
+  Standard_EXPORT void SetContext (const Handle(IntTools_Context)& theContext);
+  
 
-  //! Sets the intersection context
-  void SetContext(const Handle(IntTools_Context)& theContext)
-  {
-    myContext = theContext;
-  }
-
-  //! Returns the intersection context
-  const Handle(IntTools_Context)& Context() const
-  {
-    return myContext;
-  }
-
+  //! Gets the intersecton context
+  Standard_EXPORT const Handle(IntTools_Context)& Context() const;
+  
   //! Sets the Fuzzy value
-  void SetFuzzyValue(const Standard_Real theFuzz)
-  {
-    myFuzzyValue = Max(theFuzz, Precision::Confusion());
-  }
+  Standard_EXPORT void SetFuzzyValue(const Standard_Real theFuzz);
 
-  //! Returns the Fuzzy value
+  //! Returns Fuzzy value
   Standard_Real FuzzyValue() const
   {
     return myFuzzyValue;
   }
 
-  //! Sets the flag for quick coincidence check.
-  //! It is safe to use the quick check for coincidence only if both
-  //! of the following conditions are met:
-  //! - The vertices of edge are lying on the face;
-  //! - The edge does not intersect the boundaries of the face on the given range.
-  void UseQuickCoincidenceCheck(const Standard_Boolean theFlag)
-  {
-    myQuickCoincidenceCheck = theFlag;
+  //! Launches the process
+  Standard_EXPORT void Perform();
+  
+
+  //! Returns true if computation was done
+  //! successfully, otherwise returns false
+  Standard_EXPORT Standard_Boolean IsDone() const;
+  
+
+  //! Returns code of completion
+  //! 0 - means successful completion
+  //! 1 - the process was not started
+  //! 2,3,4,5 - invalid source data for the algorithm
+  //! 6 - discretization failed
+  //! 7 - no projectable ranges found
+  //! 11 - distance computing error
+  Standard_EXPORT Standard_Integer ErrorStatus() const;
+  
+
+  //! Returns results
+  Standard_EXPORT const IntTools_SequenceOfCommonPrts& CommonParts() const;
+  
+
+  //! Returns boundaries for edge
+  Standard_EXPORT const IntTools_Range& Range() const;
+
+  //! Sets the flag myQuickCoincidenceCheck
+  void UseQuickCoincidenceCheck(const Standard_Boolean bFlag) {
+    myQuickCoincidenceCheck=bFlag;
   }
 
   //! Returns the flag myQuickCoincidenceCheck
-  Standard_Boolean IsCoincidenceCheckedQuickly()
-  {
+  Standard_Boolean IsCoincidenceCheckedQuickly () {
     return myQuickCoincidenceCheck;
   }
 
 
-
-public: //! @name Performing the operation
-
-  //! Launches the process
-  Standard_EXPORT void Perform();
-
-
-public: //! @name Checking validity of the intersection
-
-  //! Returns TRUE if computation was successful.
-  //! Otherwise returns FALSE.
-  Standard_Boolean IsDone() const
-  {
-    return myIsDone;
-  }
-
-  //! Returns the code of completion:
-  //! 0 - means successful completion;
-  //! 1 - the process was not started;
-  //! 2,3 - invalid source data for the algorithm;
-  //! 4 - projection failed.
-  Standard_Integer ErrorStatus() const
-  {
-    return myErrorStatus;
-  }
-
-
-public: //! @name Obtaining results
-
-  //! Returns resulting common parts
-  const IntTools_SequenceOfCommonPrts& CommonParts() const
-  {
-    return mySeqOfCommonPrts;
-  }
-
-
-protected: //! @name Protected methods performing the intersection
-
+protected:
   Standard_EXPORT static Standard_Boolean IsEqDistance (const gp_Pnt& aP, const BRepAdaptor_Surface& aS, const Standard_Real aT, Standard_Real& aD);
   Standard_EXPORT void CheckData();
   
@@ -196,11 +161,18 @@ protected: //! @name Protected methods performing the intersection
   //! Checks if the edge is in the face really.
   Standard_EXPORT Standard_Boolean IsCoincident();
 
+
+
 private:
+
+
 
   TopoDS_Edge myEdge;
   TopoDS_Face myFace;
   Standard_Real myFuzzyValue;
+  Standard_Integer myDiscret;
+  Standard_Real myEpsT;
+  Standard_Real myDeflection;
   BRepAdaptor_Curve myC;
   BRepAdaptor_Surface myS;
   Standard_Real myCriteria;
@@ -209,7 +181,20 @@ private:
   Handle(IntTools_Context) myContext;
   IntTools_SequenceOfCommonPrts mySeqOfCommonPrts;
   IntTools_Range myRange;
+
+  //! Allows avoiding use Edge-Face intersection
+  //! algorithm (i.e. speeding up the Boolean algorithm)
+  //! if the edges are coincided really.
+  //! If it is not evidently set of this flag should
+  //! be avoided (otherwise, the performance of
+  //! Boolean algorithm will be slower).
   Standard_Boolean myQuickCoincidenceCheck;
 };
+
+
+
+
+
+
 
 #endif // _IntTools_EdgeFace_HeaderFile

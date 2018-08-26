@@ -18,16 +18,16 @@
 #include <Standard.hxx>
 #include <Standard_Type.hxx>
 
-#include <Bnd_Box.hxx>
-#include <BOPDS_ListOfPave.hxx>
-#include <BOPDS_ListOfPaveBlock.hxx>
-#include <BOPDS_Pave.hxx>
-#include <NCollection_BaseAllocator.hxx>
-#include <Standard_Boolean.hxx>
+#include <BOPCol_BaseAllocator.hxx>
 #include <Standard_Integer.hxx>
+#include <BOPDS_Pave.hxx>
+#include <BOPDS_ListOfPave.hxx>
 #include <Standard_Real.hxx>
+#include <Bnd_Box.hxx>
+#include <BOPCol_MapOfInteger.hxx>
 #include <Standard_Transient.hxx>
-#include <TColStd_MapOfInteger.hxx>
+#include <Standard_Boolean.hxx>
+#include <BOPDS_ListOfPaveBlock.hxx>
 class BOPDS_Pave;
 class Bnd_Box;
 
@@ -52,7 +52,7 @@ public:
 
   //! Contructor
   //! <theAllocator> - the allocator to manage the memory
-  Standard_EXPORT BOPDS_PaveBlock(const Handle(NCollection_BaseAllocator)& theAllocator);
+  Standard_EXPORT BOPDS_PaveBlock(const BOPCol_BaseAllocator& theAllocator);
   
 
   //! Modifier
@@ -224,7 +224,7 @@ public:
 protected:
 
 
-  Handle(NCollection_BaseAllocator) myAllocator;
+  BOPCol_BaseAllocator myAllocator;
   Standard_Integer myEdge;
   Standard_Integer myOriginalEdge;
   BOPDS_Pave myPave1;
@@ -233,7 +233,7 @@ protected:
   Standard_Real myTS1;
   Standard_Real myTS2;
   Bnd_Box myShrunkBox;
-  TColStd_MapOfInteger myMFence;
+  BOPCol_MapOfInteger myMFence;
   Standard_Boolean myIsSplittable;
 
 private:

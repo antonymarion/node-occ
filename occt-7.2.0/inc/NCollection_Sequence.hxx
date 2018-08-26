@@ -108,11 +108,9 @@ public:
  public:
   // ---------- PUBLIC METHODS ------------
 
-  //! Empty constructor.
-  NCollection_Sequence() : NCollection_BaseSequence(Handle(NCollection_BaseAllocator)()) {}
-
   //! Constructor
-  explicit NCollection_Sequence (const Handle(NCollection_BaseAllocator)& theAllocator) : NCollection_BaseSequence(theAllocator) {}
+  NCollection_Sequence(const Handle(NCollection_BaseAllocator)& theAllocator=0L) :
+    NCollection_BaseSequence(theAllocator) {}
 
   //! Copy constructor
   NCollection_Sequence (const NCollection_Sequence& theOther) :

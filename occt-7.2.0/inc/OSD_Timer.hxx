@@ -45,10 +45,7 @@ public:
   DEFINE_STANDARD_ALLOC
 
   //! Builds a Chronometer initialized and stopped.
-  //! @param theThisThreadOnly when TRUE, measured CPU time will account time of the current thread only;
-  //!                          otherwise CPU of the process (all threads, and completed children) is measured;
-  //!                          this flag does NOT affect ElapsedTime() value, only values returned by OSD_Chronometer
-  Standard_EXPORT OSD_Timer (Standard_Boolean theThisThreadOnly = Standard_False);
+  Standard_EXPORT OSD_Timer();
 
   //! Stops and reinitializes the timer with specified elapsed time.
   Standard_EXPORT void Reset (const Standard_Real theTimeElapsedSec);
@@ -84,8 +81,8 @@ public:
 
 private:
 
-  Standard_Real myTimeStart;
-  Standard_Real myTimeCumul;
+  Standard_Real TimeStart;
+  Standard_Real TimeCumul;
 
 };
 

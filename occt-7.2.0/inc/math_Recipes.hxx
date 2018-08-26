@@ -19,6 +19,18 @@
 #include <Standard_Integer.hxx>
 #include <Standard_Real.hxx>
 
+#ifndef __math_API
+# if defined(_WIN32) && !defined(HAVE_NO_DLL)
+#  ifdef __math_DLL
+#   define __math_API __declspec( dllexport )
+#  else
+#   define __math_API __declspec( dllimport )
+#  endif  /* __math_DLL */
+# else
+#  define __math_API
+# endif  /* _WIN32 */
+#endif  /* __math_API */
+
 class math_IntegerVector;
 class math_Vector;
 class math_Matrix;
@@ -29,7 +41,7 @@ const Standard_Integer math_Status_SingularMatrix      = 1;
 const Standard_Integer math_Status_ArgumentError       = 2;
 const Standard_Integer math_Status_NoConvergence       = 3;
 
-Standard_EXPORT Standard_Integer  LU_Decompose(math_Matrix& a, 
+__math_API Standard_Integer  LU_Decompose(math_Matrix& a, 
 					  math_IntegerVector& indx, 
 					  Standard_Real&   d,
 					  Standard_Real    TINY = 1.0e-20);
@@ -40,7 +52,7 @@ Standard_EXPORT Standard_Integer  LU_Decompose(math_Matrix& a,
 // pivoting; d is output as +1 or -1 depending on wether the number of row
 // interchanges was even or odd.
 
-Standard_EXPORT Standard_Integer LU_Decompose(math_Matrix& a, 
+__math_API Standard_Integer LU_Decompose(math_Matrix& a, 
 					 math_IntegerVector& indx, 
 					 Standard_Real&   d, 
 					 math_Vector& vv,
@@ -50,7 +62,7 @@ Standard_EXPORT Standard_Integer LU_Decompose(math_Matrix& a,
 // used internally as a scratch area.
 
 
-Standard_EXPORT void LU_Solve(const math_Matrix& a,
+__math_API void LU_Solve(const math_Matrix& a,
               const math_IntegerVector& indx, 
               math_Vector& b);
 
@@ -61,13 +73,13 @@ Standard_EXPORT void LU_Solve(const math_Matrix& a,
 // the routine may be called sequentially with different b's.
 
 
-Standard_EXPORT Standard_Integer LU_Invert(math_Matrix& a);
+__math_API Standard_Integer LU_Invert(math_Matrix& a);
 
 // Given a matrix a(1..n, 1..n) this routine computes its inverse. The matrix
 // a is replaced by its inverse.
 
 
-Standard_EXPORT Standard_Integer SVD_Decompose(math_Matrix& a,
+__math_API Standard_Integer SVD_Decompose(math_Matrix& a,
 					  math_Vector& w,                    
 					  math_Matrix& v);
 
@@ -79,7 +91,7 @@ Standard_EXPORT Standard_Integer SVD_Decompose(math_Matrix& a,
 // zero rows.
 
 
-Standard_EXPORT Standard_Integer SVD_Decompose(math_Matrix& a,
+__math_API Standard_Integer SVD_Decompose(math_Matrix& a,
 					  math_Vector& w,
 					  math_Matrix& v,
 					  math_Vector& rv1);
@@ -89,7 +101,7 @@ Standard_EXPORT Standard_Integer SVD_Decompose(math_Matrix& a,
 // (the number of rows a(1..m, 1..n)) is used internally as a scratch area.
 
 
-Standard_EXPORT void SVD_Solve(const math_Matrix& u,
+__math_API void SVD_Solve(const math_Matrix& u,
 			  const math_Vector& w,
 			  const math_Matrix& v,
 			  const math_Vector& b,
@@ -104,7 +116,7 @@ Standard_EXPORT void SVD_Solve(const math_Matrix& u,
 
 
 
-Standard_EXPORT Standard_Integer DACTCL_Decompose(math_Vector& a, const math_IntegerVector& indx,
+__math_API Standard_Integer DACTCL_Decompose(math_Vector& a, const math_IntegerVector& indx,
 					     const Standard_Real MinPivot = 1.e-20);
 
 // Given a SYMMETRIC matrix a, this routine computes its 
@@ -118,7 +130,7 @@ Standard_EXPORT Standard_Integer DACTCL_Decompose(math_Vector& a, const math_Int
 
 
 
-Standard_EXPORT Standard_Integer DACTCL_Solve(const math_Vector& a, math_Vector& b, 
+__math_API Standard_Integer DACTCL_Solve(const math_Vector& a, math_Vector& b, 
 					 const math_IntegerVector& indx, 
 					 const Standard_Real MinPivot = 1.e-20);
 
@@ -129,7 +141,7 @@ Standard_EXPORT Standard_Integer DACTCL_Solve(const math_Vector& a, math_Vector&
 
 
 
-Standard_EXPORT Standard_Integer Jacobi(math_Matrix& a, math_Vector& d, math_Matrix& v, Standard_Integer& nrot);
+__math_API Standard_Integer Jacobi(math_Matrix& a, math_Vector& d, math_Matrix& v, Standard_Integer& nrot);
 
 // Computes all eigenvalues and eigenvectors of a real symmetric matrix
 // a(1..n, 1..n). On output, elements of a above the diagonal are destroyed. 

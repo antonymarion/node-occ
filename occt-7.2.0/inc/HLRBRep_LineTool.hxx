@@ -159,7 +159,7 @@ public:
   
     static Standard_Integer NbSamples (const gp_Lin& C, const Standard_Real U0, const Standard_Real U1);
   
-    static void SamplePars (const gp_Lin& C, const Standard_Real U0, const Standard_Real U1, const Standard_Real Defl, const Standard_Integer NbMin, Handle(TColStd_HArray1OfReal)& Pars);
+  Standard_EXPORT static void SamplePars (const gp_Lin& C, const Standard_Real U0, const Standard_Real U1, const Standard_Real Defl, const Standard_Integer NbMin, Handle(TColStd_HArray1OfReal)& Pars);
 
 
 

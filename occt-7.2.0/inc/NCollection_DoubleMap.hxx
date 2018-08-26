@@ -123,13 +123,10 @@ public:
  public:
   // ---------- PUBLIC METHODS ------------
 
-  //! Empty constructor.
-  NCollection_DoubleMap() : NCollection_BaseMap (1, Standard_False, Handle(NCollection_BaseAllocator)()) {}
-
   //! Constructor
-  explicit NCollection_DoubleMap (const Standard_Integer theNbBuckets,
-                                  const Handle(NCollection_BaseAllocator)& theAllocator = 0L)
-  : NCollection_BaseMap (theNbBuckets, Standard_False, theAllocator) {}
+  NCollection_DoubleMap (const Standard_Integer NbBuckets=1,
+                     const Handle(NCollection_BaseAllocator)& theAllocator = 0L)
+    : NCollection_BaseMap (NbBuckets, Standard_False, theAllocator) {}
 
   //! Copy constructor
   NCollection_DoubleMap (const NCollection_DoubleMap& theOther)
@@ -151,24 +148,20 @@ public:
       return *this;
 
     Clear();
-    Standard_Integer anExt = theOther.Extent();
-    if (anExt)
+    ReSize (theOther.Extent()-1);
+    Iterator anIter(theOther);
+    for (; anIter.More(); anIter.Next())
     {
-      ReSize (anExt-1);
-      Iterator anIter(theOther);
-      for (; anIter.More(); anIter.Next())
-      {
-        TheKey1Type aKey1 = anIter.Key1();
-        TheKey2Type aKey2 = anIter.Key2();
-        Standard_Integer iK1 = Hasher1::HashCode (aKey1, NbBuckets());
-        Standard_Integer iK2 = Hasher2::HashCode (aKey2, NbBuckets());
-        DoubleMapNode * pNode = new (this->myAllocator) DoubleMapNode (aKey1, aKey2, 
-          myData1[iK1], 
-          myData2[iK2]);
-        myData1[iK1] = pNode;
-        myData2[iK2] = pNode;
-        Increment();
-      }
+      TheKey1Type aKey1 = anIter.Key1();
+      TheKey2Type aKey2 = anIter.Key2();
+      Standard_Integer iK1 = Hasher1::HashCode (aKey1, NbBuckets());
+      Standard_Integer iK2 = Hasher2::HashCode (aKey2, NbBuckets());
+      DoubleMapNode * pNode = new (this->myAllocator) DoubleMapNode (aKey1, aKey2, 
+                                                                     myData1[iK1], 
+                                                                     myData2[iK2]);
+      myData1[iK1] = pNode;
+      myData2[iK2] = pNode;
+      Increment();
     }
     return *this;
   }

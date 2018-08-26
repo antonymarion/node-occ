@@ -16,7 +16,7 @@
 #define BOPTools_ConnexityBlock_HeaderFile
 
 #include <NCollection_BaseAllocator.hxx>
-#include <TopTools_ListOfShape.hxx>
+#include <BOPCol_ListOfShape.hxx>
 
 //=======================================================================
 //class : ConnexityBlock
@@ -38,11 +38,11 @@ class BOPTools_ConnexityBlock {
     myLoops(myAllocator)  {
   };
   //
-  const TopTools_ListOfShape& Shapes()const {
+  const BOPCol_ListOfShape& Shapes()const {
     return myShapes;
   };
   //
-  TopTools_ListOfShape& ChangeShapes() {
+  BOPCol_ListOfShape& ChangeShapes() {
     return myShapes;
   };
   //
@@ -54,19 +54,19 @@ class BOPTools_ConnexityBlock {
     return myRegular;
   }
   //
-  const TopTools_ListOfShape& Loops()const {
+  const BOPCol_ListOfShape& Loops()const {
     return myLoops;
   };
   //
-  TopTools_ListOfShape& ChangeLoops() {
+  BOPCol_ListOfShape& ChangeLoops() {
     return myLoops;
   };
   //
  protected:
   Handle(NCollection_BaseAllocator) myAllocator;
   Standard_Boolean myRegular;
-  TopTools_ListOfShape myShapes;
-  TopTools_ListOfShape myLoops;
+  BOPCol_ListOfShape myShapes;
+  BOPCol_ListOfShape myLoops;
 };
 
 

@@ -36,6 +36,8 @@ public:
 
   //! Empty contructor
     BOPDS_IndexRange();
+Standard_EXPORT virtual ~BOPDS_IndexRange();
+  
 
   //! Modifier
   //! Sets the first index <theI1>  of the range

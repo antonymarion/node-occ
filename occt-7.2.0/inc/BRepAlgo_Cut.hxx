@@ -31,8 +31,7 @@ class TopoDS_Shape;
 //! - defining the construction of a cut shape,
 //! - implementing the construction algorithm, and
 //! - consulting the result.
-class Standard_DEPRECATED("This class is deprecated - BRepAlgoAPI_Cut should be used instead")
-  BRepAlgo_Cut : public BRepAlgo_BooleanOperation
+class BRepAlgo_Cut  : public BRepAlgo_BooleanOperation
 {
 public:
 

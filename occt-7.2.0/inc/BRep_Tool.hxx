@@ -96,28 +96,13 @@ public:
   //! parametric  space of  the  face.  Returns   a NULL
   //! handle  if this curve  does not exist.  Returns in
   //! <First> and <Last> the parameter range.
-  //! If the surface is a plane the curve can be not stored but created a new
-  //! each time. The flag pointed by <theIsStored> serves to indicate storage status. 
-  //! It is valued if the pointer is non-null.
-  Standard_EXPORT static Handle(Geom2d_Curve) CurveOnSurface (const TopoDS_Edge& E,
-                                                              const TopoDS_Face& F,
-                                                              Standard_Real& First,
-                                                              Standard_Real& Last,
-                                                              Standard_Boolean* theIsStored = NULL);
+  Standard_EXPORT static Handle(Geom2d_Curve) CurveOnSurface (const TopoDS_Edge& E, const TopoDS_Face& F, Standard_Real& First, Standard_Real& Last);
   
   //! Returns the  curve associated to   the edge in the
   //! parametric  space of the   surface. Returns a NULL
   //! handle  if this curve does  not exist.  Returns in
   //! <First> and <Last> the parameter range.
-  //! If the surface is a plane the curve can be not stored but created a new
-  //! each time. The flag pointed by <theIsStored> serves to indicate storage status. 
-  //! It is valued if the pointer is non-null.
-  Standard_EXPORT static Handle(Geom2d_Curve) CurveOnSurface(const TopoDS_Edge& E,
-                                                              const Handle(Geom_Surface)& S,
-                                                              const TopLoc_Location& L,
-                                                              Standard_Real& First,
-                                                              Standard_Real& Last,
-                                                              Standard_Boolean* theIsStored = NULL);
+  Standard_EXPORT static Handle(Geom2d_Curve) CurveOnSurface (const TopoDS_Edge& E, const Handle(Geom_Surface)& S, const TopLoc_Location& L, Standard_Real& First, Standard_Real& Last);
 
   //! For the planar surface builds the 2d curve for the edge
   //! by projection of the edge on plane.

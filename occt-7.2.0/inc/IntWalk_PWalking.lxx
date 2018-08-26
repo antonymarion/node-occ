@@ -54,16 +54,18 @@ inline Standard_Boolean IntWalk_PWalking::IsClosed() const{
   return close;
 }
 
-inline const gp_Dir& IntWalk_PWalking::TangentAtLine(Standard_Integer& theIndex) const
+inline const gp_Dir& IntWalk_PWalking::TangentAtLine
+  (Standard_Integer& Index) const
 {
   if(!done) throw StdFail_NotDone();
-  theIndex = myTangentIdx;
+  Index = indextg;
   return tgdir;
 }
 
 #define REGLAGE 0
 
-inline void IntWalk_PWalking::AddAPoint(const IntSurf_PntOn2S& POn2S) { 
+inline void IntWalk_PWalking::AddAPoint(Handle(IntSurf_LineOn2S)& theLine,
+					const IntSurf_PntOn2S& POn2S) { 
 #if REGLAGE
   Standard_Integer n=theLine->NbPoints();
   if(n) { 
@@ -77,8 +79,7 @@ inline void IntWalk_PWalking::AddAPoint(const IntSurf_PntOn2S& POn2S) {
     fflush(stdout);
   }
 #endif
-  line->Add(POn2S);
-  myTangentIdx = Max(myTangentIdx, 1);
+  theLine->Add(POn2S);  
 }
 
 

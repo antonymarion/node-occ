@@ -156,7 +156,7 @@ public:
     TopoDS_Wire WireAPIMake() const;
   
   //! returns field Analyzer (working tool)
-  Handle(ShapeAnalysis_Wire) Analyzer() const;
+  Standard_EXPORT Handle(ShapeAnalysis_Wire) Analyzer() const;
   
   //! returns working wire
     const Handle(ShapeExtend_WireData)& WireData() const;

@@ -17,26 +17,30 @@
 #ifndef _OSD_Directory_HeaderFile
 #define _OSD_Directory_HeaderFile
 
+#include <Standard.hxx>
+#include <Standard_DefineAlloc.hxx>
+#include <Standard_Handle.hxx>
+
 #include <OSD_FileNode.hxx>
+class OSD_Path;
+class OSD_Protection;
+
 
 //! Management of directories (a set of directory oriented tools)
-class OSD_Directory : public OSD_FileNode
+class OSD_Directory  : public OSD_FileNode
 {
 public:
 
-  //! Creates a temporary Directory in current directory.
-  //! This directory is automatically removed when object dies.
-  Standard_EXPORT static OSD_Directory BuildTemporary();
+  DEFINE_STANDARD_ALLOC
 
-public:
-
+  
   //! Creates Directory object.
   //! It is initiliazed to an empty name.
   Standard_EXPORT OSD_Directory();
-
-  //! Creates Directory object initialized with theName.
-  Standard_EXPORT OSD_Directory (const OSD_Path& theName);
-
+  
+  //! Creates Directory object initialized with Name.
+  Standard_EXPORT OSD_Directory(const OSD_Path& Name);
+  
   //! Creates (physically) a directory.
   //! When a directory of the same name already exists, no error is
   //! returned, and only <Protect> is applied to the existing directory.
@@ -44,7 +48,32 @@ public:
   //! If Build is used and <me> is instantiated without a name,
   //! OSDError is raised.
   Standard_EXPORT void Build (const OSD_Protection& Protect);
+  
+  //! Creates a temporary Directory in current directory.
+  //! This directory is automatically removed when object dies.
+  Standard_EXPORT static OSD_Directory BuildTemporary();
+
+
+
+
+protected:
+
+
+
+
+
+private:
+
+
+
+
 
 };
+
+
+
+
+
+
 
 #endif // _OSD_Directory_HeaderFile

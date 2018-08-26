@@ -19,7 +19,7 @@
 #include <Standard_DefineAlloc.hxx>
 #include <Standard_Handle.hxx>
 
-#include <NCollection_BaseAllocator.hxx>
+#include <BOPCol_BaseAllocator.hxx>
 #include <Standard_Integer.hxx>
 #include <Standard_Boolean.hxx>
 #include <BRepBuilderAPI_MakeShape.hxx>
@@ -55,7 +55,6 @@ public:
   using BOPAlgo_Options::ClearWarnings;
   using BOPAlgo_Options::GetReport;
   using BOPAlgo_Options::SetProgressIndicator;
-  using BOPAlgo_Options::SetUseOBB;
 
 protected:
 
@@ -66,7 +65,7 @@ protected:
   Standard_EXPORT virtual ~BRepAlgoAPI_Algo();
 
   //! Empty constructor
-  Standard_EXPORT BRepAlgoAPI_Algo(const Handle(NCollection_BaseAllocator)& theAllocator);
+  Standard_EXPORT BRepAlgoAPI_Algo(const BOPCol_BaseAllocator& theAllocator);
 
 private:
 

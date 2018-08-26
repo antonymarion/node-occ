@@ -162,9 +162,10 @@ public:
                        const Handle(NCollection_BaseAllocator)& theAllocator)
   : myData1(NULL),
     myData2(NULL),
+    isDouble(!single),
+    mySaturated(Standard_False),
     myNbBuckets(NbBuckets),
-    mySize(0),
-    isDouble(!single)
+    mySize(0)
   {
     myAllocator = (theAllocator.IsNull() ? NCollection_BaseAllocator::CommonBaseAllocator() : theAllocator);
   }
@@ -188,13 +189,15 @@ public:
 
   //! Resizable
   Standard_Boolean Resizable() const
-  { return IsEmpty() || (mySize > myNbBuckets); }
+  { return IsEmpty() || (!mySaturated && (mySize > myNbBuckets)); }
 
   //! Increment
-  Standard_Integer Increment() { return ++mySize; }
+  void Increment()
+  { mySize++; }
 
   //! Decrement
-  Standard_Integer Decrement()  { return --mySize; }
+  void Decrement() 
+  { mySize--; }
 
   //! Destroy
   Standard_EXPORT void Destroy(NCollection_DelMapNode fDel,
@@ -210,9 +213,10 @@ public:
     std::swap (myAllocator, theOther.myAllocator);
     std::swap (myData1,     theOther.myData1);
     std::swap (myData2,     theOther.myData2);
+    //std::swap (isDouble,    theOther.isDouble);
+    std::swap (mySaturated, theOther.mySaturated);
     std::swap (myNbBuckets, theOther.myNbBuckets);
     std::swap (mySize,      theOther.mySize);
-    //std::swap (isDouble,    theOther.isDouble);
   }
 
  protected:
@@ -223,9 +227,10 @@ public:
 
  private: 
   // ---------- PRIVATE FIELDS ------------
+  Standard_Boolean isDouble;
+  Standard_Boolean mySaturated;
   Standard_Integer myNbBuckets;
   Standard_Integer mySize;
-  Standard_Boolean isDouble;
 
   // ---------- FRIEND CLASSES ------------
   friend class Iterator;

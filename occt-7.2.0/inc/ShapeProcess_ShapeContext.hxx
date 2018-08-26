@@ -127,13 +127,13 @@ public:
   Standard_EXPORT void PrintStatistics() const;
 
   //! Set NonManifold flag
-  void SetNonManifold(Standard_Boolean theNonManifold)
+  Standard_EXPORT void SetNonManifold(Standard_Boolean theNonManifold)
   {
       myNonManifold = theNonManifold;
   }
 
   //! Get NonManifold flag
-  Standard_Boolean IsNonManifold()
+  Standard_EXPORT Standard_Boolean IsNonManifold()
   {
       return myNonManifold;
   }

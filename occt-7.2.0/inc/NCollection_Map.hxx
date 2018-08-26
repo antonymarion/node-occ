@@ -119,13 +119,10 @@ public:
  public:
   // ---------- PUBLIC METHODS ------------
 
-  //! Empty constructor.
-  NCollection_Map() : NCollection_BaseMap (1, Standard_True, Handle(NCollection_BaseAllocator)()) {}
-
   //! Constructor
-  explicit NCollection_Map (const Standard_Integer theNbBuckets,
-                            const Handle(NCollection_BaseAllocator)& theAllocator = 0L)
-  : NCollection_BaseMap (theNbBuckets, Standard_True, theAllocator) {}
+  NCollection_Map (const Standard_Integer NbBuckets = 1,
+                   const Handle(NCollection_BaseAllocator)& theAllocator = 0L) :
+    NCollection_BaseMap (NbBuckets, Standard_True, theAllocator) {}
 
   //! Copy constructor
   NCollection_Map (const NCollection_Map& theOther) :
@@ -147,14 +144,10 @@ public:
       return *this;
 
     Clear();
-    int anExt = theOther.Extent();
-    if (anExt)
-    {
-      ReSize (anExt-1);
-      Iterator anIter(theOther);
-      for (; anIter.More(); anIter.Next())
-        Add (anIter.Key());
-    }
+    ReSize (theOther.Extent()-1);
+    Iterator anIter(theOther);
+    for (; anIter.More(); anIter.Next())
+      Add (anIter.Key());
     return *this;
   }
 

@@ -49,7 +49,7 @@ template <class TheItemType> class NCollection_SparseArray
 public:
 
   //! Constructor; accepts size of blocks 
-  explicit NCollection_SparseArray (Standard_Size theIncrement)
+  NCollection_SparseArray (Standard_Size theIncrement)
     : NCollection_SparseArrayBase(sizeof(TheItemType),theIncrement)
   { 
   }

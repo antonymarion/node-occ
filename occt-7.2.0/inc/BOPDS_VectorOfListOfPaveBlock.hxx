@@ -15,10 +15,10 @@
 #ifndef BOPDS_VectorOfListOfPaveBlock_HeaderFile
 #define BOPDS_VectorOfListOfPaveBlock_HeaderFile
 
-#include <NCollection_Vector.hxx>
+#include <BOPCol_NCVector.hxx>
 #include <BOPDS_PaveBlock.hxx>
 #include <BOPDS_ListOfPaveBlock.hxx>
 
-typedef NCollection_Vector<BOPDS_ListOfPaveBlock> BOPDS_VectorOfListOfPaveBlock;
+typedef BOPCol_NCVector<BOPDS_ListOfPaveBlock> BOPDS_VectorOfListOfPaveBlock;
 
 #endif

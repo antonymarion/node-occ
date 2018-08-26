@@ -17,8 +17,19 @@
 #ifndef _Interface_LineBuffer_HeaderFile
 #define _Interface_LineBuffer_HeaderFile
 
-#include <NCollection_Array1.hxx>
-#include <TCollection_HAsciiString.hxx>
+#include <Standard.hxx>
+#include <Standard_DefineAlloc.hxx>
+#include <Standard_Handle.hxx>
+
+#include <TCollection_AsciiString.hxx>
+#include <Standard_Integer.hxx>
+#include <Standard_Character.hxx>
+#include <Standard_Boolean.hxx>
+#include <Standard_CString.hxx>
+class Standard_OutOfRange;
+class TCollection_AsciiString;
+class TCollection_HAsciiString;
+
 
 //! Simple Management of a Line Buffer, to be used by Interface
 //! File Writers.
@@ -55,10 +66,11 @@ public:
   Standard_EXPORT Standard_Boolean CanGet (const Standard_Integer more);
   
   //! Returns the Content of the LineBuffer
-  Standard_CString Content() const { return &myLine.First(); }
+  //! was C++ : return const
+  Standard_EXPORT Standard_CString Content() const;
   
   //! Returns the Length of the LineBuffer
-  Standard_Integer Length() const { return myLen + myInit; }
+  Standard_EXPORT Standard_Integer Length() const;
   
   //! Clears completely the LineBuffer
   Standard_EXPORT void Clear();
@@ -92,8 +104,18 @@ public:
   //! Adds a text made of only ONE Character
   Standard_EXPORT void Add (const Standard_Character text);
 
+
+
+
+protected:
+
+
+
+
+
 private:
 
+  
   //! Prepares Move : Inserts Initial Blanks if required, and
   //! determines if SetKeep can be supported (it cannot be if Length
   //! + Next String to get (see CanGet) overpass Max Size)
@@ -103,17 +125,23 @@ private:
   //! to Clear
   Standard_EXPORT void Keep();
 
-private:
 
-  NCollection_Array1<Standard_Character> myLine;
-  Standard_Integer myMax;
-  Standard_Integer myInit;
-  Standard_Integer myKeep;
-  Standard_Integer myGet;
-  Standard_Integer myLen;
-  Standard_Integer myFriz;
-  Standard_Character myKept;
+  TCollection_AsciiString theline;
+  Standard_Integer themax;
+  Standard_Integer theinit;
+  Standard_Integer thekeep;
+  Standard_Integer theget;
+  Standard_Integer thelen;
+  Standard_Integer thefriz;
+  Standard_Character thekept;
+
 
 };
+
+
+
+
+
+
 
 #endif // _Interface_LineBuffer_HeaderFile

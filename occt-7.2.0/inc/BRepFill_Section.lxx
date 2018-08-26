@@ -14,11 +14,6 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-inline const TopoDS_Shape& BRepFill_Section::OriginalShape() const
-{
-  return myOriginalShape; 
-}
-
 inline const TopoDS_Wire& BRepFill_Section::Wire() const
 {
   return wire; 

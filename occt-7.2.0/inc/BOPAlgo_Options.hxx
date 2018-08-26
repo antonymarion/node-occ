@@ -18,7 +18,7 @@
 #include <Message_Report.hxx>
 #include <Standard_OStream.hxx>
 
-#include <NCollection_BaseAllocator.hxx>
+#include <BOPCol_BaseAllocator.hxx>
 
 class Message_ProgressIndicator;
 
@@ -32,8 +32,6 @@ class Message_ProgressIndicator;
 //!                       touching or coinciding cases;
 //! - *Progress indicator* - provides interface to track the progress of
 //!                          operation and stop the operation by user's break.
-//! - *Using the Oriented Bounding Boxes* - Allows using the Oriented Bounding Boxes of the shapes
-//!                          for filtering the intersections.
 //!
 class BOPAlgo_Options
 {
@@ -45,13 +43,13 @@ public:
   Standard_EXPORT BOPAlgo_Options();
 
   //! Constructor with allocator
-  Standard_EXPORT BOPAlgo_Options(const Handle(NCollection_BaseAllocator)& theAllocator);
+  Standard_EXPORT BOPAlgo_Options(const BOPCol_BaseAllocator& theAllocator);
 
   //! Destructor
   Standard_EXPORT virtual ~BOPAlgo_Options();
 
   //! Returns allocator
-  const Handle(NCollection_BaseAllocator)& Allocator() const
+  const BOPCol_BaseAllocator& Allocator() const
   {
     return myAllocator;
   }
@@ -158,21 +156,6 @@ public:
   //! Set the Progress Indicator object.
   Standard_EXPORT void SetProgressIndicator(const Handle(Message_ProgressIndicator)& theObj);
 
-public:
-  //!@name Usage of Oriented Bounding boxes
-
-  //! Enables/Disables the usage of OBB
-  void SetUseOBB(const Standard_Boolean theUseOBB)
-  {
-    myUseOBB = theUseOBB;
-  }
-
-  //! Returns the flag defining usage of OBB
-  Standard_Boolean UseOBB() const
-  {
-    return myUseOBB;
-  }
-
 protected:
 
   //! Breaks the execution if the break signal
@@ -181,12 +164,11 @@ protected:
 
 protected:
 
-  Handle(NCollection_BaseAllocator) myAllocator;
+  BOPCol_BaseAllocator myAllocator;
   Handle(Message_Report) myReport;
   Standard_Boolean myRunParallel;
   Standard_Real myFuzzyValue;
   Handle(Message_ProgressIndicator) myProgressIndicator;
-  Standard_Boolean myUseOBB;
 
 };
 

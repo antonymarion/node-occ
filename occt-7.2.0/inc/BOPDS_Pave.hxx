@@ -37,6 +37,8 @@ public:
 
   //! Empty contructor
     BOPDS_Pave();
+Standard_EXPORT virtual ~BOPDS_Pave();
+  
 
   //! Modifier
   //! Sets the index of vertex <theIndex>

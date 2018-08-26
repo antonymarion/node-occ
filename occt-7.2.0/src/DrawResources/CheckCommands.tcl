@@ -473,7 +473,7 @@ proc _check_args { args {options {}} {command_name ""}} {
       set get_value              [lindex ${option} 2]
       set local_value ""
       if { [_check_arg ${option_name} local_value ${get_value}] } {
-        upvar 1 ${variable_to_save_value} ${variable_to_save_value}
+        upvar ${variable_to_save_value} ${variable_to_save_value}
         set ${variable_to_save_value} ${local_value}
         set toContinue 1
       }
@@ -595,10 +595,12 @@ proc checkprops {shape args} {
                 if { $m == 0 } {
                     puts "Error : The command is not valid. The $prop is 0."
                 }
-                # check of change of area is < 1%
-                if { ($mass != 0 && abs (($mass - $m) / double($mass)) > $depsilon) || 
-                     ($mass == 0 && $m != 0) } {
-                    puts "Error : The $prop of result shape is $m, expected $mass"
+                if { $mass > 0 } {
+                    puts "The expected $prop is $mass"
+                }
+                #check of change of area is < 1%
+                if { ($mass != 0 && [expr 1.*abs($mass - $m)/$mass] > $depsilon) || ($mass == 0 && $m != 0) } {
+                    puts "Error : The $prop of result shape is $m"
                 }
             } else {
                 if { $m != 0 } {

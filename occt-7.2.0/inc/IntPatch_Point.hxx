@@ -45,7 +45,7 @@ public:
 
   
   //! Empty constructor.
-  IntPatch_Point();
+  Standard_EXPORT IntPatch_Point();
   
   //! Sets the values of a point which is on no domain,
   //! when both surfaces are implicit ones.

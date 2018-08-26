@@ -15,9 +15,9 @@
 #ifndef BOPDS_VectorOfShapeInfo_HeaderFile
 #define BOPDS_VectorOfShapeInfo_HeaderFile
 
-#include <NCollection_Vector.hxx>
+#include <BOPCol_NCVector.hxx>
 #include <BOPDS_ShapeInfo.hxx>
 
-typedef NCollection_Vector<BOPDS_ShapeInfo> BOPDS_VectorOfShapeInfo;
+typedef BOPCol_NCVector<BOPDS_ShapeInfo> BOPDS_VectorOfShapeInfo;
 
 #endif

@@ -15,10 +15,10 @@
 #ifndef BOPDS_VectorOfPnt_HeaderFile
 #define BOPDS_VectorOfPnt_HeaderFile
 
-#include <NCollection_Vector.hxx>
+#include <BOPCol_NCVector.hxx>
 #include <BOPDS_Point.hxx>
 
-typedef NCollection_Vector<BOPDS_Point> BOPDS_VectorOfPoint;
+typedef BOPCol_NCVector<BOPDS_Point> BOPDS_VectorOfPoint;
 
 
 #endif

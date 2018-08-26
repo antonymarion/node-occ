@@ -238,15 +238,17 @@ public:
   // ---------- PUBLIC METHODS ----------
 
   /**
-   * Empty constructor.
-   */
-  NCollection_UBTree() : myRoot(0L), myLastNode(0L), myAlloc (NCollection_BaseAllocator::CommonBaseAllocator()) {}
-
-  /**
    * Constructor.
    */
-  explicit NCollection_UBTree (const Handle(NCollection_BaseAllocator)& theAllocator)
-  : myRoot(0L), myLastNode(0L), myAlloc (!theAllocator.IsNull() ? theAllocator : NCollection_BaseAllocator::CommonBaseAllocator()) {}
+  NCollection_UBTree
+    (const Handle(NCollection_BaseAllocator)& theAllocator=0L)
+      : myRoot(0L), myLastNode(0L)
+  {
+    if (theAllocator.IsNull())
+      myAlloc = NCollection_BaseAllocator::CommonBaseAllocator();
+    else
+      myAlloc = theAllocator;
+  }
 
   /**
    * Update the tree with a new object and its bounding box.
@@ -257,7 +259,8 @@ public:
    * @return
    *   always True
    */
-  virtual Standard_Boolean Add (const TheObjType& theObj, const TheBndType& theBnd);
+  Standard_EXPORT virtual Standard_Boolean Add (const TheObjType& theObj,
+                                                const TheBndType& theBnd);
 
   /**
    * Searches in the tree all objects conforming to the given selector.
@@ -322,7 +325,8 @@ public:
    * @return
    *   the number of objects accepted
    */
-  Standard_Integer Select (const TreeNode& theBranch, Selector& theSelector) const;
+  Standard_EXPORT Standard_Integer Select (const TreeNode& theBranch,
+                                           Selector& theSelector) const;
 
  private:
   // ---------- PRIVATE METHODS ----------

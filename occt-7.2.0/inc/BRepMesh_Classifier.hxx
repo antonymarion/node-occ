@@ -38,7 +38,7 @@ public:
   Standard_EXPORT BRepMesh_Classifier();
 
   //! Destructor.
-  virtual ~BRepMesh_Classifier()
+  Standard_EXPORT virtual ~BRepMesh_Classifier()
   {
     Destroy();
   }

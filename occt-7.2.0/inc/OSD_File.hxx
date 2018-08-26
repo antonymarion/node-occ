@@ -17,15 +17,24 @@
 #ifndef _OSD_File_HeaderFile
 #define _OSD_File_HeaderFile
 
+#include <Standard.hxx>
+#include <Standard_DefineAlloc.hxx>
+#include <Standard_Handle.hxx>
+
+#include <Standard_Boolean.hxx>
+#include <OSD_LockType.hxx>
+#include <OSD_OpenMode.hxx>
+#include <Standard_Integer.hxx>
+#include <Standard_Address.hxx>
 #include <OSD_FileNode.hxx>
 #include <OSD_FromWhere.hxx>
 #include <OSD_KindFile.hxx>
-#include <OSD_LockType.hxx>
-#include <OSD_OpenMode.hxx>
-
+#include <Standard_Size.hxx>
 class Standard_ProgramError;
 class OSD_Path;
 class OSD_Protection;
+class TCollection_AsciiString;
+
 
 //! Basic tools to manage files
 //! Warning: 'ProgramError' is raised when somebody wants to use the methods
@@ -34,6 +43,9 @@ class OSD_File  : public OSD_FileNode
 {
 public:
 
+  DEFINE_STANDARD_ALLOC
+
+  
   //! Creates File object.
   Standard_EXPORT OSD_File();
   
@@ -105,16 +117,14 @@ public:
   //! is less than Nbyte bytes. For this reason the output
   //! parameter Readbyte will contain the number of read bytes.
   Standard_EXPORT void Read (const Standard_Address Buffer, const Standard_Integer Nbyte, Standard_Integer& Readbyte);
-
-  //! Attempts to write theNbBytes bytes from the AsciiString to the file.
-  void Write (const TCollection_AsciiString& theBuffer, const Standard_Integer theNbBytes)
-  {
-    Write ((Standard_Address )theBuffer.ToCString(), theNbBytes);
-  }
-
-  //! Attempts to write theNbBytes bytes from the buffer pointed
-  //! to by theBuffer to the file associated to the object File.
-  Standard_EXPORT void Write (const Standard_Address theBuffer, const Standard_Integer theNbBytes);
+  
+  //! Attempts to write Nbyte bytes from the AsciiString to the file
+  //! associated to the object File.
+  Standard_EXPORT void Write (const TCollection_AsciiString& Buffer, const Standard_Integer Nbyte);
+  
+  //! Attempts to write Nbyte bytes from the buffer pointed
+  //! to by Buffer to the file associated to the object File.
+  Standard_EXPORT void Write (const Standard_Address Buffer, const Standard_Integer Nbyte);
   
   //! Sets the seek pointer associated with the open file
   Standard_EXPORT void Seek (const Standard_Integer Offset, const OSD_FromWhere Whence);
@@ -140,17 +150,10 @@ public:
   Standard_EXPORT void UnLock();
   
   //! Returns the current lock state
-  OSD_LockType GetLock() const { return myLock; }
-
+  Standard_EXPORT OSD_LockType GetLock();
+  
   //! Returns TRUE if this file is locked.
-  Standard_Boolean IsLocked() const
-  {
-  #ifdef _WIN32
-    return ImperativeFlag;
-  #else
-    return myLock != OSD_NoLock;
-  #endif
-  }
+  Standard_EXPORT Standard_Boolean IsLocked();
   
   //! Returns actual number of bytes of <me>.
   Standard_EXPORT Standard_Size Size();
@@ -199,22 +202,32 @@ public:
   //!    aTmp.Close();
   Standard_EXPORT int Capture(int theDescr);
 
+
 protected:
 
-#ifdef _WIN32
-  Standard_Address myFileHandle;
-#else
-  Standard_Integer myFileChannel;
-#endif
-  Standard_Address myFILE;
+
+
   Standard_Integer myIO;
+  Standard_Address myFILE;
+  Standard_Integer myFileChannel;
+  Standard_Address myFileHandle;
+
 
 private:
 
+
+
+  Standard_Boolean ImperativeFlag;
   OSD_LockType myLock;
   OSD_OpenMode myMode;
-  Standard_Boolean ImperativeFlag;
+
 
 };
+
+
+
+
+
+
 
 #endif // _OSD_File_HeaderFile

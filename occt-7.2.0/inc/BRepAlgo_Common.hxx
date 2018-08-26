@@ -31,8 +31,7 @@ class TopoDS_Shape;
 //! - defining the construction of a common shape,
 //! - implementing the construction algorithm, and
 //! - consulting the result.
-class Standard_DEPRECATED("This class is deprecated - BRepAlgoAPI_Common should be used instead")
-  BRepAlgo_Common  : public BRepAlgo_BooleanOperation
+class BRepAlgo_Common  : public BRepAlgo_BooleanOperation
 {
 public:
 

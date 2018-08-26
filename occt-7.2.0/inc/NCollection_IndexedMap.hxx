@@ -44,24 +44,30 @@ public:
   //! STL-compliant typedef for key type
   typedef TheKeyType key_type;
 
-private:
-  //! Adaptation of the TListNode to the INDEXEDmap
-  class IndexedMapNode : public NCollection_TListNode<TheKeyType>
+ private:
+   // **************** Adaptation of the TListNode to the INDEXEDmap
+   class IndexedMapNode : public NCollection_TListNode<TheKeyType>
   {
   public:
     //! Constructor with 'Next'
     IndexedMapNode (const TheKeyType&      theKey1, 
-                    const Standard_Integer theIndex,
-                    NCollection_ListNode*  theNext1)
-    : NCollection_TListNode<TheKeyType> (theKey1, theNext1),
-      myIndex (theIndex)
-    {
+                    const Standard_Integer theKey2, 
+                    NCollection_ListNode*  theNext1, 
+                    NCollection_ListNode*  theNext2) :
+      NCollection_TListNode<TheKeyType> (theKey1, theNext1),
+      myKey2(theKey2),
+      myNext2((IndexedMapNode*)theNext2)
+    { 
     }
     //! Key1
-    TheKeyType& Key1() { return this->ChangeValue(); }
-
-    //! Index
-    Standard_Integer& Index() { return myIndex; }
+    TheKeyType& Key1 (void)
+    { return this->ChangeValue(); }
+    //! Key2
+    Standard_Integer& Key2 (void)
+    { return myKey2; }
+    //! Next2
+    IndexedMapNode*& Next2 (void)
+    { return myNext2; }
     
     //! Static deleter to be passed to BaseList
     static void delNode (NCollection_ListNode * theNode, 
@@ -72,7 +78,8 @@ private:
     }
 
   private:
-    Standard_Integer myIndex;
+    Standard_Integer myKey2;
+    IndexedMapNode * myNext2;
   };
 
  public:
@@ -124,13 +131,10 @@ private:
  public:
   // ---------- PUBLIC METHODS ------------
 
-  //! Empty constructor.
-  NCollection_IndexedMap() : NCollection_BaseMap (1, Standard_False, Handle(NCollection_BaseAllocator)()) {}
-
   //! Constructor
-  explicit NCollection_IndexedMap (const Standard_Integer theNbBuckets,
-                                   const Handle(NCollection_BaseAllocator)& theAllocator=0L)
-  : NCollection_BaseMap (theNbBuckets, Standard_False, theAllocator) {}
+  NCollection_IndexedMap (const Standard_Integer NbBuckets=1,
+                          const Handle(NCollection_BaseAllocator)& theAllocator=0L)
+  : NCollection_BaseMap (NbBuckets, Standard_False, theAllocator) {}
 
   //! Copy constructor
   NCollection_IndexedMap (const NCollection_IndexedMap& theOther)
@@ -152,19 +156,19 @@ private:
       return *this;
 
     Clear();
-    Standard_Integer anExt = theOther.Extent();
-    if (anExt)
+    ReSize (theOther.Extent()-1);
+    Standard_Integer i, iLength=theOther.Extent();
+    for (i=1; i<=iLength; i++)
     {
-      ReSize (anExt-1); //mySize is same after resize
-      for (Standard_Integer anIndexIter = 1; anIndexIter <= anExt; ++anIndexIter)
-      {
-        const TheKeyType& aKey1 = theOther.FindKey (anIndexIter);
-        const Standard_Integer iK1 = Hasher::HashCode (aKey1, NbBuckets());
-        IndexedMapNode* pNode = new (this->myAllocator) IndexedMapNode (aKey1, anIndexIter, myData1[iK1]);
-        myData1[iK1]             = pNode;
-        myData2[anIndexIter - 1] = pNode;
-        Increment();
-      }
+      TheKeyType aKey1 = theOther(i);
+      Standard_Integer iK1 = Hasher::HashCode (aKey1, NbBuckets());
+      Standard_Integer iK2 = ::HashCode (i, NbBuckets());
+      IndexedMapNode * pNode = new (this->myAllocator) IndexedMapNode (aKey1, i, 
+                                                                       myData1[iK1], 
+                                                                       myData2[iK2]);
+      myData1[iK1] = pNode;
+      myData2[iK2] = pNode;
+      Increment();
     }
     return *this;
   }
@@ -176,60 +180,64 @@ private:
   }
 
   //! ReSize
-  void ReSize (const Standard_Integer theExtent)
+  void ReSize (const Standard_Integer N)
   {
     NCollection_ListNode** ppNewData1 = NULL;
     NCollection_ListNode** ppNewData2 = NULL;
     Standard_Integer newBuck;
-    if (BeginResize (theExtent, newBuck, ppNewData1, ppNewData2))
+    if (BeginResize (N, newBuck, ppNewData1, ppNewData2))
     {
       if (myData1) 
       {
-        memcpy (ppNewData2, myData2, sizeof(IndexedMapNode*) * Extent());
-        for (Standard_Integer aBucketIter = 0; aBucketIter <= NbBuckets(); ++aBucketIter)
+        IndexedMapNode *p, *q;
+        Standard_Integer i, iK1, iK2;
+        for (i = 0; i <= NbBuckets(); i++) 
         {
-          if (myData1[aBucketIter])
+          if (myData1[i]) 
           {
-            IndexedMapNode* p = (IndexedMapNode* )myData1[aBucketIter];
+            p = (IndexedMapNode *) myData1[i];
             while (p) 
             {
-              const Standard_Integer iK1 = Hasher::HashCode (p->Key1(), newBuck);
-              IndexedMapNode* q = (IndexedMapNode* )p->Next();
-              p->Next() = ppNewData1[iK1];
+              iK1 =Hasher::HashCode(p->Key1(), newBuck);
+              q = (IndexedMapNode*) p->Next();
+              p->Next()  = ppNewData1[iK1];
               ppNewData1[iK1] = p;
+              if (p->Key2() > 0) 
+              {
+                iK2 = ::HashCode (p->Key2(), newBuck);
+                p->Next2() = (IndexedMapNode*)ppNewData2[iK2];
+                ppNewData2[iK2] = p;
+              }
               p = q;
             }
           }
         }
       }
-      EndResize (theExtent, newBuck, ppNewData1, ppNewData2);
+      EndResize (N, newBuck, ppNewData1, ppNewData2);
     }
   }
 
   //! Add
   Standard_Integer Add (const TheKeyType& theKey1)
   {
-    if (Resizable())
-    {
-      ReSize (Extent());
-    }
-
+    if (Resizable()) 
+      ReSize(Extent());
     Standard_Integer iK1 = Hasher::HashCode (theKey1, NbBuckets());
-    IndexedMapNode* pNode = (IndexedMapNode* )myData1[iK1];
+    IndexedMapNode * pNode;
+    pNode = (IndexedMapNode *) myData1[iK1];
     while (pNode)
     {
       if (Hasher::IsEqual (pNode->Key1(), theKey1))
-      {
-        return pNode->Index();
-      }
+        return pNode->Key2();
       pNode = (IndexedMapNode *) pNode->Next();
     }
-
-    const Standard_Integer aNewIndex = Increment();
-    pNode = new (this->myAllocator) IndexedMapNode (theKey1, aNewIndex, myData1[iK1]);
-    myData1[iK1]           = pNode;
-    myData2[aNewIndex - 1] = pNode;
-    return aNewIndex;
+    Increment();
+    Standard_Integer iK2 = ::HashCode(Extent(),NbBuckets());
+    pNode = new (this->myAllocator) IndexedMapNode (theKey1, Extent(), 
+                                                    myData1[iK1], myData2[iK2]);
+    myData1[iK1] = pNode;
+    myData2[iK2] = pNode;
+    return Extent();
   }
 
   //! Contains
@@ -257,14 +265,15 @@ private:
                                   "NCollection_IndexedMap::Substitute : "
                                   "Index is out of range");
 
+    IndexedMapNode * p;
     // check if theKey1 is not already in the map
     Standard_Integer iK1 = Hasher::HashCode (theKey1, NbBuckets());
-    IndexedMapNode* p = (IndexedMapNode *) myData1[iK1];
+    p = (IndexedMapNode *) myData1[iK1];
     while (p)
     {
       if (Hasher::IsEqual (p->Key1(), theKey1))
       {
-        if (p->Index() != theIndex)
+        if (p->Key2() != theIndex)
         {
           throw Standard_DomainError ("NCollection_IndexedMap::Substitute : "
                                       "Attempt to substitute existing key");
@@ -276,7 +285,14 @@ private:
     }
 
     // Find the node for the index I
-    p = (IndexedMapNode* )myData2[theIndex - 1];
+    Standard_Integer iK2 = ::HashCode (theIndex, NbBuckets());
+    p = (IndexedMapNode *) myData2[iK2];
+    while (p) 
+    {
+      if (p->Key2() == theIndex) 
+        break;
+      p = (IndexedMapNode*) p->Next2();
+    }
     
     // remove the old key
     Standard_Integer iK = Hasher::HashCode (p->Key1(), NbBuckets());
@@ -308,26 +324,71 @@ private:
       return;
     }
 
-    IndexedMapNode* aP1 = (IndexedMapNode* )myData2[theIndex1 - 1];
-    IndexedMapNode* aP2 = (IndexedMapNode* )myData2[theIndex2 - 1];
-    std::swap (aP1->Index(), aP2->Index());
-    myData2[theIndex2 - 1] = aP1;
-    myData2[theIndex1 - 1] = aP2;
+    const Standard_Integer aK1 = ::HashCode (theIndex1, NbBuckets());
+    const Standard_Integer aK2 = ::HashCode (theIndex2, NbBuckets());
+
+    IndexedMapNode* aP1 = (IndexedMapNode*) myData2[aK1];
+    IndexedMapNode* aP2 = (IndexedMapNode*) myData2[aK2];
+
+    if (aP1->Key2() == theIndex1)
+    {
+      myData2[aK1] = (IndexedMapNode *) aP1->Next2();
+    }
+    else
+    {
+      IndexedMapNode* aQ = aP1;
+      for (aP1 = aQ->Next2(); aP1->Key2() != theIndex1; aQ = aP1, aP1 = aQ->Next2()) { }
+
+      aQ->Next2() = aP1->Next2();
+    }
+
+    if (aP2->Key2() == theIndex2)
+    {
+      myData2[aK2] = (IndexedMapNode *) aP2->Next2();
+    }
+    else
+    {
+      IndexedMapNode* aQ = aP2;
+      for (aP2 = aQ->Next2(); aP2->Key2() != theIndex2; aQ = aP2, aP2 = aQ->Next2()) { }
+
+      aQ->Next2() = aP2->Next2();
+    }
+
+    std::swap (aP1->Key2(),
+               aP2->Key2());
+
+    aP1->Next2() = (IndexedMapNode*) myData2[aK2];
+    myData2[aK2] = aP1;
+
+    aP2->Next2() = (IndexedMapNode*) myData2[aK1];
+    myData2[aK1] = aP2;
   }
 
   //! RemoveLast
   void RemoveLast (void)
   {
-    const Standard_Integer aLastIndex = Extent();
-    Standard_OutOfRange_Raise_if (aLastIndex == 0, "NCollection_IndexedMap::RemoveLast");
+    Standard_OutOfRange_Raise_if (Extent() == 0, "NCollection_IndexedMap::RemoveLast");
 
+    IndexedMapNode * p, * q;
     // Find the node for the last index and remove it
-    IndexedMapNode* p = (IndexedMapNode* )myData2[aLastIndex - 1];
-    myData2[aLastIndex - 1] = NULL;
-
+    Standard_Integer iK2 = ::HashCode (Extent(), NbBuckets());
+    p = (IndexedMapNode *) myData2[iK2];
+    q = NULL;
+    while (p) 
+    {
+      if (p->Key2() == Extent()) 
+        break;
+      q = p;
+      p = (IndexedMapNode*) p->Next2();
+    }
+    if (q == NULL) 
+      myData2[iK2] = (IndexedMapNode *) p->Next2();
+    else 
+      q->Next2() = p->Next2();
+    
     // remove the key
     Standard_Integer iK1 = Hasher::HashCode (p->Key1(), NbBuckets());
-    IndexedMapNode* q = (IndexedMapNode *) myData1[iK1];
+    q = (IndexedMapNode *) myData1[iK1];
     if (q == p)
       myData1[iK1] = (IndexedMapNode *) p->Next();
     else 
@@ -343,14 +404,12 @@ private:
 
   //! Remove the key of the given index.
   //! Caution! The index of the last key can be changed.
-  void RemoveFromIndex(const Standard_Integer theIndex)
+  void RemoveFromIndex(const Standard_Integer theKey2)
   {
-    Standard_OutOfRange_Raise_if(theIndex < 1 || theIndex > Extent(), "NCollection_IndexedMap::RemoveFromIndex");
-    const Standard_Integer aLastInd = Extent();
-    if (theIndex != aLastInd)
-    {
-      Swap(theIndex, aLastInd);
-    }
+    Standard_OutOfRange_Raise_if(theKey2 < 1 || theKey2 > Extent(), "NCollection_IndexedMap::Remove");
+    Standard_Integer aLastInd = Extent();
+    if (theKey2 != aLastInd)
+      Swap(theKey2, aLastInd);
     RemoveLast();
   }
 
@@ -369,28 +428,35 @@ private:
   }
 
   //! FindKey
-  const TheKeyType& FindKey (const Standard_Integer theIndex) const
+  const TheKeyType& FindKey (const Standard_Integer theKey2) const
   {
-    Standard_OutOfRange_Raise_if (theIndex < 1 || theIndex > Extent(), "NCollection_IndexedMap::FindKey");
-    IndexedMapNode* pNode2 = (IndexedMapNode* )myData2[theIndex - 1];
-    return pNode2->Key1();
+    Standard_OutOfRange_Raise_if (theKey2 < 1 || theKey2 > Extent(), "NCollection_IndexedMap::FindKey");
+
+    IndexedMapNode * pNode2 =
+      (IndexedMapNode *) myData2[::HashCode(theKey2,NbBuckets())];
+    while (pNode2)
+    {
+      if (pNode2->Key2() == theKey2) 
+        return pNode2->Key1();
+      pNode2 = (IndexedMapNode*) pNode2->Next2();
+    }
+    throw Standard_NoSuchObject("NCollection_IndexedMap::FindKey");
   }
 
   //! operator ()
-  const TheKeyType& operator() (const Standard_Integer theIndex) const
-  { return FindKey (theIndex); }
+  const TheKeyType& operator() (const Standard_Integer theKey2) const
+  { return FindKey (theKey2); }
 
   //! FindIndex
   Standard_Integer FindIndex(const TheKeyType& theKey1) const
   {
     if (IsEmpty()) return 0;
-    IndexedMapNode* pNode1 = (IndexedMapNode* )myData1[Hasher::HashCode(theKey1,NbBuckets())];
+    IndexedMapNode * pNode1 = 
+      (IndexedMapNode *) myData1[Hasher::HashCode(theKey1,NbBuckets())];
     while (pNode1)
     {
-      if (Hasher::IsEqual (pNode1->Key1(), theKey1))
-      {
-        return pNode1->Index();
-      }
+      if (Hasher::IsEqual (pNode1->Key1(), theKey1)) 
+        return pNode1->Key2();
       pNode1 = (IndexedMapNode*) pNode1->Next();
     }
     return 0;

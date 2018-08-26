@@ -69,9 +69,9 @@ public:
   
     const TopoDS_Shape& GluedShape() const;
   
-  const TopTools_ListOfShape& Edges() const;
+  Standard_EXPORT const TopTools_ListOfShape& Edges() const;
   
-  const TopTools_ListOfShape& TgtEdges() const;
+  Standard_EXPORT const TopTools_ListOfShape& TgtEdges() const;
 
 
 

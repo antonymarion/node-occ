@@ -138,7 +138,7 @@ inline Standard_ShortReal     Min (const Standard_ShortReal Val1,
 // ==================================
 // Methods implemeted in Standard_ShortReal.cxx
 // ==================================
-Standard_EXPORT Standard_Integer HashCode (const Standard_ShortReal, const Standard_Integer);  
+__Standard_API Standard_Integer HashCode (const Standard_ShortReal, const Standard_Integer);  
 
 //-------------------------------------------------------------------
 // IsEqual : Returns Standard_True if two ShortReals are equal
