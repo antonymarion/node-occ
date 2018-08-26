@@ -15,10 +15,10 @@ environment:
 
   # these variables are common to all jobs
   # -------------- 14 Visual Studio 2015
-#  msvs_toolset: 14
-#  VisualStudioVersion: "14"
-  msvs_toolset: 12
-  VisualStudioVersion: "12"
+  msvs_toolset: 14
+  VisualStudioVersion: "14"
+#  msvs_toolset: 12
+#  VisualStudioVersion: "12"
   matrix:
 
     - electron_version: "3.0.0-beta.2"
