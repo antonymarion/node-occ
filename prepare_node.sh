@@ -47,7 +47,7 @@ echo "NPM VERSION  = `npm --version`"
 
 
 # figure out if we should publish
-PUBLISH_BINARY=false
+PUBLISH_BINARY=true
 
 # if we are building a tag then publish
 echo $TRAVIS_BRANCH
