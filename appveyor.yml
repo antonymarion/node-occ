@@ -21,9 +21,9 @@ environment:
 #  VisualStudioVersion: "12"
   matrix:
 
-    - electron_version: "3.0.0-beta.2"
-      nodejs_version: 10.9.0
-      platform: x64
+#    - electron_version: "3.0.0-beta.2"
+#      nodejs_version: 10.9.0
+#      platform: x64
 
     - electron_version: "2.0.4"
       nodejs_version: 10.9.0
