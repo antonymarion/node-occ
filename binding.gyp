@@ -57,6 +57,9 @@
                         "-Wno-reorder",
                         "-Wno-extra"
                       ],
+                      "ldflags": [
+                        "-Wl,-rpath,<(module_root_dir)/lib/binding"
+                        ],
 
                       "library_dirs": [
                         "<!(pwd)/occt-7.2.0/lib",
