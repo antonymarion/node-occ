@@ -9,7 +9,7 @@
     "electron-mocha": "^6.0.4",
     "gettemporaryfilepath": "1.0.0",
     "nan": "^2.11.1",
-    "node-pre-gyp": "^0.11.0",
+    "node-pre-gyp": "0.7.0",
     "pace": "~0.0.4",
     "progress": "~2.0.0"
   },
@@ -56,7 +56,7 @@
   "binary": {
     "module_name": "occ",
     "module_path": "./lib/binding/",
-    "host": "https://api.github.com/antonymarion/node-occ/releases/download/",
+    "host": "https://github.com/antonymarion/node-occ/releases/download/",
     "remote_path": "{version}"
   },
   "gypfile": true,
