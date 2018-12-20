@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: update-npm
-          command: 'sudo npm install -g npm@10'
+          command: 'sudo npm install -g npm'
       - run:
           name: build-from-source
           command: npm install --build-from-source
