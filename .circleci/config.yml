@@ -1,0 +1,118 @@
+language: cpp
+dist: xenial
+os:
+  - linux
+
+#  we use also circle-ci container based infrastructure
+#  https://circleci.com/docs/2.0/configuration-reference/#full-example
+# sudo: required
+
+env:
+  NODE_PRE_GYP_GITHUB_TOKEN:
+    secure: "QLn52YaMzobrIzERHGZ3AL32uLr6RN9FfkMwenFOA8SXjGecZ8WXBZq+xg3QLwW/rRb4FWO2Dd83Djrbj5X+NfW82H6YXoLRWKmTxRfqeIJ47BdXi8DYXLrEAOZs6LcIcJ/A2oM64UIJtb4gKnKze3dfxGAIciBQA+tjNqfc6kvtzUGnXDJ/9HSOG6YbqZiZtUtPTK1f5OElhPFeQL1OkqMLQp5E0lqzQG/+b0Rkx6AX+kDSga7vSmG7CWjXanHjaeCvy6lIAAzLpRWuE43oN0USWMAynAlZ9bWt2Fj7KNv63wUmIgK2ykOFCGZK15HEJjoT4TVmEa6FH6A76KLUFm/sSEgLpGe8C3mWpIjQdoLQbw5xEl1bFWfM/3Yyg7Qx/b6bAnuhnocqsEd+eoYE80KdxC2CUziRSq0dwzhvWT92SJKyuOVHPMnij/vGKeRup4jcuzdRwwyibD0osQG3JiPkSwVeQQ4gtPHvRdfo8I/8KV55UX0wdhq29HMkh7o4bBMd/ywiw5LZb5yXPhIXGfUn2hh1ODo+N7zb3NZt03TTE/igFL1exZIn6eiSrTzcUtkEiQKrSnVTq1Afom2slOoTpE+LtrWPKIlXde6fF50wKvu6x8KpwmikZUMsCNdTDGI9Xfh3Zx0O+PsEn7/HkRv8Wy5E3hGTn1piksypqXU="
+  global:
+    secure: WD2eZVA4gw9k//sR358jIcwQc0Lxt7OipvwKr1AqEhLwv8X7WbMExfH7E5WjqXrY8IA/U9b6K8OCY3og1DOxz2rtNO+0C/j5CRap66fuujrar3pqgVw4KrSxPGhXQCS7PR42ciUIOice6ILuY5WnDknqDCmH3ugDSMOZrMCki9CBvATMnfvfs1KdX9nHFONEzuEJEFGbaSuAOVYw9Zc+gePgGChwdLjIiwkcXOA7W9MQ3UO0DbsDdpj80rvc2TZjwkWPQJGzP7u2u7P51ZaA0GEpNGDZfRcblq0HtkI/ZaHptuYlwlTfzE2frpwA47bxOGIznwUH3xP237qB2hlaWZGL215iW4KJ2eJXoFqjqGtg+jelm3hQGIR69YwL5Nei3pZgZXsDeWyaT7YMa0ZvCkfXW52Bh6yYu9tU7HCfHxFoUi4insNbx5moVoTzAUUKF7lpRWRtC0H+l7otq7OCHXjY02iHh2aRSw9fDM7VYDw5rlJJkLG7MDwSDCclgcytXaglCE95hPzLVoYYgM+63YcAW6FuZkssOxcqZOp8gncyt1xGMjhB1v0eDm+RTN+zqT/AnqNfgKyaXQZFKlInmsCIUSeW1U/jO5BWsNEtJc7RVUKyvqpp/JL3mT1qti9Mi9AFK1D11I+3FcuCDXsdcqSGaqoBpvtzIqFhP2Jxj6Q=
+  matrix:
+    - TRAVIS_NODE_VERSION="6"
+    #- TRAVIS_NODE_VERSION="6" ARCH="x86"
+    - TRAVIS_NODE_VERSION="7"
+    #- TRAVIS_NODE_VERSION="7" ARCH="x86"
+    #- TRAVIS_ELECTRON_VERSION="1.4.14" TRAVIS_NODE_VERSION="6"
+    - TRAVIS_NODE_VERSION="8"
+    - TRAVIS_NODE_VERSION="9"
+    - TRAVIS_NODE_VERSION="10"
+
+matrix:
+  exclude:
+    - os: osx
+      env: TRAVIS_NODE_VERSION="6"
+    - os: osx
+      env: TRAVIS_NODE_VERSION="6" ARCH="x86"
+    - os: osx
+      env: TRAVIS_NODE_VERSION="7"
+    - os: osx
+      env: TRAVIS_NODE_VERSION="8"
+    - os: osx
+      env: TRAVIS_NODE_VERSION="9"
+  #- os: osx
+  # env: TRAVIS_NODE_VERSION="7" ARCH="x86"
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+      - libtbb2
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install tbb; fi
+
+  # reinstall latest nvm
+  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh
+  - nvm install $TRAVIS_NODE_VERSION
+  - PATH=$PATH:`pwd`/node_modules/.bin
+  - BASE_URL=$(node -p "'https://nodejs.org/dist/' + process.version")
+  - X86_FILE=$(node -p "'node-' + process.version + '-' + process.platform + '-x86'")
+  # download node if testing x86 architecture
+  - >
+    if [[ "$ARCH" == "x86" ]]; then
+      wget -q $BASE_URL/$X86_FILE.tar.gz
+      tar -xf $X86_FILE.tar.gz
+      export PATH=$X86_FILE/bin:$PATH
+      ls $X86_FILE/bin
+      echo " PATH =" $PATH
+    fi;
+    true;
+
+  # print versions
+  - uname -a
+  - file `which node`
+  - node --version
+  - node -p 'process.platform + "@" + process.arch'
+  - npm --version
+
+  # use g++ on linux
+  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
+  - $CXX --version
+  - npm install -g node-pre-gyp-github node-pre-gyp
+
+  # compile Node-OCC
+  - bash ./prepare_node.sh
+
+git:
+  submodules: false
+
+install:
+  - npm install --build-from-source
+
+script:
+  - >
+    if [[ -z $TRAVIS_ELECTRON_VERSION ]]; then
+      export LD_LIBRARY_PATH=`pwd`/occt-7.2.0/lib
+      export DYLD_LIBRARY_PATH=`pwd`/occt-7.2.0/lib
+      node ./
+      npm test
+    else
+      electron test_electron
+      electron_mocha test
+    fi;
+    true;
+
+  # if publishing, do it
+  # Figure out if we should publish
+  - PUBLISH_BINARY=false
+  # If we are building a tag then we need to publish a new binary package
+  - if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]]; then PUBLISH_BINARY=true; fi;
+  # or if we put the string [publish binary] in the commit message
+  - if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then PUBLISH_BINARY=true; fi;
+  - if [[ $PUBLISH_BINARY == true ]]; then node-pre-gyp package; fi;
+  - if [[ $PUBLISH_BINARY == true ]]; then node-pre-gyp-github publish --release; fi;
+
+  # cleanup
+  - node-pre-gyp clean
+
+cache:
+  directories:
+    - build_oce
