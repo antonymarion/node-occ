@@ -22,11 +22,11 @@ ECHO PLATFORM %PLATFORM%
 IF /I "%PLATFORM%" == "x64" (
     SET VCPLATFORM=x64
     ECHO Compiling for x64
-    goto VS2015_X64
+    goto VS2013_X64
 ) ELSE IF /I "%PLATFORM%" == "x32" (
     SET VCPLATFORM=Win32
     ECHO Compiling for x86
-    goto VS2015_X86
+    goto VS2013_X86
 ) else (
     ECHO INVALID PLATFORM SPECIFIED
     goto handle_test_error
@@ -95,7 +95,7 @@ goto do_cmake
 :do_cmake
 
 ECHO PREFIX  : %PREFIX%
-REM IF EXIST %PREFIX% GOTO done_already_build
+IF EXIST %PREFIX% GOTO done_already_build
 
 
 ECHO ----------------------------------------------------------

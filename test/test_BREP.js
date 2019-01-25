@@ -1,5 +1,4 @@
 const assert = require("assert");
-const async = require("async");
 const should = require("should");
 const shape_factory = require("../lib/shapeFactory");
 const occ = require("../lib/occ");
@@ -25,27 +24,10 @@ describe("testing BREP input output ", function () {
 
     });
     after(function (done) {
-        async.series([
-            function(done){
-                remove_file(b1_brep,done);
-            },
-            function(done){
-                remove_file(b2_brep,done);
-            },
-            function(done){
-                remove_file(b3_brep,done);
-            },
-        ], function(err){
-            if (err){
-                return done(err);
-            }
-            done();
-        });
-
-
-
-
-
+        remove_file(b1_brep);
+        remove_file(b2_brep);
+        remove_file(b3_brep);
+        done();
     });
 
     function create_shapes() {

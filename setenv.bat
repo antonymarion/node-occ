@@ -12,14 +12,14 @@ if '%ARCH%' == 'unset' (
 
 
 SET CWD=%~dp0
-SET OCCT_VER=7.3.0
+SET OCCT_VER=7.2.0
 SET OCCT_FOLDER="%CWD%occt-%OCCT_VER%\"
 ECHO %OCCT_FOLDER%
 IF EXIST "%OCCT_FOLDER%" (
    echo OCCT-%OCCT_VER% prebuild stuff already installed
 ) else (
   IF NOT EXIST occt-%OCCT_VER% (
-      curl -OL https://github.com/antonymarion/occt_builder/releases/download/%OCCT_VER%/occt-%OCCT_VER%-win64.zip
+      curl -OL https://github.com/OpenWebCAD/occt_builder/releases/download/%OCCT_VER%/occt-%OCCT_VER%-win64.zip
   )
   7z x occt-%OCCT_VER%-win64.zip -y > a.txt
   echo DONE
