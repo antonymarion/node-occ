@@ -4,9 +4,9 @@
 Scanning the drive for archives:
 1 file, 27890582 bytes (27 MiB)
 
-Extracting archive: occt-7.2.0-win64.zip
+Extracting archive: occt-7.3.0-win64.zip
 --
-Path = occt-7.2.0-win64.zip
+Path = occt-7.3.0-win64.zip
 Type = zip
 Physical Size = 27890582
 
