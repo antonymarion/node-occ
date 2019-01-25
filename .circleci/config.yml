@@ -12,3 +12,5 @@ jobs:
       - run:
           name: build-from-source
           command: npm install --build-from-source
+      - store_artifacts:
+          path: /home/circleci/project/build
