@@ -106,8 +106,8 @@ script:
 # or if we put the string [publish binary] in the commit message
 - if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then PUBLISH_BINARY=true; fi;
 - if [[ $PUBLISH_BINARY == true ]]; then node-pre-gyp package; fi;
-#- if [[ $PUBLISH_BINARY == true ]]; then node-pre-gyp-github publish --release; fi;
-- if [[ $PUBLISH_BINARY == true ]]; then prebuild --all -u 4fc09fe828409ef6472e1debd21e9b31f51b8823; fi;
+- if [[ $PUBLISH_BINARY == true ]]; then node-pre-gyp-github publish --release; fi;
+#- if [[ $PUBLISH_BINARY == true ]]; then prebuild --all -u 4fc09fe828409ef6472e1debd21e9b31f51b8823; fi;
 
 # cleanup
 - node-pre-gyp clean
