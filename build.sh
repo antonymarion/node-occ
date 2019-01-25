@@ -10,7 +10,7 @@ export OCCT_TARFILE=${OCCT_PACKAGE}-osx.tgz
 else
 export OCCT_TARFILE=${OCCT_PACKAGE}-linux.tgz
 fi
-export OCCT_TARFILE_URL="https://github.com/OpenWebCAD/occt_builder/releases/download/${OCCT_VERSION}/${OCCT_TARFILE}"
+export OCCT_TARFILE_URL="https://github.com/antonymarion/occt_builder/releases/download/${OCCT_VERSION}/${OCCT_TARFILE}"
 
 echo "  OCCT_TARFILE     = " ${OCCT_TARFILE}
 echo "  OCCT_TARFILE_URL = " ${OCCT_TARFILE_URL}
