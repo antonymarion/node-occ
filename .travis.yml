@@ -1,24 +1,15 @@
 language: cpp
 dist: trusty
 os:
-  - linux
-  - osx
-
-#  we use travis container based infrastructure
-#  https://docs.travis-ci.com/user/installing-dependencies/#Installing-Packages-on-Container-Based-Infrastructure 
-# sudo: required
-
+- linux
+- osx
 env:
   matrix:
   - TRAVIS_NODE_VERSION="6"
-  #- TRAVIS_NODE_VERSION="6" ARCH="x86"
   - TRAVIS_NODE_VERSION="7"
-  #- TRAVIS_NODE_VERSION="7" ARCH="x86"
-  #- TRAVIS_ELECTRON_VERSION="1.4.14" TRAVIS_NODE_VERSION="6"
   - TRAVIS_NODE_VERSION="8"
   - TRAVIS_NODE_VERSION="9"
   - TRAVIS_NODE_VERSION="10"
-
 matrix:
   exclude:
   - os: osx
@@ -31,10 +22,8 @@ matrix:
     env: TRAVIS_NODE_VERSION="8"
   - os: osx
     env: TRAVIS_NODE_VERSION="9"
-  #- os: osx
-  # env: TRAVIS_NODE_VERSION="7" ARCH="x86"
   allow_failures:
-    - os: osx
+  - os: osx
 addons:
   apt:
     sources:
@@ -42,51 +31,38 @@ addons:
     packages:
     - g++-4.8
     - libtbb2
-
 before_install:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi   
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install tbb; fi
-
-# reinstall latest nvm
-- rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh
+- rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm
+  && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh
 - nvm install $TRAVIS_NODE_VERSION
 - PATH=$PATH:`pwd`/node_modules/.bin
 - BASE_URL=$(node -p "'https://nodejs.org/dist/' + process.version")
 - X86_FILE=$(node -p "'node-' + process.version + '-' + process.platform + '-x86'")
-# download node if testing x86 architecture
-- >
+- |
   if [[ "$ARCH" == "x86" ]]; then
     wget -q $BASE_URL/$X86_FILE.tar.gz
     tar -xf $X86_FILE.tar.gz
     export PATH=$X86_FILE/bin:$PATH
     ls $X86_FILE/bin
     echo " PATH =" $PATH
-  fi;
-  true;
-
-# print versions
+  fi; true;
 - uname -a
 - file `which node`
 - node --version
 - node -p 'process.platform + "@" + process.arch'
 - npm --version
-
-# use g++ on linux
 - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
-- $CXX --version
+- "$CXX --version"
 - npm install -g node-pre-gyp-github node-pre-gyp
-
-# compile Node-OCC
 - bash ./prepare_node.sh
-
 git:
-  submodules: false  
-
+  submodules: false
 install:
 - npm install --build-from-source
-
 script:
-- >
+- |
   if [[ -z $TRAVIS_ELECTRON_VERSION ]]; then
     export LD_LIBRARY_PATH=`pwd`/occt-7.3.0/lib
     export DYLD_LIBRARY_PATH=`pwd`/occt-7.3.0/lib
@@ -95,23 +71,18 @@ script:
   else
     electron test_electron
     electron_mocha test
-  fi;
-  true;
-
-# if publishing, do it
-# Figure out if we should publish
+  fi; true;
 - PUBLISH_BINARY=true
-# If we are building a tag then we need to publish a new binary package
-- if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]]; then PUBLISH_BINARY=true; fi;
-# or if we put the string [publish binary] in the commit message
-- if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then PUBLISH_BINARY=true; fi;
+- if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]]; then PUBLISH_BINARY=true;
+  fi;
+- if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then PUBLISH_BINARY=true;
+  fi;
 - if [[ $PUBLISH_BINARY == true ]]; then node-pre-gyp package; fi;
 - if [[ $PUBLISH_BINARY == true ]]; then node-pre-gyp-github publish --release; fi;
-#- if [[ $PUBLISH_BINARY == true ]]; then prebuild --all -u 4fc09fe828409ef6472e1debd21e9b31f51b8823; fi;
-
-# cleanup
 - node-pre-gyp clean
-
 cache:
   directories:
   - build_oce
+deploy:
+  api-key:
+    secure: wcNU0NFzvjlI7xTPHYARqflkuH4UpVmqeXFjP+UvyIOgNhnrdV9aZwfmY3+xZnLWV8iW6DAY5y6gkEMin+CvIhYLj3Gbk735uRn4AK9EArkQEgfbm8ONW12iCiwjmF3hUJRXlYU3j8+eAT8wxDLS+X6zE409u9LVvnaucqxPGiFtKa1XsmDNYzCvuyq1z272ArpTQ+Pz1JA4yPhpZ1JKHZw9zTTHtBDd0SMLU5ix3iVGuDD06roGxRDm3vULeM4t93vFjOmHo6XOaNSrFlZtZrSNF/ncPt7hbl5rAuZHXKPVvmMYBqtbdzn038depzHUo/99tz4WbLgAtt0D8q9/VXoK9+J2Aqbp9kLHsOpUWXbLkn5OP3rH5+vC77HHLjiUfoyyPXn4IVUUg9w2xN5KS8HIeS9i81d+Y0tnm2CrQvTfnrEtWQZmDrcx4O1a2o2Bx8OFzC+pkJxKiY2uuEeJrzwm+u4A6ZAySha8wC5gi+CGrh9QUKdzDLfdo+JSNBJC+EgxAj4gB11SYZBLwkcM0A/TKkQ4wu2apC/GJRdYu/3Gj3IQ1cU+MOieG2GkOFtcDCgFwFJbqVE4Ax/L1RGAcsqJZR2CITZlGVn80ILyDVydcFSaM8D2pifP+ObZK1sQ0NscQU5LAzAwoKihRzeilBCKOpk+hxjAKqR4kZKZDlU=
