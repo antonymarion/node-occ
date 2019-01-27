@@ -3,7 +3,7 @@
 #
 #
 ##########################################################################################
-export OCCT_VERSION=7.3.0
+export OCCT_VERSION=7.1.0
 export OCCT_PACKAGE=occt-${OCCT_VERSION}
 if [ `uname` == "Darwin" ];then
 export OCCT_TARFILE=${OCCT_PACKAGE}-osx.tgz
