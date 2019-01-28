@@ -19,7 +19,7 @@ IF EXIST "%OCCT_FOLDER%" (
    echo OCCT-%OCCT_VER% prebuild stuff already installed
 ) else (
   IF NOT EXIST occt-%OCCT_VER% (
-      curl -OL https://github.com/openwebcad/occt_builder/releases/download/v%OCCT_VER%/occt-%OCCT_VER%-win64.zip
+      curl -OL https://github.com/antonymarion/occt_builder/releases/download/%OCCT_VER%/occt-%OCCT_VER%-win64.zip
   )
   7z x occt-%OCCT_VER%-win64.zip -y > a.txt
   echo DONE
