@@ -42,6 +42,9 @@ environment:
   
     - nodejs_version: 10
       platform: x64
+  
+    - nodejs_version: 12
+      platform: x64
 
     # - electron_version: "1.4.14"
     #   nodejs_version: 6
@@ -65,6 +68,10 @@ environment:
 
     - electron_version: "4.0.3"
       nodejs_version: 10
+      platform: x64
+
+    - electron_version: "5.0.2"
+      nodejs_version: 12
       platform: x64
 
     # - electron_version: "1.6.10"
