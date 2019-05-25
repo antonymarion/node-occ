@@ -25,23 +25,23 @@ environment:
     # - nodejs_version: 6
     #   platform: x86
 
-    # - nodejs_version: 6
-    #  platform: x64
+    - nodejs_version: 6
+      platform: x64
 
     # - nodejs_version: 7
     #   platform: x86
 
-    # - nodejs_version: 7
-    #  platform: x64
+    - nodejs_version: 7
+      platform: x64
 
-    #- nodejs_version: 8
-    #  platform: x64
+    - nodejs_version: 8
+      platform: x64
 
-    #- nodejs_version: 9
-    #  platform: x64
+    - nodejs_version: 9
+      platform: x64
   
-    #- nodejs_version: 10
-    #  platform: x64
+    - nodejs_version: 10
+      platform: x64
   
  #   - nodejs_version: 12
  #     platform: x64
@@ -50,29 +50,30 @@ environment:
     #   nodejs_version: 6
     #   platform: x86
 
-    # - electron_version: "1.4.14"
-    #  nodejs_version: 6
-    #  platform: x64
+    - electron_version: "1.4.14"
+      nodejs_version: 6
+      platform: x64
 
     # - electron_version: "1.6.10"
     #   nodejs_version: 6
     #   platform: x86
 
-    #- electron_version: "1.6.10"
-    #  nodejs_version: 6
-    #  platform: x64
+    - electron_version: "1.6.10"
+      nodejs_version: 6
+      platform: x64
 
-    #- electron_version: "2.0.16"
-    #  nodejs_version: 8
-    #  platform: x64
+    - electron_version: "2.0.16"
+      nodejs_version: 8
+      platform: x64
 
-    #- electron_version: "4.0.3"
-    #  nodejs_version: 10
-    #  platform: x64
-      
-     - electron_version: "4.2.2"
+    - electron_version: "4.0.3"
       nodejs_version: 10
-      platform: x64 
+      platform: x64
+
+
+    - electron_version: "4.2.2"
+      nodejs_version: 10
+      platform: x64
 
  #   - electron_version: "5.0.2"
  #     nodejs_version: 12
