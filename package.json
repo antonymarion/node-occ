@@ -8,7 +8,7 @@
     "colors": "*",
     "electron-mocha": "^6.0.4",
     "gettemporaryfilepath": "1.0.0",
-    "nan": "^2.11.1",
+    "nan": "^2.13.2",
     "node-pre-gyp": "^0.11.0",
     "pace": "~0.0.4",
     "progress": "~2.0.0",
