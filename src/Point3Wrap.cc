@@ -89,6 +89,6 @@ void Point3Wrap::Init(v8::Local<v8::Object> target)
   EXPOSE_METHOD(Point3Wrap, asArray);
 
 
-  target->Set(Nan::New("Point3D").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
+  target->Set(Nan::New("Point3D").ToLocalChecked(), tpl->GetFunction());
 
 }

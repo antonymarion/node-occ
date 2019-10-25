@@ -13,18 +13,18 @@ v8::Local<v8::Object> buildEmptyWrapper(TopAbs_ShapeEnum type)
   case  TopAbs_COMPOUND:
   case  TopAbs_COMPSOLID:
   case  TopAbs_SOLID:
-    return Nan::To<v8::Object>(Nan::New(Solid::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),0, 0).ToLocalChecked());
+    return Nan::New(Solid::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),0, 0).ToLocalChecked()->ToObject();
   case TopAbs_SHELL:
-    return Nan::To<v8::Object>(Nan::New(Shell::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
+    return Nan::New(Shell::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
     break;
   case TopAbs_FACE:
-    return Nan::To<v8::Object>(Nan::New(Face::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
+    return Nan::New(Face::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
   case TopAbs_WIRE:
-    return Nan::To<v8::Object>(Nan::New(Wire::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
+    return Nan::New(Wire::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
   case TopAbs_EDGE:
-    return Nan::To<v8::Object>(Nan::New(Edge::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
+    return Nan::New(Edge::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
   case TopAbs_VERTEX:
-    return Nan::To<v8::Object>(Nan::New(Vertex::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
+    return Nan::New(Vertex::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
   case TopAbs_SHAPE:
     break;
   }
@@ -100,7 +100,7 @@ void ShapeIterator::Init(v8::Local<v8::Object> target)
   EXPOSE_METHOD(ShapeIterator, next);
   EXPOSE_METHOD(ShapeIterator, reset);
 
-  target->Set(Nan::New("ShapeIterator").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
+  target->Set(Nan::New("ShapeIterator").ToLocalChecked(), tpl->GetFunction());
 
 }
 
@@ -109,7 +109,7 @@ TopAbs_ShapeEnum getShapeEnum(const v8::Local<v8::Value> arg)
 {
   if (arg->IsString()) {
 
-    v8::Local<v8::String> str = Nan::To<v8::String>(arg);
+    v8::Local<v8::String> str = arg->ToString();
     if (str->Equals(Nan::New("COMPOUND").ToLocalChecked())) {
       return TopAbs_COMPOUND;
     }
@@ -150,7 +150,7 @@ NAN_METHOD(ShapeIterator::New)
   }
 
   // TODO (check that the object info[0] has the correct type)
-  Base* pShape = Nan::To<v8::Object>(Nan::ObjectWrap::Unwrap<Base>(info[0]));
+  Base* pShape = Nan::ObjectWrap::Unwrap<Base>(info[0]->ToObject());
 
   TopAbs_ShapeEnum type = getShapeEnum(info[1]);
 

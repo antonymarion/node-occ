@@ -49,7 +49,7 @@ size_t extractArgumentList(_NAN_METHOD_ARGS, std::vector<ClassType*>& elements)
 
   for (int i = 0; i < info.Length(); i++) {
     if (IsInstanceOf<ClassType>(info[i])) {
-      elements.push_back(Nan::ObjectWrap::Unwrap<ClassType>(Nan::To<v8::Object>(info[i])));
+      elements.push_back(Nan::ObjectWrap::Unwrap<ClassType>(info[i]->ToObject()));
     }
   }
   return elements.size();
@@ -62,8 +62,8 @@ bool extractArg(const v8::Local<v8::Value>& value, ClassType*& pObj)
   if (value.IsEmpty()) return false;
   if (!value->IsObject()) return false;
 
-  if (IsInstanceOf<ClassType>((Nan::To<v8::Object>(value)))) {
-    pObj = Nan::ObjectWrap::Unwrap<ClassType>((Nan::To<v8::Object>(value)));
+  if (IsInstanceOf<ClassType>(value->ToObject())) {
+    pObj = Nan::ObjectWrap::Unwrap<ClassType>(value->ToObject());
     return true;
   }
   return false;
@@ -81,7 +81,7 @@ bool _extractArray(const v8::Local<v8::Value>& value, std::vector<ClassType*>& e
       if (!arr->Get(i)->IsObject()) {
         return false; // element is not an object
       }
-      Nan::To<v8::Object>(v8::Local<v8::Object> obj = arr->Get(i));
+      v8::Local<v8::Object> obj = arr->Get(i)->ToObject();
       if (IsInstanceOf<ClassType>(obj)) {
         elements.push_back(Nan::ObjectWrap::Unwrap<ClassType>(obj));
       }
@@ -89,7 +89,7 @@ bool _extractArray(const v8::Local<v8::Value>& value, std::vector<ClassType*>& e
   }
   else if (value->IsObject()) {
     // a single element
-    v8::Local<v8::Object> obj = (Nan::To<v8::Object>(value));
+    v8::Local<v8::Object> obj = value->ToObject();
     if (IsInstanceOf<ClassType>(obj)) {
       elements.push_back(Nan::ObjectWrap::Unwrap<ClassType>(obj));
     }

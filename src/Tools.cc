@@ -23,7 +23,7 @@ void extractShapes(v8::Local<v8::Value> value, std::list<Shape*>& shapes)
   }
   else if (value->IsObject()) {
     // it must be of type
-    v8::Local<v8::Object> obj = (Nan::To<v8::Object>(value));
+    v8::Local<v8::Object> obj = value->ToObject();
     if (IsInstanceOf<Solid>(obj)) {
       shapes.push_back(Nan::ObjectWrap::Unwrap<Shape>(obj));
     }
@@ -46,7 +46,7 @@ static bool extractCallback(const v8::Local<v8::Value>& value, v8::Local<v8::Fun
   if (!value->IsFunction()) {
     return false;
   }
-  callback = v8::Local<v8::Function>::Cast((Nan::To<v8::Object>(value)));
+  callback = v8::Local<v8::Function>::Cast(value->ToObject());
   assert(!callback.IsEmpty());
   return true;
 }
@@ -158,7 +158,7 @@ static int extractSubShape(const TopoDS_Shape& shape, std::list<v8::Local<v8::Ob
   case TopAbs_COMPSOLID:
   case TopAbs_SOLID:
   {
-    shapes.push_back(Nan::To<v8::Object>(Solid::NewInstance(shape)));
+    shapes.push_back(Solid::NewInstance(shape)->ToObject());
     break;
   }
   case TopAbs_FACE:
