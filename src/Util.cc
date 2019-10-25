@@ -53,7 +53,7 @@ void ReadDouble(v8::Local<v8::Object> value, const char* name, double* retValue,
 void ReadInt(v8::Local<v8::Object> value, const char* name,int* retValue, int defaultValue)
 {
   Nan::HandleScope scope;
-  v8::Local<v8::Value> _v = (Nan::To<v8::Object(value))->Get(Nan::New(name).ToLocalChecked());
+  v8::Local<v8::Value> _v = (Nan::To<v8::Object>(value))->Get(Nan::New(name).ToLocalChecked());
   *retValue =  Nan::To<int>(_v).FromMaybe(defaultValue);
 }
 

@@ -133,7 +133,7 @@ int Edge::createCircle(const gp_Pnt& center, const gp_Dir& normal, double radius
 }
 
 template <class T> T* my_unwrap(v8::MaybeLocal<v8::Value> value) {
-  return Nan::ObjectWrap::Unwrap<T>(Nan::To<v8::Object(value.ToLocalChecked()));
+  return Nan::ObjectWrap::Unwrap<T>(Nan::To<v8::Object>(value.ToLocalChecked()));
 }
 
 Vertex* getOrCreateVertex(v8::Local<v8::Value> arg)
@@ -151,11 +151,11 @@ Vertex* getOrCreateVertex(v8::Local<v8::Value> arg)
   }
   else if (arg->IsObject()) {
 
-    v8::Local<v8::Value> obj = Nan::To<v8::Object(arg);
+    v8::Local<v8::Value> obj = Nan::To<v8::Object>(arg);
     if (!IsInstanceOf<Vertex>(obj)) {
       return 0;
     }
-    Vertex* vertex = Nan::ObjectWrap::Unwrap<Vertex>(Nan::To<v8::Object(obj));
+    Vertex* vertex = Nan::ObjectWrap::Unwrap<Vertex>(Nan::To<v8::Object>(obj));
     return vertex;
   }
   else {
@@ -180,7 +180,7 @@ NAN_METHOD(Edge::static_createLine)
   }
 
   auto instance = Nan::NewInstance(Constructor<Edge>(), 0, 0).ToLocalChecked();
-  Edge* pThis = Nan::ObjectWrap::Unwrap<Edge>(Nan::To<v8::Object(instance));
+  Edge* pThis = Nan::ObjectWrap::Unwrap<Edge>(Nan::To<v8::Object>(instance));
   //xx  Edge* pThis = new Edge();
     //xx v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New(_template).ToLocalChecked())->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
     //xx pThis->Wrap(instance);

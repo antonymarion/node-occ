@@ -194,8 +194,8 @@ OBJECT* DynamicCast(const v8::Local<v8::Value>& value)
 {
   if (value.IsEmpty()) return 0;
   if (!value->IsObject()) return 0;
-  if (IsInstanceOf<OBJECT>((Nan::To<v8::Object(value)))) {
-    return Nan::ObjectWrap::Unwrap<OBJECT>((Nan::To<v8::Object(value)));
+  if (IsInstanceOf<OBJECT>((Nan::To<v8::Object>(value)))) {
+    return Nan::ObjectWrap::Unwrap<OBJECT>((Nan::To<v8::Object>(value)));
   }
   return 0;
 }

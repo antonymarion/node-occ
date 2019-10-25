@@ -436,7 +436,7 @@ NAN_METHOD(Mesh::getFaceTriangles)
   Mesh* pThis = UNWRAP(Mesh);
   Face* pFace = 0;
   if (info.Length() == 1 && info[0]->IsObject()) {
-    pFace = Nan::ObjectWrap::Unwrap<Face>((Nan::To<v8::Object(info[0])));
+    pFace = Nan::ObjectWrap::Unwrap<Face>((Nan::To<v8::Object>(info[0])));
   }
   if (!pFace) {
     return Nan::ThrowError("expecting one argument : face");
@@ -474,7 +474,7 @@ NAN_METHOD(Mesh::getFaceTriangleNormals)
   Mesh* pThis = UNWRAP(Mesh);
   Face* pFace = 0;
   if (info.Length() == 1 && info[0]->IsObject()) {
-    pFace = Nan::ObjectWrap::Unwrap<Face>((Nan::To<v8::Object(info[0])));
+    pFace = Nan::ObjectWrap::Unwrap<Face>((Nan::To<v8::Object>(info[0])));
   }
   if (!pFace) {
     return Nan::ThrowError("expecting one argument : face");
@@ -517,7 +517,7 @@ NAN_METHOD(Mesh::getEdgeIndices)
   Mesh* pThis = UNWRAP(Mesh);
   Edge* pEdge = 0;
   if (info.Length() == 1 && info[0]->IsObject()) {
-    pEdge = Nan::ObjectWrap::Unwrap<Edge>((Nan::To<v8::Object(info[0])));
+    pEdge = Nan::ObjectWrap::Unwrap<Edge>((Nan::To<v8::Object>(info[0])));
   }
   if (!pEdge) {
     return Nan::ThrowError("expecting one argument : edge");
