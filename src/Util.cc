@@ -5,7 +5,7 @@
 using namespace std;
 
 
-void ReadPropertyPointFromArray(v8::Handle<v8::Array> arr, double* x, double* y, double*z)
+void ReadPropertyPointFromArray(v8::Local<v8::Array> arr, double* x, double* y, double*z)
 {
   double defaultValue =0.0;
   int length = arr->Length();
@@ -35,7 +35,7 @@ void ReadPropertyPointFromArray(v8::Handle<v8::Array> arr, double* x, double* y,
 //  //xx }
 //}
 
-void ReadDouble(const v8::Handle<v8::Value>& _v, double& value)
+void ReadDouble(const v8::Local<v8::Value>& _v, double& value)
 {
 
   value = 0.0;
@@ -43,21 +43,21 @@ void ReadDouble(const v8::Handle<v8::Value>& _v, double& value)
     value = extract_double(_v);
   }
 }
-void ReadDouble(v8::Handle<v8::Object> value, const char* name, double* retValue,double defaultValue)
+void ReadDouble(v8::Local<v8::Object> value, const char* name, double* retValue,double defaultValue)
 {
   Nan::HandleScope scope;
   v8::Local<v8::Value> _v = value->Get(Nan::New(name).ToLocalChecked());
   *retValue=  Nan::To<double>(_v).FromMaybe(defaultValue);
 }
 
-void ReadInt(v8::Handle<v8::Object> value, const char* name,int* retValue, int defaultValue)
+void ReadInt(v8::Local<v8::Object> value, const char* name,int* retValue, int defaultValue)
 {
   Nan::HandleScope scope;
-  v8::Local<v8::Value> _v = value->ToObject()->Get(Nan::New(name).ToLocalChecked());
+  v8::Local<v8::Value> _v = (Nan::To<v8::Object>(value))->Get(Nan::New(name).ToLocalChecked());
   *retValue =  Nan::To<int>(_v).FromMaybe(defaultValue);
 }
 
-void ReadXYZ(v8::Handle<v8::Object> obj, double* x, double* y, double* z)
+void ReadXYZ(v8::Local<v8::Object> obj, double* x, double* y, double* z)
 {
   ReadDouble(obj, "x", x, 0.0);
   ReadDouble(obj, "y", y, 0.0);
@@ -68,18 +68,18 @@ void ReadPoint(v8::Local<v8::Value> value, double* x, double* y, double*z)
 {
 
   if (value->IsArray()) {
-    v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(value);
+    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(value);
     ReadPropertyPointFromArray(arr, x, y, z);
   } else if (value->IsObject()) {
     // object must have x,y,z property set
-    v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(value);
+    v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(value);
     ReadXYZ(obj, x, y, z);
   } else {
     Nan::ThrowError("Invalid Point or Vector ( must be a [] or a {x:..,y:.., z:...} )");
   }
 }
 
-void ReadUVW(v8::Handle<v8::Object> obj, double* x, double* y, double* z)
+void ReadUVW(v8::Local<v8::Object> obj, double* x, double* y, double* z)
 {
   ReadDouble(obj, "u", x, 0.0);
   ReadDouble(obj, "v", y, 0.0);

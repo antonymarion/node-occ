@@ -9,10 +9,10 @@
 Nan::Persistent<v8::FunctionTemplate> Solid::_template;
 
 /*static*/
-void Solid::Init(v8::Handle<v8::Object> target)
+void Solid::Init(v8::Local<v8::Object> target)
 {
   // Prepare constructor template
-  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(Solid::New);  
+  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(Solid::New);
   tpl->SetClassName(Nan::New("Solid").ToLocalChecked());
 
   // object has one internal filed ( the C++ object)
@@ -26,14 +26,14 @@ void Solid::Init(v8::Handle<v8::Object> target)
   Base::InitProto(proto);
 
   EXPOSE_METHOD(Solid,getEdges);
-  EXPOSE_METHOD(Solid,getVertices); 
+  EXPOSE_METHOD(Solid,getVertices);
   EXPOSE_METHOD(Solid,getFaces);
   EXPOSE_METHOD(Solid,getOuterShell);
   EXPOSE_METHOD(Solid,getShells);
   EXPOSE_METHOD(Solid,getSolids);
   EXPOSE_METHOD(Solid,getShapeName);
   EXPOSE_METHOD(Solid,getAdjacentFaces);
-  EXPOSE_METHOD(Solid,getCommonEdges);	
+  EXPOSE_METHOD(Solid,getCommonEdges);
   EXPOSE_METHOD(Solid,createMesh);
 
 
@@ -47,7 +47,7 @@ void Solid::Init(v8::Handle<v8::Object> target)
   EXPOSE_READ_ONLY_PROPERTY(_mesh,mesh);
   EXPOSE_READ_ONLY_PROPERTY_BOOLEAN(Solid,hasMesh);
 
-  target->Set(Nan::New("Solid").ToLocalChecked(), tpl->GetFunction());
+  target->Set(Nan::New("Solid").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 
 }
 
@@ -85,7 +85,7 @@ NAN_METHOD(Solid::New)
 
 v8::Local<v8::Object> Solid::Clone() const
 {
-  v8::Local<v8::Object> instance = Solid::NewInstance()->ToObject();
+  v8::Local<v8::Object> instance = Nan::To<v8::Object>(Solid::NewInstance());
   Solid* pClone = Nan::ObjectWrap::Unwrap<Solid>(instance);
 
   pClone->setShape(this->shape());
@@ -108,14 +108,14 @@ v8::Local<v8::Object> Solid::Clone() const
   return instance;
 }
 
-v8::Handle<v8::Value> Solid::NewInstance()
+v8::Local<v8::Value> Solid::NewInstance()
 {
   v8::Local<v8::Object> instance = Nan::New(Solid::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),0,0).ToLocalChecked();
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(instance);
   return instance;
 }
 
-v8::Handle<v8::Value> Solid::NewInstance(TopoDS_Shape shape)
+v8::Local<v8::Value> Solid::NewInstance(TopoDS_Shape shape)
 {
   v8::Local<v8::Object> instance = Nan::New(Solid::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(instance);
@@ -315,7 +315,7 @@ NAN_METHOD(Solid::getCommonVertices)
   Face* pFace2 = 0 ;
   if (info.Length()<2 || !extractArg(info[0],pFace1) || !extractArg(info[1],pFace2) ) {
     return Nan::ThrowError("invalid arguments getCommonEdges : expecting <FACE>,<FACE>");
-  }	
+  }
   v8::Local<v8::Array> arr = v8::Array::New(0);
   Nan::ThrowError("Not Implemented ");
   info.GetReturnValue().Set(arr);
@@ -424,13 +424,13 @@ NAN_PROPERTY_GETTER(Solid::_mesh)
 //        BRepMesh().Mesh(shape_, 1.0);
 //    }
 //}
-v8::Handle<v8::Object> Solid::createMesh(double factor, double angle, bool qualityNormals)
+v8::Local<v8::Object> Solid::createMesh(double factor, double angle, bool qualityNormals)
 {
 
   Nan::EscapableHandleScope scope;
 
   const unsigned argc = 0;
-  v8::Handle<v8::Value> argv[1] = {  };
+  v8::Local<v8::Value> argv[1] = {  };
   v8::Local<v8::Object> theMesh = Nan::New(Mesh::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),argc, argv).ToLocalChecked();
 
   Mesh *mesh =  Mesh::Unwrap<Mesh>(theMesh);
@@ -478,10 +478,10 @@ NAN_METHOD(Solid::getShapeName)
 {
   Solid* pThis = UNWRAP(Solid); pThis;
 
-  v8::Handle<v8::Object> pShape = info[0]->ToObject();
+  v8::Local<v8::Object> pShape = (Nan::To<v8::Object>(info[0]));
   if (!pShape.IsEmpty()) {
     v8::Local<v8::Value> hashCode = pShape->Get(Nan::New("hashCode").ToLocalChecked());
-    v8::Local<v8::Object> reversedMap = pJhis->Get(Nan::New("_reversedMap").ToLocalChecked())->ToObject();
+    v8::Local<v8::Object> reversedMap = Nan::To<v8::Object>(pJhis->Get(Nan::New("_reversedMap").ToLocalChecked()));
     v8::Local<v8::Value>  value = reversedMap->Get(hashCode);
     info.GetReturnValue().Set(value);
   }
@@ -491,7 +491,7 @@ std::string Solid::_getShapeName(const TopoDS_Shape& shape)
 {
 	v8::Local<v8::Object> pJhis = this->handle();// NanObjectWrapHandle(this);
 
-  v8::Local<v8::Object> reversedMap = pJhis->Get(Nan::New("_reversedMap").ToLocalChecked())->ToObject();
+  v8::Local<v8::Object> reversedMap = Nan::To<v8::Object>(pJhis->Get(Nan::New("_reversedMap").ToLocalChecked()));
   v8::Local<v8::Value> hashCode = Nan::New<v8::Integer>(shape.HashCode(std::numeric_limits<int>::max()));
   v8::Local<v8::Value> value = reversedMap->Get(hashCode);
 
@@ -503,11 +503,11 @@ std::string Solid::_getShapeName(const TopoDS_Shape& shape)
 void Solid::_registerNamedShape(const char* name,const TopoDS_Shape& shape)
 {
   if (shape.ShapeType() == TopAbs_FACE)  {
-    v8::Local<v8::Object> obj = NanObjectWrapHandle(this)->Get(Nan::New("faces").ToLocalChecked())->ToObject();
+    v8::Local<v8::Object> obj = Nan::To<v8::Object>(NanObjectWrapHandle(this)->Get(Nan::New("faces").ToLocalChecked()));
     obj->Set(Nan::New(name).ToLocalChecked(),    Face::NewInstance(TopoDS::Face(shape)));
   }
 
-  v8::Local<v8::Object> reversedMap = NanObjectWrapHandle(this)->Get(Nan::New("_reversedMap").ToLocalChecked())->ToObject();
+  v8::Local<v8::Object> reversedMap = Nan::To<v8::Object>(NanObjectWrapHandle(this)->Get(Nan::New("_reversedMap").ToLocalChecked()));
   reversedMap->Set(shape.HashCode(std::numeric_limits<int>::max()),Nan::New(name).ToLocalChecked());
 }
 
@@ -529,7 +529,7 @@ NAN_METHOD(Solid::createMesh)
    if (info.Length()>=3) {
     return Nan::ThrowError("invalid arguments ( factor|double, angle|degree)");
    }
-  v8::Handle<v8::Object> mesh = pThis->createMesh(factor,angle,true);
+  v8::Local<v8::Object> mesh = pThis->createMesh(factor,angle,true);
 
   if (pThis->m_cacheMesh.IsEmpty()) {
       pThis->m_cacheMesh.Reset(mesh);
