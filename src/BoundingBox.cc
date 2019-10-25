@@ -9,7 +9,7 @@ Nan::Persistent<v8::FunctionTemplate> BoundingBox::_template;
 v8::Local<v8::Value> BoundingBox::NewInstance(const Bnd_Box& box)
 {
 
-  v8::Local<v8::Object> instance = Nan::New<v8::FunctionTemplate>(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New<v8::FunctionTemplate>(_template))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
 
   BoundingBox* pThis = ObjectWrap::Unwrap<BoundingBox>(instance);
 
@@ -116,7 +116,7 @@ void BoundingBox::Init(v8::Local<v8::Object> target)
   EXPOSE_TEAROFF(BoundingBox,farPt);
   EXPOSE_READ_ONLY_PROPERTY_BOOLEAN(BoundingBox,isVoid);
 
-  target->Set(Nan::New("BoundingBox").ToLocalChecked(), tpl->GetFunction());
+  target->Set(Nan::New("BoundingBox").ToLocalChecked(), Nan::GetFunction(tpl);
 }
 
 void BoundingBox::InitNew(_NAN_METHOD_ARGS)

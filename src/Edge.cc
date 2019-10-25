@@ -217,7 +217,7 @@ NAN_METHOD(Edge::static_createCircle)
 
 
   Edge* pThis = new Edge();
-  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New(_template))->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
   pThis->Wrap(instance);
 
   pThis->createCircle(center, normal, radius);
@@ -244,7 +244,7 @@ NAN_METHOD(Edge::static_createArc3P)
 
 
   Edge* pThis = new Edge();
-  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New(_template))->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
   pThis->Wrap(instance);
 
   pThis->createArc3P(v1, v3, p2);
@@ -279,7 +279,7 @@ v8::Local<v8::Object>  Edge::Clone() const
 {
 
   Edge* obj = new Edge();
-  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New(_template))->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
   obj->Wrap(instance);
   obj->setShape(this->shape());
   return instance;
@@ -362,7 +362,7 @@ void Edge::Init(v8::Local<v8::Object> target)
   //xx  EXPOSE_METHOD(Edge, polygonOnTriangulation);
 
 
-  target->Set(Nan::New("Edge").ToLocalChecked(), tpl->GetFunction());
+  target->Set(Nan::New("Edge").ToLocalChecked(), Nan::GetFunction(tpl));
 
   //xx EXPOSE_STATIC_METHOD(Edge,createLine);
   //xx EXPOSE_STATIC_METHOD(Edge,createCircle);

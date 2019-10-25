@@ -62,7 +62,7 @@ void Mesh::Init(v8::Local<v8::Object> target)
   EXPOSE_METHOD(Mesh, getFaceTriangleNormals);
 
   // other Mesh prototype members are defined in the mesh.js script
-  target->Set(Nan::New("Mesh").ToLocalChecked(), tpl->GetFunction());
+  target->Set(Nan::New("Mesh").ToLocalChecked(), Nan::GetFunction(tpl);
 
 }
 

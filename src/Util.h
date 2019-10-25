@@ -208,7 +208,7 @@ ObjType2* DynamicCast(const v8::Local<v8::Value>& value)
 }
 
 template<class T> v8::Local<v8::Function> Constructor() {
-     return Nan::New<v8::FunctionTemplate>(T::_template)->GetFunction();
+     return Nan::GetFunction(Nan::New<v8::FunctionTemplate>(T::_template));
 }
 template<class T> NAN_METHOD(_NewInstance) {
     int argc =info.Length();

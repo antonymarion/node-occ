@@ -15,7 +15,7 @@ Nan::Persistent<v8::FunctionTemplate> BooleanOperation::_template;
 v8::Local<v8::Value> BooleanOperation::NewInstance(BOPAlgo_Operation op)
 {
 
-  v8::Local<v8::Object> instance = Nan::New<v8::FunctionTemplate>(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New<v8::FunctionTemplate>(_template))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
   BooleanOperation* pThis = ObjectWrap::Unwrap<BooleanOperation>(instance);
   return instance;
 }
@@ -91,5 +91,5 @@ void BooleanOperation::Init(v8::Local<v8::Object> target)
   //XX    EXPOSE_READ_ONLY_PROPERTY(BooleanOperation,_shape1,shape1);
   //XX    EXPOSE_READ_ONLY_PROPERTY(BooleanOperation,_shape2,shape2);
 
-  target->Set(Nan::New("BooleanOperation").ToLocalChecked(), tpl->GetFunction());
+  target->Set(Nan::New("BooleanOperation").ToLocalChecked(), Nan::GetFunction(tpl));
 }

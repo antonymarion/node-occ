@@ -13,18 +13,18 @@ v8::Local<v8::Object> buildEmptyWrapper(TopAbs_ShapeEnum type)
   case  TopAbs_COMPOUND:
   case  TopAbs_COMPSOLID:
   case  TopAbs_SOLID:
-    return Nan::New(Solid::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),0, 0).ToLocalChecked()->ToObject();
+    return Nan::GetFunction(Nan::New(Solid::_template))->NewInstance(Nan::GetCurrentContext(),0, 0).ToLocalChecked()->ToObject();
   case TopAbs_SHELL:
-    return Nan::New(Shell::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::GetFunction(Nan::New(Shell::_template))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
     break;
   case TopAbs_FACE:
-    return Nan::New(Face::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::GetFunction(Nan::New(Face::_template))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
   case TopAbs_WIRE:
-    return Nan::New(Wire::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::GetFunction(Nan::New(Wire::_template))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
   case TopAbs_EDGE:
-    return Nan::New(Edge::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::GetFunction(Nan::New(Edge::_template))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
   case TopAbs_VERTEX:
-    return Nan::New(Vertex::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::GetFunction(Nan::New(Vertex::_template))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
   case TopAbs_SHAPE:
     break;
   }
@@ -100,7 +100,7 @@ void ShapeIterator::Init(v8::Local<v8::Object> target)
   EXPOSE_METHOD(ShapeIterator, next);
   EXPOSE_METHOD(ShapeIterator, reset);
 
-  target->Set(Nan::New("ShapeIterator").ToLocalChecked(), tpl->GetFunction());
+  target->Set(Nan::New("ShapeIterator").ToLocalChecked(), Nan::GetFunction(tpl));
 
 }
 
