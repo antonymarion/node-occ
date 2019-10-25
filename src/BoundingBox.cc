@@ -9,7 +9,7 @@ Nan::Persistent<v8::FunctionTemplate> BoundingBox::_template;
 v8::Local<v8::Value> BoundingBox::NewInstance(const Bnd_Box& box)
 {
 
-  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New<v8::FunctionTemplate>(_template).ToLocalChecked())->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New<v8::FunctionTemplate>(_template))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
 
   BoundingBox* pThis = ObjectWrap::Unwrap<BoundingBox>(instance);
 
