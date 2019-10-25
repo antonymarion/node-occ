@@ -43,7 +43,7 @@ bool ShapeIterator::more()
   return ex.More() ? true : false;
 }
 
-v8::Local<v8::Value> ShapeIterator::next()
+v8::Handle<v8::Value> ShapeIterator::next()
 {
   if (ex.More()) {
 
@@ -79,7 +79,7 @@ NAN_METHOD(ShapeIterator::reset)
 
 Nan::Persistent<v8::FunctionTemplate> ShapeIterator::_template;
 
-void ShapeIterator::Init(v8::Local<v8::Object> target)
+void ShapeIterator::Init(v8::Handle<v8::Object> target)
 {
   // Prepare constructor template
   v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(ShapeIterator::New);
@@ -105,11 +105,11 @@ void ShapeIterator::Init(v8::Local<v8::Object> target)
 }
 
 
-TopAbs_ShapeEnum getShapeEnum(const v8::Local<v8::Value> arg)
+TopAbs_ShapeEnum getShapeEnum(const v8::Handle<v8::Value> arg)
 {
   if (arg->IsString()) {
 
-    v8::Local<v8::String> str = arg->ToString();
+    v8::Handle<v8::String> str = arg->ToString();
     if (str->Equals(Nan::New("COMPOUND").ToLocalChecked())) {
       return TopAbs_COMPOUND;
     }

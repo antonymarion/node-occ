@@ -86,7 +86,7 @@ void Vertex::InitNew(_NAN_METHOD_ARGS)
   REXPOSE_READ_ONLY_PROPERTY_DOUBLE(Vertex,z);
 }
 
-void Vertex::Init(v8::Local<v8::Object> target)
+void Vertex::Init(v8::Handle<v8::Object> target)
 {
   // Prepare constructor template
   v8::Local<v8::FunctionTemplate>  tpl = Nan::New<v8::FunctionTemplate>(Vertex::New);

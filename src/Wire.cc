@@ -92,7 +92,7 @@ NAN_METHOD(Wire::New)
     Edge* edge = DynamicCast<Edge>(info[i]);
     Wire* wire = DynamicCast<Wire>(info[i]);
 
-    if (edge) {
+    if (edge) { 
       // IsInstanceOf<Edge>(info[i]->ToObject())) {
       //xx Edge* edge = Nan::ObjectWrap::Unwrap<Edge>(info[i]->ToObject());
       mkWire.Add(edge->edge());
@@ -133,7 +133,7 @@ NAN_METHOD(Wire::InitNew)
   REXPOSE_READ_ONLY_PROPERTY_BOOLEAN(Wire, isClosed);
 }
 
-void Wire::Init(v8::Local<v8::Object> target)
+void Wire::Init(v8::Handle<v8::Object> target)
 {
   // Prepare constructor template
   v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(Wire::New);

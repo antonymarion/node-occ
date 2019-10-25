@@ -12,7 +12,7 @@ BooleanOperation::~BooleanOperation()
 Nan::Persistent<v8::FunctionTemplate> BooleanOperation::_template;
 
 
-v8::Local<v8::Value> BooleanOperation::NewInstance(BOPAlgo_Operation op)
+v8::Handle<v8::Value> BooleanOperation::NewInstance(BOPAlgo_Operation op)
 {
 
   v8::Local<v8::Object> instance = (Nan::GetFunction(Nan::New<v8::FunctionTemplate>(_template)))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
@@ -20,7 +20,7 @@ v8::Local<v8::Value> BooleanOperation::NewInstance(BOPAlgo_Operation op)
   return instance;
 }
 
-BOPAlgo_Operation ReadOperationType(const v8::Local<v8::Value>& arg)
+BOPAlgo_Operation ReadOperationType(const v8::Handle<v8::Value>& arg)
 {
   if (Nan::To<v8::String>(arg)==(Nan::New("SECTION").ToLocalChecked()))  return BOPAlgo_SECTION;
   if (Nan::To<v8::String>(arg)==(Nan::New("COMMON").ToLocalChecked()))   return BOPAlgo_COMMON;
@@ -68,7 +68,7 @@ Handle<Value> BooleanOperation_getSameShape2(const v8::Arguments& args)
 }
 */
 
-void BooleanOperation::Init(v8::Local<v8::Object> target)
+void BooleanOperation::Init(v8::Handle<v8::Object> target)
 {
 
   // Prepare constructor template
@@ -77,7 +77,7 @@ void BooleanOperation::Init(v8::Local<v8::Object> target)
 
   // object has one internal filed ( the C++ object)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-
+  
   _template.Reset(tpl);
 
 

@@ -36,7 +36,7 @@ template<class T> bool IsInstanceOf(v8::Local<v8::Value> obj) {
 	return _template->HasInstance(obj);
 
 }
-template<class T> bool IsInstanceOf(v8::Local<v8::Object> obj) {
+template<class T> bool IsInstanceOf(v8::Handle<v8::Object> obj) {
 	v8::Local<v8::FunctionTemplate> _template = Nan::New(T::_template);
 	return _template->HasInstance(obj);
 }
@@ -85,7 +85,7 @@ NAN_GETTER(ee)
 // proto->Set(Nan::New(#staticMethod),FunctionTemplate::New(staticMethod)->GetFunction());
 
 #define __EXPOSE_READ_ONLY_PROPERTY(element,staticMethod,name) \
-    Nan::SetAccessor(element,Nan::New(#name).ToLocalChecked(), &staticMethod,  0,v8::Local<v8::Value>(),v8::DEFAULT,v8::ReadOnly)
+    Nan::SetAccessor(element,Nan::New(#name).ToLocalChecked(), &staticMethod,  0,v8::Handle<v8::Value>(),v8::DEFAULT,v8::ReadOnly)
 
 #define EXPOSE_READ_ONLY_PROPERTY(staticMethod,name) \
     __EXPOSE_READ_ONLY_PROPERTY(proto,staticMethod,name)
@@ -149,7 +149,7 @@ inline const char* ToCString(const v8::String::Utf8Value& value)
 #define UNWRAP(CLASS)                                         \
   0;                                                          \
   CHECK_THIS_DEFINED(CLASS)                                   \
-  v8::Local<v8::Object> pJhis = info.This();                 \
+  v8::Handle<v8::Object> pJhis = info.This();                 \
   if ( pJhis.IsEmpty() || !IsInstanceOf<CLASS>(pJhis))  {     \
     return Nan::ThrowError("invalid object");                 \
   }                                                           \
