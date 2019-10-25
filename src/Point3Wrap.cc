@@ -56,7 +56,7 @@ NAN_METHOD(Point3Wrap::equals)
   else if (info.Length() == 2) {
     gp_Pnt p1;
     ReadPoint(info[0], &p1);
-    
+
     double tol;
     ReadDouble(info[1], tol);
 
@@ -68,7 +68,7 @@ NAN_METHOD(Point3Wrap::equals)
 }
 
 // Methods exposed to JavaScripts
-void Point3Wrap::Init(v8::Handle<v8::Object> target)
+void Point3Wrap::Init(v8::Local<v8::Object> target)
 {
   // Prepare constructor template
   v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(Point3Wrap::New);
@@ -87,7 +87,7 @@ void Point3Wrap::Init(v8::Handle<v8::Object> target)
 
   EXPOSE_METHOD(Point3Wrap, equals);
   EXPOSE_METHOD(Point3Wrap, asArray);
-  
+
 
   target->Set(Nan::New("Point3D").ToLocalChecked(), tpl->GetFunction());
 

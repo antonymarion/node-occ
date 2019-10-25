@@ -78,7 +78,7 @@ NAN_METHOD(ShapeFactory::makeBox)
   //    1 point + 3 numbers dx,dy,dz
   //TODO   1 object with { x: 1,y: 2,z: 3, dw:
 
-  v8::Handle<v8::Value> pJhis = Solid::NewInstance();
+  v8::Local<v8::Value> pJhis = Solid::NewInstance();
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
 
   double dx = 10;
@@ -170,7 +170,7 @@ NAN_METHOD(ShapeFactory::makePrism)
     return Nan::ThrowError("invalid arguments : expecting <FACE>,<VECTOR>");
   }
 
-  v8::Handle<v8::Value> pJhis = Solid::NewInstance();
+  v8::Local<v8::Value> pJhis = Solid::NewInstance();
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
 
 
@@ -239,7 +239,7 @@ static void registerOneAxisFaces(Solid* pThis, BRepPrim_OneAxis& tool)
 
 NAN_METHOD(ShapeFactory::makeSphere)
 {
-  v8::Handle<v8::Value> pJhis = Solid::NewInstance();
+  v8::Local<v8::Value> pJhis = Solid::NewInstance();
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
 
 
@@ -262,11 +262,11 @@ NAN_METHOD(ShapeFactory::makeSphere)
   info.GetReturnValue().Set(pJhis);
 }
 
-void ReadAx2(const v8::Handle<v8::Value>& value, gp_Ax2* ax2)
+void ReadAx2(const v8::Local<v8::Value>& value, gp_Ax2* ax2)
 {
   assert(ax2);
   if (value->IsArray()) {
-    v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(value);
+    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(value);
     gp_Pnt origin;
     ReadPoint(arr->Get(0), &origin);
     if (arr->Length() == 2) {
@@ -314,7 +314,7 @@ NAN_METHOD(ShapeFactory::makeCylinder)
       return  Nan::ThrowError("invalid value for arguments makeCylinder(R,H)");
     }
 
-    v8::Handle<v8::Value> pJhis = Solid::NewInstance();
+    v8::Local<v8::Value> pJhis = Solid::NewInstance();
     Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
     try {
       pThis->setShape(BRepPrimAPI_MakeCylinder(R, H).Shape());
@@ -343,7 +343,7 @@ NAN_METHOD(ShapeFactory::makeCylinder)
           return Nan::ThrowError("invalid value for arguments");
         }
 
-        v8::Handle<v8::Value> pJhis = Solid::NewInstance();
+        v8::Local<v8::Value> pJhis = Solid::NewInstance();
         Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
         BRepPrimAPI_MakeCylinder tool(ax2, R, H);
         pThis->setShape(tool.Shape());
@@ -377,7 +377,7 @@ NAN_METHOD(ShapeFactory::makeCylinder)
       gp_Vec aV(dx / H, dy / H, dz / H);
       gp_Ax2 ax2(p1, aV);
 
-      v8::Handle<v8::Value> pJhis = Solid::NewInstance();
+      v8::Local<v8::Value> pJhis = Solid::NewInstance();
       Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
       try {
         BRepPrimAPI_MakeCylinder tool(ax2, R, H);
@@ -398,7 +398,7 @@ NAN_METHOD(ShapeFactory::makeCylinder)
 NAN_METHOD(ShapeFactory::makeCone)
 {
 
-  v8::Handle<v8::Value> pJhis = Solid::NewInstance();
+  v8::Local<v8::Value> pJhis = Solid::NewInstance();
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
 
   const double epsilon = 1E-3;
@@ -476,7 +476,7 @@ NAN_METHOD(ShapeFactory::makeCone)
   }
   else if (info.Length() == 4 && info[0]->IsArray() && info[1]->IsArray() && info[2]->IsNumber() && info[3]->IsNumber()) {
     try {
-      // cone with a sharp apex 
+      // cone with a sharp apex
     // apex, direction ,  half_angle, height
       gp_Pnt apex;
       ReadPoint(info[0], &apex);
@@ -484,7 +484,7 @@ NAN_METHOD(ShapeFactory::makeCone)
       gp_Dir innerDir;
       ReadDir(info[1], &innerDir);
 
-      double half_angle_in_radian = atan(1.0); // default : 45° 
+      double half_angle_in_radian = atan(1.0); // default : 45°
       ReadDouble(info[2], half_angle_in_radian);
 
       double height = 100;
@@ -508,11 +508,11 @@ NAN_METHOD(ShapeFactory::makeCone)
 
 NAN_METHOD(ShapeFactory::makeTorus)
 {
-  v8::Handle<v8::Value> pJhis = Solid::NewInstance();
+  v8::Local<v8::Value> pJhis = Solid::NewInstance();
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
 
   // variation 1
-  //  
+  //
   //  Center as <x,y,z>
   //  axis   as <u,v,w>
   //  bigRadius
@@ -721,7 +721,7 @@ void ShapeClassifier::classify()
 
 
 
-  // 
+  //
   // now check shape of the new solid that but that have'nt been processed yet
   //
   //   if the shape can be found in  old solid we can reuse the name of the
@@ -922,7 +922,7 @@ static void ShapeFactory_createBoolean(_NAN_METHOD_ARGS, Solid* pSolid1, Solid* 
     }
     shape = pTool->Shape();
 
-    v8::Handle<v8::Value> result(Solid::NewInstance(shape));
+    v8::Local<v8::Value> result(Solid::NewInstance(shape));
 
     Solid* pResult = Nan::ObjectWrap::Unwrap<Solid>(result->ToObject());
 
@@ -963,12 +963,12 @@ static void ShapeFactory_createBoolean(_NAN_METHOD_ARGS, Solid* pSolid1, Solid* 
 }
 
 
-v8::Handle<v8::Value> ShapeFactory::add(const std::vector<Base*>& shapes)
+v8::Local<v8::Value> ShapeFactory::add(const std::vector<Base*>& shapes)
 {
   TopoDS_Compound compound;
   BRep_Builder builder;
 
-  v8::Handle<v8::Value> pJhis(Solid::NewInstance());
+  v8::Local<v8::Value> pJhis(Solid::NewInstance());
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
   try {
 
@@ -992,16 +992,16 @@ NAN_METHOD(ShapeFactory::compound)
 {
   std::vector<Base*> shapes;
   for (int i = 0; i < info.Length(); i++) {
-    v8::Handle<v8::Object> obj = info[i]->ToObject();
+    v8::Local<v8::Object> obj = info[i]->ToObject();
     if (IsInstanceOf<Solid>(obj)) {
       Base* pShape = Nan::ObjectWrap::Unwrap<Solid>(obj);
       shapes.push_back(pShape);
     }
     else if (info[i]->IsArray()) {
-      v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(info[i]);
+      v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(info[i]);
       int length = arr->Length();
       for (int j = 0; j < length; j++) {
-        v8::Handle<v8::Object> obj1 = arr->Get(j)->ToObject();
+        v8::Local<v8::Object> obj1 = arr->Get(j)->ToObject();
         if (IsInstanceOf<Solid>(obj1)) {
           Base* pShape = Nan::ObjectWrap::Unwrap<Solid>(obj1);
           shapes.push_back(pShape);
@@ -1058,7 +1058,7 @@ NAN_METHOD(ShapeFactory::common)
 bool extractListOfFaces(v8::Local<v8::Value> value, TopTools_ListOfShape& faces)
 {
   if (value->IsArray()) {
-    v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(value);
+    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(value);
     int length = arr->Length();
     for (int i = 0; i < length; i++) {
       Face* pFace = 0;
@@ -1068,7 +1068,7 @@ bool extractListOfFaces(v8::Local<v8::Value> value, TopTools_ListOfShape& faces)
     }
   }
   else {
-    // could be a single face 
+    // could be a single face
     Face* pFace = 0;
     if (!extractArg(value, pFace)) {
       return false;
@@ -1115,7 +1115,7 @@ NAN_METHOD(ShapeFactory::makeThickSolid)
 
     TopoDS_Shape shape = tool.Shape();
 
-    v8::Handle<v8::Value> result(Solid::NewInstance(shape));
+    v8::Local<v8::Value> result(Solid::NewInstance(shape));
 
     Solid* pResult = Nan::ObjectWrap::Unwrap<Solid>(result->ToObject());
 
@@ -1194,7 +1194,7 @@ NAN_METHOD(ShapeFactory::makeDraftAngle)
 
     TopoDS_Shape shape = tool.Shape();
 
-    v8::Handle<v8::Value> result(Solid::NewInstance(shape));
+    v8::Local<v8::Value> result(Solid::NewInstance(shape));
 
     Solid* pResult = Nan::ObjectWrap::Unwrap<Solid>(result->ToObject());
 

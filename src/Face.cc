@@ -156,7 +156,7 @@ v8::Local<v8::Object> Face::Clone() const
   return instance;
 }
 
-v8::Handle<v8::Object> Face::NewInstance(const TopoDS_Face& face)
+v8::Local<v8::Object> Face::NewInstance(const TopoDS_Face& face)
 {
   Face* obj = new Face();
   v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
@@ -175,11 +175,11 @@ NAN_PROPERTY_GETTER(Face::_mesh)
   info.GetReturnValue().Set(Nan::New(pThis->m_cacheMesh));
 }
 
-v8::Handle<v8::Object> Face::createMesh(double factor, double angle, bool qualityNormals)
+v8::Local<v8::Object> Face::createMesh(double factor, double angle, bool qualityNormals)
 {
   Nan::EscapableHandleScope scope;
   const unsigned argc = 0;
-  v8::Handle<v8::Value> argv[1] = {  };
+  v8::Local<v8::Value> argv[1] = {  };
   v8::Local<v8::Object> theMesh = Nan::New(Mesh::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),argc, argv).ToLocalChecked();
 
   Mesh *mesh =  Mesh::Unwrap<Mesh>(theMesh);
@@ -215,7 +215,7 @@ void Face::InitNew(_NAN_METHOD_ARGS)
   REXPOSE_READ_ONLY_PROPERTY_BOOLEAN(Face,hasMesh);
 }
 
-void Face::Init(v8::Handle<v8::Object> target)
+void Face::Init(v8::Local<v8::Object> target)
 {
   // Prepare constructor template
   v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(Face::New);
@@ -245,6 +245,6 @@ void Face::Init(v8::Handle<v8::Object> target)
 NAN_METHOD(Face::createMesh)
 {
   Face* pThis = UNWRAP(Face);
-  v8::Handle<v8::Object> mesh = pThis->createMesh(1,0.5,true);
+  v8::Local<v8::Object> mesh = pThis->createMesh(1,0.5,true);
   info.GetReturnValue().Set(mesh);
 }

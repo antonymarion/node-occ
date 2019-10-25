@@ -141,7 +141,7 @@ NAN_METHOD(Base::mirror)
 {
   CHECK_THIS_DEFINED(Base);
   const Base* pThis = ObjectWrap::Unwrap<Base>(info.This());
-  // TODO 
+  // TODO
   v8::Local<v8::Object> copy    = pThis->Clone();
   info.GetReturnValue().Set(copy);
 }
@@ -337,7 +337,7 @@ void Base::InitNew(_NAN_METHOD_ARGS)
   REXPOSE_READ_ONLY_PROPERTY_CONST_STRING(Base,orientation);
 }
 
-void  Base::InitProto(v8::Handle<v8::ObjectTemplate>& proto)
+void  Base::InitProto(v8::Local<v8::ObjectTemplate>& proto)
 {
   EXPOSE_METHOD(Base,clone);
   EXPOSE_METHOD(Base,translate);

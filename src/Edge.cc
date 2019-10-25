@@ -9,12 +9,12 @@
 #define EXPOSE_POINT_PROPERTY(THISTYPE,ACCESSOR)                                            \
   Nan::SetAccessor(proto,                                                            \
 			Nan::New<v8::String>(#ACCESSOR).ToLocalChecked(),                        \
-					&THISTYPE::getter_##ACCESSOR,  0,v8::Handle<v8::Value>(),v8::DEFAULT,(v8::PropertyAttribute)(v8::ReadOnly|v8::DontDelete))
+					&THISTYPE::getter_##ACCESSOR,  0,v8::Local<v8::Value>(),v8::DEFAULT,(v8::PropertyAttribute)(v8::ReadOnly|v8::DontDelete))
 
 #define REXPOSE_POINT_PROPERTY(THISTYPE,ACCESSOR)                                            \
   Nan::SetAccessor(info.This(),                                                            \
 			Nan::New<v8::String>(#ACCESSOR).ToLocalChecked(),                        \
-					&THISTYPE::getter_##ACCESSOR,  0,v8::Handle<v8::Value>(),v8::DEFAULT,(v8::PropertyAttribute)(v8::ReadOnly|v8::DontDelete))
+					&THISTYPE::getter_##ACCESSOR,  0,v8::Local<v8::Value>(),v8::DEFAULT,(v8::PropertyAttribute)(v8::ReadOnly|v8::DontDelete))
 
 bool Edge::isSeam(Base *face)
 {
@@ -136,7 +136,7 @@ template <class T> T* my_unwrap(v8::MaybeLocal<v8::Value> value) {
   return Nan::ObjectWrap::Unwrap<T>(value.ToLocalChecked()->ToObject());
 }
 
-Vertex* getOrCreateVertex(v8::Handle<v8::Value> arg)
+Vertex* getOrCreateVertex(v8::Local<v8::Value> arg)
 {
   Nan::HandleScope scope;
 
@@ -330,7 +330,7 @@ NAN_PROPERTY_GETTER(Edge::getter_lastVertex) {
 
 
 
-void Edge::Init(v8::Handle<v8::Object> target)
+void Edge::Init(v8::Local<v8::Object> target)
 {
 
   // Prepare constructor template
