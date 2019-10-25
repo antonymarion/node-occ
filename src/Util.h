@@ -3,20 +3,20 @@
 #include "NodeV8.h"
 
 
-template <class T> inline double extract_double(const v8::Local<T>& a) {
+template <class T> inline double extract_double(const v8::Handle<T>& a) {
   return Nan::To<double>(a).FromJust();
 }
 
-void ReadDouble(const v8::Local<v8::Value>& _v,double& value);
+void ReadDouble(const v8::Handle<v8::Value>& _v,double& value);
 
-void ReadInt(v8::Local<v8::Object> obj,const char* name,int* retValue,int defaultValue);
-void ReadDouble(v8::Local<v8::Object> obj,const char* name,double* retValue,double defaultValue=0.0);
+void ReadInt(v8::Handle<v8::Object> obj,const char* name,int* retValue,int defaultValue);
+void ReadDouble(v8::Handle<v8::Object> obj,const char* name,double* retValue,double defaultValue=0.0);
 
-void ReadPropertyPointFromArray(v8::Local<v8::Array> value,double* x,double* y, double*z );
+void ReadPropertyPointFromArray(v8::Handle<v8::Array> value,double* x,double* y, double*z );
 // void ReadPropertyPoint( Handle<Object> value,const char* name,double* x,double* y, double*z );
 
-void ReadXYZ(v8::Local<v8::Object> value,double* x,double* y,double* z);
-void ReadUVW(v8::Local<v8::Object> value,double* x,double* y,double* z);
+void ReadXYZ(v8::Handle<v8::Object> value,double* x,double* y,double* z);
+void ReadUVW(v8::Handle<v8::Object> value,double* x,double* y,double* z);
 
 void ReadPoint(v8::Local<v8::Value> value,double* x,double* y, double*z);
 void ReadPoint(v8::Local<v8::Value> value,gp_Pnt* pt);
@@ -190,17 +190,17 @@ inline v8::Local<v8::Object> _makeTypedArray(const unsigned int* data, int lengt
 
 
 template <typename OBJECT>
-OBJECT* DynamicCast(const v8::Local<v8::Value>& value)
+OBJECT* DynamicCast(const v8::Handle<v8::Value>& value)
 {
   if (value.IsEmpty()) return 0;
   if (!value->IsObject()) return 0;
-  if (IsInstanceOf<OBJECT>(value->ToObject())) {
-    return Nan::ObjectWrap::Unwrap<OBJECT>(value->ToObject());
+  if (IsInstanceOf<OBJECT>((Nan::To<v8::Object>(value)))) {
+    return Nan::ObjectWrap::Unwrap<OBJECT>((Nan::To<v8::Object>(value)));
   }
   return 0;
 }
 template <typename ObjType1, typename ObjType2>
-ObjType2* DynamicCast(const v8::Local<v8::Value>& value)
+ObjType2* DynamicCast(const v8::Handle<v8::Value>& value)
 {
   ObjType1* obj = DynamicCast<ObjType1>(value);
   if (obj) return obj;
@@ -208,7 +208,7 @@ ObjType2* DynamicCast(const v8::Local<v8::Value>& value)
 }
 
 template<class T> v8::Local<v8::Function> Constructor() {
-     return Nan::New<v8::FunctionTemplate>(T::_template)->GetFunction();
+     return Nan::GetFunction(Nan::New<v8::FunctionTemplate>(T::_template));
 }
 template<class T> NAN_METHOD(_NewInstance) {
     int argc =info.Length();
