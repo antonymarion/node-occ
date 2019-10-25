@@ -47,7 +47,7 @@ void Solid::Init(v8::Local<v8::Object> target)
   EXPOSE_READ_ONLY_PROPERTY(_mesh,mesh);
   EXPOSE_READ_ONLY_PROPERTY_BOOLEAN(Solid,hasMesh);
 
-  target->Set(Nan::New("Solid").ToLocalChecked(), Nan::GetFunction(tpl));
+  target->Set(Nan::New("Solid").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 
 }
 
@@ -110,14 +110,14 @@ v8::Local<v8::Object> Solid::Clone() const
 
 v8::Local<v8::Value> Solid::NewInstance()
 {
-  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New(Solid::_template))->NewInstance(Nan::GetCurrentContext(),0,0).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::New(Solid::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),0,0).ToLocalChecked();
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(instance);
   return instance;
 }
 
 v8::Local<v8::Value> Solid::NewInstance(TopoDS_Shape shape)
 {
-  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New(Solid::_template))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::New(Solid::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(instance);
   pThis->setShape(shape);
   return instance;
@@ -431,7 +431,7 @@ v8::Local<v8::Object> Solid::createMesh(double factor, double angle, bool qualit
 
   const unsigned argc = 0;
   v8::Local<v8::Value> argv[1] = {  };
-  v8::Local<v8::Object> theMesh = Nan::GetFunction(Nan::New(Mesh::_template))->NewInstance(Nan::GetCurrentContext(),argc, argv).ToLocalChecked();
+  v8::Local<v8::Object> theMesh = Nan::New(Mesh::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),argc, argv).ToLocalChecked();
 
   Mesh *mesh =  Mesh::Unwrap<Mesh>(theMesh);
 
