@@ -157,7 +157,7 @@ NAN_METHOD(Base::applyTransform)
   }
   try {
 
-    Transformation* pTrans =  ObjectWrap::Unwrap<Transformation>(info[0]->ToObject());
+    Transformation* pTrans =  ObjectWrap::Unwrap<Transformation>((Nan::To<v8::Object(info[0])));
 
     const gp_Trsf& transformation = pTrans->m_trsf;
     pThis->setShape(BRepBuilderAPI_Transform(pThis->shape(), transformation).Shape());

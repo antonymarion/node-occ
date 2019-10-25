@@ -13,18 +13,18 @@ v8::Local<v8::Object> buildEmptyWrapper(TopAbs_ShapeEnum type)
   case  TopAbs_COMPOUND:
   case  TopAbs_COMPSOLID:
   case  TopAbs_SOLID:
-    return Nan::New(Solid::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),0, 0).ToLocalChecked()->ToObject();
+    return Nan::To<v8::Object(Nan::New(Solid::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),0, 0).ToLocalChecked());
   case TopAbs_SHELL:
-    return Nan::New(Shell::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::To<v8::Object(Nan::New(Shell::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
     break;
   case TopAbs_FACE:
-    return Nan::New(Face::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::To<v8::Object(Nan::New(Face::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
   case TopAbs_WIRE:
-    return Nan::New(Wire::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::To<v8::Object(Nan::New(Wire::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
   case TopAbs_EDGE:
-    return Nan::New(Edge::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::To<v8::Object(Nan::New(Edge::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
   case TopAbs_VERTEX:
-    return Nan::New(Vertex::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked()->ToObject();
+    return Nan::To<v8::Object(Nan::New(Vertex::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked());
   case TopAbs_SHAPE:
     break;
   }
@@ -150,7 +150,7 @@ NAN_METHOD(ShapeIterator::New)
   }
 
   // TODO (check that the object info[0] has the correct type)
-  Base* pShape = Nan::ObjectWrap::Unwrap<Base>(info[0]->ToObject());
+  Base* pShape = Nan::To<v8::Object(Nan::ObjectWrap::Unwrap<Base>(info[0]));
 
   TopAbs_ShapeEnum type = getShapeEnum(info[1]);
 

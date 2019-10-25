@@ -85,7 +85,7 @@ NAN_METHOD(Solid::New)
 
 v8::Local<v8::Object> Solid::Clone() const
 {
-  v8::Local<v8::Object> instance = Solid::NewInstance()->ToObject();
+  v8::Local<v8::Object> instance = Nan::To<v8::Object(Solid::NewInstance());
   Solid* pClone = Nan::ObjectWrap::Unwrap<Solid>(instance);
 
   pClone->setShape(this->shape());
@@ -478,10 +478,10 @@ NAN_METHOD(Solid::getShapeName)
 {
   Solid* pThis = UNWRAP(Solid); pThis;
 
-  v8::Local<v8::Object> pShape = info[0]->ToObject();
+  v8::Local<v8::Object> pShape = (Nan::To<v8::Object(info[0]));
   if (!pShape.IsEmpty()) {
     v8::Local<v8::Value> hashCode = pShape->Get(Nan::New("hashCode").ToLocalChecked());
-    v8::Local<v8::Object> reversedMap = pJhis->Get(Nan::New("_reversedMap").ToLocalChecked())->ToObject();
+    v8::Local<v8::Object> reversedMap = Nan::To<v8::Object(pJhis->Get(Nan::New("_reversedMap").ToLocalChecked()));
     v8::Local<v8::Value>  value = reversedMap->Get(hashCode);
     info.GetReturnValue().Set(value);
   }
@@ -491,7 +491,7 @@ std::string Solid::_getShapeName(const TopoDS_Shape& shape)
 {
 	v8::Local<v8::Object> pJhis = this->handle();// NanObjectWrapHandle(this);
 
-  v8::Local<v8::Object> reversedMap = pJhis->Get(Nan::New("_reversedMap").ToLocalChecked())->ToObject();
+  v8::Local<v8::Object> reversedMap = Nan::To<v8::Object(pJhis->Get(Nan::New("_reversedMap").ToLocalChecked()));
   v8::Local<v8::Value> hashCode = Nan::New<v8::Integer>(shape.HashCode(std::numeric_limits<int>::max()));
   v8::Local<v8::Value> value = reversedMap->Get(hashCode);
 
@@ -503,11 +503,11 @@ std::string Solid::_getShapeName(const TopoDS_Shape& shape)
 void Solid::_registerNamedShape(const char* name,const TopoDS_Shape& shape)
 {
   if (shape.ShapeType() == TopAbs_FACE)  {
-    v8::Local<v8::Object> obj = NanObjectWrapHandle(this)->Get(Nan::New("faces").ToLocalChecked())->ToObject();
+    v8::Local<v8::Object> obj = Nan::To<v8::Object(NanObjectWrapHandle(this)->Get(Nan::New("faces").ToLocalChecked()));
     obj->Set(Nan::New(name).ToLocalChecked(),    Face::NewInstance(TopoDS::Face(shape)));
   }
 
-  v8::Local<v8::Object> reversedMap = NanObjectWrapHandle(this)->Get(Nan::New("_reversedMap").ToLocalChecked())->ToObject();
+  v8::Local<v8::Object> reversedMap = Nan::To<v8::Object(NanObjectWrapHandle(this)->Get(Nan::New("_reversedMap").ToLocalChecked()));
   reversedMap->Set(shape.HashCode(std::numeric_limits<int>::max()),Nan::New(name).ToLocalChecked());
 }
 
