@@ -194,8 +194,8 @@ OBJECT* DynamicCast(const v8::Handle<v8::Value>& value)
 {
   if (value.IsEmpty()) return 0;
   if (!value->IsObject()) return 0;
-  if (IsInstanceOf<OBJECT>((Nan::To<v8::Object>(value)))) {
-    return Nan::ObjectWrap::Unwrap<OBJECT>((Nan::To<v8::Object>(value)));
+  if (IsInstanceOf<OBJECT>(value->ToObject())) {
+    return Nan::ObjectWrap::Unwrap<OBJECT>(value->ToObject());
   }
   return 0;
 }
@@ -208,7 +208,7 @@ ObjType2* DynamicCast(const v8::Handle<v8::Value>& value)
 }
 
 template<class T> v8::Local<v8::Function> Constructor() {
-     return Nan::GetFunction(Nan::New<v8::FunctionTemplate>(T::_template));
+     return Nan::New<v8::FunctionTemplate>(T::_template)->GetFunction();
 }
 template<class T> NAN_METHOD(_NewInstance) {
     int argc =info.Length();

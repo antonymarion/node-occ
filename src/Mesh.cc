@@ -62,7 +62,7 @@ void Mesh::Init(v8::Handle<v8::Object> target)
   EXPOSE_METHOD(Mesh, getFaceTriangleNormals);
 
   // other Mesh prototype members are defined in the mesh.js script
-  target->Set(Nan::New("Mesh").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
+  target->Set(Nan::New("Mesh").ToLocalChecked(), tpl->GetFunction());
 
 }
 
@@ -131,7 +131,7 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
   normalTranslationTable.reserve(nb_points);
 
   // ------------------------------------------------------------------------------
-  // import face points into index 
+  // import face points into index
   // ------------------------------------------------------------------------------
   const TColgp_Array1OfPnt&   nodes = triangulation->Nodes();
   Coord3f vert;
@@ -208,7 +208,7 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
           //------------------------------------------------
           const gp_Pnt& vertex = nodes(i + 1);
           GeomAPI_ProjectPointOnSurf SrfProp(vertex, surface);
-          
+
           Standard_Real fU, fV;
           SrfProp.Parameters(1, fU, fV);
 
@@ -402,7 +402,7 @@ void Mesh::updateJavaScriptArray()
   UpdateExternalArray(pThis, "normals", &_normals.data()[0].x, _normals.size() * 3);
   UpdateExternalArray(pThis, "triangles", &_triangles.data()[0].i, _triangles.size() * 3);
   UpdateExternalArray(pThis, "triangleNormals", &_triangles_normals.data()[0].i, _triangles_normals.size() * 3);
-  
+
   UpdateExternalArray(pThis, "faceRanges", &_faceRanges.data()[0], _faceRanges.size());
   UpdateExternalArray(pThis, "edgeIndices", &_edgeIndices.data()[0], _edgeIndices.size());
   UpdateExternalArray(pThis, "edgeRanges", &_edgeRanges.data()[0], _edgeRanges.size());
@@ -436,7 +436,7 @@ NAN_METHOD(Mesh::getFaceTriangles)
   Mesh* pThis = UNWRAP(Mesh);
   Face* pFace = 0;
   if (info.Length() == 1 && info[0]->IsObject()) {
-    pFace = Nan::ObjectWrap::Unwrap<Face>((Nan::To<v8::Object>(info[0])));
+    pFace = Nan::ObjectWrap::Unwrap<Face>(info[0]->ToObject());
   }
   if (!pFace) {
     return Nan::ThrowError("expecting one argument : face");
@@ -474,7 +474,7 @@ NAN_METHOD(Mesh::getFaceTriangleNormals)
   Mesh* pThis = UNWRAP(Mesh);
   Face* pFace = 0;
   if (info.Length() == 1 && info[0]->IsObject()) {
-    pFace = Nan::ObjectWrap::Unwrap<Face>((Nan::To<v8::Object>(info[0])));
+    pFace = Nan::ObjectWrap::Unwrap<Face>(info[0]->ToObject());
   }
   if (!pFace) {
     return Nan::ThrowError("expecting one argument : face");
@@ -517,7 +517,7 @@ NAN_METHOD(Mesh::getEdgeIndices)
   Mesh* pThis = UNWRAP(Mesh);
   Edge* pEdge = 0;
   if (info.Length() == 1 && info[0]->IsObject()) {
-    pEdge = Nan::ObjectWrap::Unwrap<Edge>((Nan::To<v8::Object>(info[0])));
+    pEdge = Nan::ObjectWrap::Unwrap<Edge>(info[0]->ToObject());
   }
   if (!pEdge) {
     return Nan::ThrowError("expecting one argument : edge");

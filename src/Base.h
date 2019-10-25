@@ -35,7 +35,7 @@ public:
   static NAN_METHOD(clone);
   static NAN_METHOD(getBoundingBox);
 
-  static void  InitProto(v8::Handle<v8::ObjectTemplate>& target);
+  static void  InitProto(v8::Local<v8::ObjectTemplate>& target);
 };
 
 v8::Local<v8::Object> buildEmptyWrapper(TopAbs_ShapeEnum type);
@@ -71,17 +71,17 @@ bool extractArg(const v8::Local<v8::Value>& value, ClassType*& pObj)
 
 
 template<class ClassType>
-bool _extractArray(const v8::Handle<v8::Value>& value, std::vector<ClassType*>& elements)
+bool _extractArray(const v8::Local<v8::Value>& value, std::vector<ClassType*>& elements)
 {
   if (value->IsArray()) {
-    v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(value);
+    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(value);
     int length = arr->Length();
     elements.reserve(elements.size() + length);
     for (int i = 0; i < length; i++) {
       if (!arr->Get(i)->IsObject()) {
         return false; // element is not an object
       }
-      v8::Handle<v8::Object> obj = arr->Get(i)->ToObject();
+      v8::Local<v8::Object> obj = arr->Get(i)->ToObject();
       if (IsInstanceOf<ClassType>(obj)) {
         elements.push_back(Nan::ObjectWrap::Unwrap<ClassType>(obj));
       }
@@ -89,7 +89,7 @@ bool _extractArray(const v8::Handle<v8::Value>& value, std::vector<ClassType*>& 
   }
   else if (value->IsObject()) {
     // a single element
-    v8::Handle<v8::Object> obj = value->ToObject();
+    v8::Local<v8::Object> obj = value->ToObject();
     if (IsInstanceOf<ClassType>(obj)) {
       elements.push_back(Nan::ObjectWrap::Unwrap<ClassType>(obj));
     }
