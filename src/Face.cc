@@ -150,7 +150,7 @@ NAN_METHOD(Face::New)
 v8::Local<v8::Object> Face::Clone() const
 {
   Face* obj = new Face();
-  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New(_template).ToLocalChecked())->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
   obj->Wrap(instance);
   obj->setShape(this->shape());
   return instance;
@@ -159,7 +159,7 @@ v8::Local<v8::Object> Face::Clone() const
 v8::Handle<v8::Object> Face::NewInstance(const TopoDS_Face& face)
 {
   Face* obj = new Face();
-  v8::Local<v8::Object> instance = Nan::GetFunction(Nan::New(_template).ToLocalChecked())->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
   obj->Wrap(instance);
   obj->setShape(face);
   return instance;
@@ -239,7 +239,7 @@ void Face::Init(v8::Handle<v8::Object> target)
   EXPOSE_READ_ONLY_PROPERTY_BOOLEAN(Face,hasMesh);
   EXPOSE_READ_ONLY_PROPERTY(_mesh,mesh);
   EXPOSE_TEAROFF(Face,centreOfMass);
-  target->Set(Nan::New("Face").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
+  target->Set(Nan::New("Face").ToLocalChecked(), tpl->GetFunction());
 }
 
 NAN_METHOD(Face::createMesh)

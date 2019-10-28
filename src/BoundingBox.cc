@@ -6,10 +6,10 @@
 Nan::Persistent<v8::FunctionTemplate> BoundingBox::_template;
 
 
-v8::Handle<v8::Value> BoundingBox::NewInstance(const Bnd_Box& box)
+v8::Local<v8::Value> BoundingBox::NewInstance(const Bnd_Box& box)
 {
 
-  v8::Local<v8::Object> instance = (Nan::GetFunction(Nan::New<v8::FunctionTemplate>(_template)))->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
+  v8::Local<v8::Object> instance = Nan::New<v8::FunctionTemplate>(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
 
   BoundingBox* pThis = ObjectWrap::Unwrap<BoundingBox>(instance);
 
@@ -18,7 +18,7 @@ v8::Handle<v8::Value> BoundingBox::NewInstance(const Bnd_Box& box)
   return instance;
 }
 
-v8::Handle<v8::Value> BoundingBox::NewInstance(const gp_Pnt& nearPt,const gp_Pnt& farPt)
+v8::Local<v8::Value> BoundingBox::NewInstance(const gp_Pnt& nearPt,const gp_Pnt& farPt)
 {
   Bnd_Box box;
   box.Add(nearPt);
@@ -71,8 +71,8 @@ NAN_METHOD(BoundingBox::addPoint)
   info.GetReturnValue().Set(info.This());
 }
 
-bool checkCoerceToPoint(const v8::Handle<v8::Value>& v)
-{ 
+bool checkCoerceToPoint(const v8::Local<v8::Value>& v)
+{
   // TODO ...
   return true;
 }
@@ -95,7 +95,7 @@ NAN_METHOD(BoundingBox::isOut)
 }
 
 
-void BoundingBox::Init(v8::Handle<v8::Object> target)
+void BoundingBox::Init(v8::Local<v8::Object> target)
 {
   // Prepare constructor template
   v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(BoundingBox::New);
@@ -116,8 +116,7 @@ void BoundingBox::Init(v8::Handle<v8::Object> target)
   EXPOSE_TEAROFF(BoundingBox,farPt);
   EXPOSE_READ_ONLY_PROPERTY_BOOLEAN(BoundingBox,isVoid);
 
-
-  target->Set(Nan::New("BoundingBox").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
+  target->Set(Nan::New("BoundingBox").ToLocalChecked(), tpl->GetFunction());
 }
 
 void BoundingBox::InitNew(_NAN_METHOD_ARGS)
