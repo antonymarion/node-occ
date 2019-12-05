@@ -3,7 +3,7 @@
 #
 #
 ##########################################################################################
-export OCCT_VERSION=7.1.0
+export OCCT_VERSION=7.2.0
 export OCCT_PACKAGE=occt-${OCCT_VERSION}
 if [ `uname` == "Darwin" ];then
 export OCCT_TARFILE=${OCCT_PACKAGE}-osx.tgz
@@ -22,11 +22,11 @@ if [ ! -f "${OCCT_TARFILE}" ]; then
   mv "${OCCT_TARFILE}.downloading" ${OCCT_TARFILE}
 fi
 
-if [ ! -d "${OCCT_PACKAGE}" ]; then 
+if [ ! -d "${OCCT_PACKAGE}" ]; then
   echo "extracting package ${OCCT_TARFILE}"
   tar -xf ${OCCT_TARFILE}
 fi
- 
+
 export LD_LIBRARY_PATH=`pwd`/${OCCT_PACKAGE}/lib:$LD_LIBRARY_PATH
 
 export VERSION_FILE=`pwd`/${OCCT_PACKAGE}/include/opencascade/Standard_Version.hxx
@@ -59,7 +59,7 @@ PUBLISH_BINARY=true
 # if we are building a tag then publish
 echo $TRAVIS_BRANCH
 export CURRENT BRANCH=`git describe --tags --always HEAD`
-echo "CURRENT BRANCH  = $CURRENT_BRANCH" 
+echo "CURRENT BRANCH  = $CURRENT_BRANCH"
 if [[ "$TRAVIS_BRANCH" == "$CURRENT_BRANCH" ]]; then PUBLISH_BINARY=true; fi;
 
 
@@ -84,4 +84,4 @@ if [[ ! -z $TRAVIS_ELECTRON_VERSION ]]; then
 fi
 
 #  git submodule update --depth 50 --init --recursive
-[[ ${1:-} = "--only-prepare" ]] || npm install --build-from-source 
+[[ ${1:-} = "--only-prepare" ]] || npm install --build-from-source
