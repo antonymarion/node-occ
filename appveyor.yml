@@ -75,17 +75,17 @@ environment:
       nodejs_version: 10
       platform: x64
 
-#    - electron_version: "5.0.2"
-#      nodejs_version: 12
-#      platform: x64
-#
-#    - electron_version: "6.0.0"
-#      nodejs_version: 12
-#      platform: x64
+    - electron_version: "5.0.2"
+      nodejs_version: 12
+      platform: x64
 
-    # - electron_version: "1.6.10"
-    #   nodejs_version: 7.4
-    #   platform: x86
+    - electron_version: "6.0.0"
+      nodejs_version: 12
+      platform: x64
+
+     - electron_version: "1.6.10"
+       nodejs_version: 7.4
+       platform: x86
 
 
 # clone directory
@@ -110,7 +110,7 @@ install:
     if ($env:appveyor_repo_tag -match "true" -and ("$(git describe --tags --always HEAD)" -eq $env:appveyor_repo_tag_name)) {
       $env:publish_binary = 1;
     } else {
-      $env:publish_binary = 1;
+      $env:publish_binary = 0;
     }
     true;
 - ps: >
@@ -146,8 +146,8 @@ after_test:
   - IF %PUBLISH_BINARY% == 1        (node-pre-gyp package 2>&1)
   - # IF %PUBLISH_BINARY% == 1        (node-pre-gyp publish 2>&1)
   - # IF %PUBLISH_BINARY% == 1        (node-pre-gyp-github publish --release 2>&1)
-  - IF %PUBLISH_BINARY% == 1        (node-pre-gyp-github publish --release)
-#  -  # IF %PUBLISH_BINARY% == 1        (node-pre-gyp-github publish  2>&1)
+  - IF %PUBLISH_BINARY% == 1        (node-pre-gyp-github publish)
+  -  # IF %PUBLISH_BINARY% == 1        (node-pre-gyp-github publish  2>&1)
   - IF %PUBLISH_BINARY% == 1        (node-pre-gyp clean)
   - IF %PUBLISH_BINARY% == 1        (npm install --fallback-to-build=false)
 

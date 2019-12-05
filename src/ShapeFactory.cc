@@ -78,8 +78,8 @@ NAN_METHOD(ShapeFactory::makeBox)
   //    1 point + 3 numbers dx,dy,dz
   //TODO   1 object with { x: 1,y: 2,z: 3, dw:
 
-  v8::Handle<v8::Value> pJhis = Solid::NewInstance();
-  Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
+  v8::Local<v8::Value> pJhis = Solid::NewInstance();
+  Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(Nan::To<v8::Object>(pJhis).ToLocalChecked());
 
   double dx = 10;
   double dy = 10;
@@ -476,7 +476,7 @@ NAN_METHOD(ShapeFactory::makeCone)
   }
   else if (info.Length() == 4 && info[0]->IsArray() && info[1]->IsArray() && info[2]->IsNumber() && info[3]->IsNumber()) {
     try {
-      // cone with a sharp apex 
+      // cone with a sharp apex
     // apex, direction ,  half_angle, height
       gp_Pnt apex;
       ReadPoint(info[0], &apex);
@@ -484,7 +484,7 @@ NAN_METHOD(ShapeFactory::makeCone)
       gp_Dir innerDir;
       ReadDir(info[1], &innerDir);
 
-      double half_angle_in_radian = atan(1.0); // default : 45° 
+      double half_angle_in_radian = atan(1.0); // default : 45°
       ReadDouble(info[2], half_angle_in_radian);
 
       double height = 100;
@@ -512,7 +512,7 @@ NAN_METHOD(ShapeFactory::makeTorus)
   Solid* pThis = Nan::ObjectWrap::Unwrap<Solid>(pJhis->ToObject());
 
   // variation 1
-  //  
+  //
   //  Center as <x,y,z>
   //  axis   as <u,v,w>
   //  bigRadius
@@ -721,7 +721,7 @@ void ShapeClassifier::classify()
 
 
 
-  // 
+  //
   // now check shape of the new solid that but that have'nt been processed yet
   //
   //   if the shape can be found in  old solid we can reuse the name of the
@@ -1068,7 +1068,7 @@ bool extractListOfFaces(v8::Local<v8::Value> value, TopTools_ListOfShape& faces)
     }
   }
   else {
-    // could be a single face 
+    // could be a single face
     Face* pFace = 0;
     if (!extractArg(value, pFace)) {
       return false;

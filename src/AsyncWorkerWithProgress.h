@@ -17,31 +17,35 @@ inline ProgressData::ProgressData()
 class AsyncWorkerWithProgress : public Nan::AsyncWorker {
 
   Nan::Callback* _progressCallback;
-  uv_async_t* async;
+  uv_async_t async;
 protected:
   std::string _filename;
 public:
   ProgressData m_data;
 
 public:
-  AsyncWorkerWithProgress(Nan::Callback *callback,Nan::Callback* progressCallback,std::string*  pfilename)
+  AsyncWorkerWithProgress(
+    Nan::Callback *callback,
+    Nan::Callback* progressCallback,
+    std::string*  pfilename
+  )
     : Nan::AsyncWorker(callback) , _progressCallback(progressCallback)
   {
-    async = new uv_async_t();
-    _filename = *pfilename; 
+    _filename = *pfilename;
     delete pfilename;
-
-    uv_async_init(uv_default_loop(),async,AsyncWorkerWithProgress::notify_progress);
-    async->data = this;
+    async.data = this;
+    uv_async_init(Nan::GetCurrentEventLoop(), &async, AsyncProgress_);
 
   }
+
  inline static void AsyncClose_(uv_handle_t* handle) {
     AsyncWorkerWithProgress* worker = static_cast<AsyncWorkerWithProgress*>(handle->data);
-    delete reinterpret_cast<uv_async_t*>(handle);
     delete worker;
+    handle->data = nullptr;
   }
+
   virtual void Destroy() {
-    uv_close(reinterpret_cast<uv_handle_t*>(async), AsyncClose_);
+    uv_close(reinterpret_cast<uv_handle_t*>(&async), AsyncClose_);
   }
   ~AsyncWorkerWithProgress() {
 
@@ -70,9 +74,9 @@ public:
   };
 
 #if NODE_MODULE_VERSION >= 14 // 12
-static void notify_progress(uv_async_t* handle) 
+static void notify_progress(uv_async_t* handle)
 #else
-static void notify_progress(uv_async_t* handle,int status/*unused*/) 
+static void notify_progress(uv_async_t* handle,int status/*unused*/)
 #endif
   {
     AsyncWorkerWithProgress *worker = static_cast<AsyncWorkerWithProgress*>(handle->data);
@@ -80,7 +84,7 @@ static void notify_progress(uv_async_t* handle,int status/*unused*/)
   }
 
   /**
-  * 
+  *
   * Note:
   *    - this method is called in the main loop thread.
   *    - there is no garanty that this method will be called for each send_notify_progress

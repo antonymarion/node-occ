@@ -5,18 +5,23 @@
 using namespace std;
 
 
-void ReadPropertyPointFromArray(v8::Handle<v8::Array> arr, double* x, double* y, double*z)
+void ReadPropertyPointFromArray(v8::Local<v8::Array> arr, double* x, double* y, double*z)
 {
+  Nan::HandleScope scope;
+
   double defaultValue =0.0;
   int length = arr->Length();
   if (length >= 1) {
-    *x = Nan::To<double>(arr->Get(0)).FromMaybe(defaultValue);
+    auto element0 = Nan::Get(arr,0).ToLocalChecked();
+    *x = Nan::To<double>(element0).FromMaybe(defaultValue);
   }
   if (length >= 2) {
-    *y = arr->Get(1)->NumberValue();
+    auto element1 = Nan::Get(arr,1).ToLocalChecked();
+    *y = Nan::To<double>(element1).FromMaybe(defaultValue);
   }
   if (length >= 3) {
-    *z = arr->Get(2)->NumberValue();
+    auto element2 = Nan::Get(arr,2).ToLocalChecked();
+    *z = Nan::To<double>(element2).FromMaybe(defaultValue);
   }
 
 }

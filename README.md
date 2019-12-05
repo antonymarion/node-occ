@@ -16,7 +16,7 @@ This project comes with a set of V8 wrappers around OpenCascade API and a sample
 
 
 ```javascript
-var occ = require('occ')
+var occ = require("node-occ").occ;
 
 // construct a box
 var box = occ.makeBox([0,0,0],[100,100,50])
@@ -75,9 +75,9 @@ $npm install node-occ
    
 ### on Linux
 
+#### on ubuntu
 
-
-### on ubuntu
+(use nodejs 12.0)
 
 ```bash
 
@@ -87,16 +87,15 @@ sudo npm install node-pre-gyp -g
 sudo npm install mocha -g
 
 #installing cmake
-sudo apt-get install cmake cmake-curses-gui g++ build-essential
+sudo apt-get install cmake cmake-curses-gui g++ build-essential libtbb2
 
 # ------------------------------------
 git clone --recursive https://github.com/erossignon/node-occ.git
 cd node-occ
-sh prepare_build.sh
-npm install
-node-pre-gyp configure
-node-pre-gyp build
-mocha
+export OCCT_PACKAGE=occt-7.2.0
+export LD_LIBRARY_PATH=`pwd`/${OCCT_PACKAGE}/lib:$LD_LIBRARY_PATH
+npm install --build-from-source
+make test
 ```
 
 
@@ -116,7 +115,7 @@ mocha
 
 ## MIT License
 
-Copyright © 2012-2015 E. Rossignon
+Copyright © 2012-2019 E. Rossignon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

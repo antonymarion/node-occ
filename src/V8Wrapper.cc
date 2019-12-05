@@ -22,7 +22,7 @@ NAN_METHOD(ForceGC)
     Nan::IdleNotification(100);
 }
 
-void Initialize(v8::Handle<v8::Object> target)
+void Initialize(v8::Local<v8::Object> target)
 {
 
     BoundingBox::Init(target);

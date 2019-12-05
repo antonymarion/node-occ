@@ -13,7 +13,6 @@
                    "xcode_settings": {
                         "OTHER_CFLAGS" : [
                             "-O3",
-                            "-rpath,\${ORIGIN}",
                             "-frtti",
                             "-Wno-ignored-qualifiers",
                             "-Wno-unused-variable",
@@ -25,10 +24,10 @@
                         ]
                    },
                     "library_dirs": [
-                      "<!(pwd)/occt-7.1.0/lib",
+                      "<!(pwd)/occt-7.2.0/lib",
                     ],
                     "include_dirs": [
-                      "<!(pwd)/occt-7.1.0/include/opencascade",
+                      "<!(pwd)/occt-7.2.0/include/opencascade",
                       "<!(node -e \"require('nan')\")"
                     ],},
               ],
@@ -199,7 +198,7 @@
                 "copies": [
                   {
                     "files": [
-                    
+
                       "<(bin_folder)/libTKBO.7.1.0.dylib",
                       "<(bin_folder)/libTKBool.7.1.0.dylib",
                       "<(bin_folder)/libTKBRep.7.1.0.dylib",
@@ -238,7 +237,7 @@
           "copies": [
             {
               "files": [
-              
+
                 "<(bin_folder)/libTKBO.so.7.1.0",
                 "<(bin_folder)/libTKBool.so.7.1.0",
                 "<(bin_folder)/libTKBRep.so.7.1.0",
@@ -263,7 +262,7 @@
                 "<(bin_folder)/libTKTopAlgo.so.7.1.0",
                 "<(bin_folder)/libTKXSBase.so.7.1.0",
 
-              
+
                 "<(bin_folder)/libTKBO.so.7",
                 "<(bin_folder)/libTKBool.so.7",
                 "<(bin_folder)/libTKBRep.so.7",

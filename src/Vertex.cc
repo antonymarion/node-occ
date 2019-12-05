@@ -72,7 +72,7 @@ NAN_METHOD(Vertex::New)
 v8::Local<v8::Object>  Vertex::Clone() const
 {
   Vertex* obj = new Vertex();
-  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = makeInstance(_template);
   obj->Wrap(instance);
   obj->setShape(this->shape());
   return instance;

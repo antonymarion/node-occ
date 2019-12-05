@@ -38,9 +38,9 @@ NAN_METHOD(Point3Wrap::asArray)
 {
   Point3Wrap* pThis = Nan::ObjectWrap::Unwrap<Point3Wrap>(info.This());
   v8::Local<v8::Array> arr = Nan::New<v8::Array>(3);
-  arr->Set(0, Nan::New(pThis->x()));
-  arr->Set(1, Nan::New(pThis->y()));
-  arr->Set(2, Nan::New(pThis->z()));
+  Nan::Set(arr,0, Nan::New(pThis->x()));
+  Nan::Set(arr,1, Nan::New(pThis->y()));
+  Nan::Set(arr,2, Nan::New(pThis->z()));
   info.GetReturnValue().Set(arr);
 }
 NAN_METHOD(Point3Wrap::equals)
@@ -56,7 +56,7 @@ NAN_METHOD(Point3Wrap::equals)
   else if (info.Length() == 2) {
     gp_Pnt p1;
     ReadPoint(info[0], &p1);
-    
+
     double tol;
     ReadDouble(info[1], tol);
 
@@ -87,7 +87,7 @@ void Point3Wrap::Init(v8::Handle<v8::Object> target)
 
   EXPOSE_METHOD(Point3Wrap, equals);
   EXPOSE_METHOD(Point3Wrap, asArray);
-  
+
 
   target->Set(Nan::New("Point3D").ToLocalChecked(), tpl->GetFunction());
 

@@ -86,8 +86,7 @@ NAN_METHOD(Transformation::makeScale)
 
   Transformation* pThis = prepare(info);
 
-  double factor= info[0]->NumberValue();
-
+  double factor= Nan::To<double>(info[0]).FromJust();
   double x=0,y=0,z=0;
   ReadPoint(info[1],&x,&y,&z);
 

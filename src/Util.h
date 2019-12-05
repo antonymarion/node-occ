@@ -3,20 +3,24 @@
 #include "NodeV8.h"
 
 
-template <class T> inline double extract_double(const v8::Handle<T>& a) {
+inline v8::Local<v8::Object>  makeInstance(Nan::Persistent<v8::FunctionTemplate>& _template) {
+  return Nan::NewInstance(Nan::GetFunction(Nan::New(_template)).ToLocalChecked()).ToLocalChecked();
+}
+
+template <class T> inline double extract_double(const v8::Local<T>& a) {
   return Nan::To<double>(a).FromJust();
 }
 
-void ReadDouble(const v8::Handle<v8::Value>& _v,double& value);
+void ReadDouble(const v8::Local<v8::Value>& _v,double& value);
 
-void ReadInt(v8::Handle<v8::Object> obj,const char* name,int* retValue,int defaultValue);
-void ReadDouble(v8::Handle<v8::Object> obj,const char* name,double* retValue,double defaultValue=0.0);
+void ReadInt(v8::Local<v8::Object> obj,const char* name,int* retValue,int defaultValue);
+void ReadDouble(v8::Local<v8::Object> obj,const char* name,double* retValue,double defaultValue=0.0);
 
-void ReadPropertyPointFromArray(v8::Handle<v8::Array> value,double* x,double* y, double*z );
+void ReadPropertyPointFromArray(v8::Local<v8::Array> value,double* x,double* y, double*z );
 // void ReadPropertyPoint( Handle<Object> value,const char* name,double* x,double* y, double*z );
 
-void ReadXYZ(v8::Handle<v8::Object> value,double* x,double* y,double* z);
-void ReadUVW(v8::Handle<v8::Object> value,double* x,double* y,double* z);
+void ReadXYZ(v8::Local<v8::Object> value,double* x,double* y,double* z);
+void ReadUVW(v8::Local<v8::Object> value,double* x,double* y,double* z);
 
 void ReadPoint(v8::Local<v8::Value> value,double* x,double* y, double*z);
 void ReadPoint(v8::Local<v8::Value> value,gp_Pnt* pt);

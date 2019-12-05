@@ -16,14 +16,15 @@ void extractShapes(v8::Local<v8::Value> value, std::list<Shape*>& shapes)
 {
   if (value->IsArray()) {
 
-    v8::Array* arr = v8::Array::Cast(*value);
+    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(value);
     for (uint32_t i = 0; i < arr->Length(); i++) {
-      extractShapes(arr->Get(i), shapes);
+      auto elementI = Nan::Get(arr,i).ToLocalChecked();
+      extractShapes(elementI, shapes);
     }
   }
   else if (value->IsObject()) {
     // it must be of type
-    v8::Handle<v8::Object> obj = value->ToObject();
+    v8::Local<v8::Object> obj = Nan::To<v8::Object>(value).ToLocalChecked();
     if (IsInstanceOf<Solid>(obj)) {
       shapes.push_back(Nan::ObjectWrap::Unwrap<Shape>(obj));
     }
@@ -31,23 +32,23 @@ void extractShapes(v8::Local<v8::Value> value, std::list<Shape*>& shapes)
   }
 }
 
-static bool extractFileName(const v8::Handle<v8::Value>& value, std::string& filename)
+static bool extractFileName(const v8::Local<v8::Value>& value, std::string& filename)
 {
   // first argument is filename
   if (!value->IsString()) {
     return false;
   }
-  v8::String::Utf8Value str(value);
-  filename = ToCString(str);
+  Nan::Utf8String str(value);
+  filename = *str;
   return true;
 }
-static bool extractCallback(const v8::Handle<v8::Value>& value, v8::Handle<v8::Function>& callback)
+
+static bool extractCallback(const v8::Local<v8::Value>& value, v8::Local<v8::Function>& callback)
 {
   if (!value->IsFunction()) {
     return false;
   }
-  callback = v8::Handle<v8::Function>::Cast(value->ToObject());
-  assert(!callback.IsEmpty());
+  callback = Nan::To<v8::Function>(value).ToLocalChecked();
   return true;
 }
 
@@ -337,7 +338,7 @@ void StepAsyncReadWorker::HandleOKCallback() {
 
       v8::Local<v8::Array> arr = convert(jsshapes);
 
-      v8::Local<v8::Value> err = Nan::Null(); 
+      v8::Local<v8::Value> err = Nan::Null();
       v8::Local<v8::Value> argv[2] = { err, arr };
       callback->Call(2, argv);
 
@@ -347,7 +348,7 @@ void StepAsyncReadWorker::HandleOKCallback() {
       return this->HandleErrorCallback();
     }
   }
-  else {  
+  else {
     return this->HandleErrorCallback();
   }
 }
@@ -420,7 +421,7 @@ void StepAsyncReadWorker::Execute() {
     }
 
     aReader.WS()->MapReader()->SetProgress(0);
-  
+
     progress->SetValue(100);
     progress->EndScope();
     progress->Show(true);
@@ -434,7 +435,7 @@ void StepAsyncReadWorker::Execute() {
 
     int nbs = aReader.NbShapes();
     for (int i = 1; i <= nbs; i++) {
-      const TopoDS_Shape& aShape = aReader.Shape(i);             
+      const TopoDS_Shape& aShape = aReader.Shape(i);
 
 
       if (aShape.ShapeType() == TopAbs_SOLID) {

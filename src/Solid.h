@@ -32,7 +32,7 @@ public:
 
   virtual void InitNew(_NAN_METHOD_ARGS);
 
-  v8::Handle<v8::Object> createMesh(double factor, double angle, bool qualityNormals = true);
+  v8::Local<v8::Object> createMesh(double factor, double angle, bool qualityNormals = true);
 
   typedef enum BoolOpType {
     BOOL_FUSE,

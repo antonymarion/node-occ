@@ -133,7 +133,9 @@ int Edge::createCircle(const gp_Pnt& center, const gp_Dir& normal, double radius
 }
 
 template <class T> T* my_unwrap(v8::MaybeLocal<v8::Value> value) {
-  return Nan::ObjectWrap::Unwrap<T>(value.ToLocalChecked()->ToObject());
+
+  auto a = Nan::To<v8::Object>(value.ToLocalChecked()).ToLocalChecked();
+  return Nan::ObjectWrap::Unwrap<T>(a);
 }
 
 Vertex* getOrCreateVertex(v8::Local<v8::Value> arg)

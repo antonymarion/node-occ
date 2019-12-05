@@ -25,10 +25,9 @@ NAN_METHOD(Mesh::New)
 
   Mesh* obj = new Mesh();
 
-  info.This()->Set(Nan::New("vertices").ToLocalChecked(), Nan::New<v8::Object>());
-  info.This()->Set(Nan::New("normals").ToLocalChecked(), Nan::New<v8::Object>());
-  info.This()->Set(Nan::New("edgeIndices").ToLocalChecked(), Nan::New<v8::Object>());
-  info.This()->Set(Nan::New("triangles").ToLocalChecked(), Nan::New<v8::Object>());
+  Nan::Set(info.This(),Nan::New("normals").ToLocalChecked(), Nan::New<v8::Object>());
+  Nan::Set(info.This(),Nan::New("edgeIndices").ToLocalChecked(), Nan::New<v8::Object>());
+  Nan::Set(info.This(),Nan::New("triangles").ToLocalChecked(), Nan::New<v8::Object>());
 
   obj->Wrap(info.This());
   info.GetReturnValue().Set(info.This());

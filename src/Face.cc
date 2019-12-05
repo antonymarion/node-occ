@@ -150,16 +150,16 @@ NAN_METHOD(Face::New)
 v8::Local<v8::Object> Face::Clone() const
 {
   Face* obj = new Face();
-  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = makeInstance(_template);
   obj->Wrap(instance);
   obj->setShape(this->shape());
   return instance;
 }
 
-v8::Handle<v8::Object> Face::NewInstance(const TopoDS_Face& face)
+v8::Local<v8::Object> Face::NewInstance(const TopoDS_Face& face)
 {
   Face* obj = new Face();
-  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = makeInstance(_template);
   obj->Wrap(instance);
   obj->setShape(face);
   return instance;

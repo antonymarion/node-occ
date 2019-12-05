@@ -33,13 +33,13 @@ public:
     static NAN_METHOD(getFaceTriangles);
     static NAN_METHOD(getFaceTriangleNormals);
 
-    static void Init(v8::Handle<v8::Object> target);
+    static void Init(v8::Local<v8::Object> target);
 
 private:
 
     // a set of points to support edges and triangles
     std::vector<Coord3f>     _vertices;
-    // a set of normals 
+    // a set of normals
     std::vector<Coord3f>     _normals;
 
     std::vector<Triangle3i>   _triangles;
@@ -70,15 +70,15 @@ public:
     uint32_t numTriangles()  {
         return  (uint32_t) _triangles.size();
     }
-    
+
     int32_t numVertices()  {
         return (int32_t) _vertices.size();
     }
-    
+
     int32_t numNormals()  {
         return (int32_t) _normals.size();
     }
-    
+
     int32_t numEdges()  {
         return (int32_t)  _edgeIndices.size()>>1;
     }

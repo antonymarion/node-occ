@@ -47,7 +47,8 @@ describe("testing STEP input output ", function () {
     it(" readSTEP with callback ", function (done) {
 
         let callback_called = 0;
-        occ.readSTEP(b3_step, function (err, shapes) {
+        occ.readSTEP(b3_step,  (err, shapes) => {
+            console.log(err,shapes);
             shapes.length.should.equal(2);
             shapes[0].numFaces.should.equal(6);
             shapes[1].numFaces.should.equal(3);

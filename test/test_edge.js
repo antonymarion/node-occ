@@ -6,7 +6,7 @@ describe("testing Edges ",function(){
     describe("constructing an empty Edge",function(){
         let edge;
         before(function(){
-            edge = new occ.Edge()
+            edge = new occ.Edge();
             should.exist(edge);
         });
         it("should be valid", function(){

@@ -15,18 +15,25 @@ Nan::Persistent<v8::FunctionTemplate> BooleanOperation::_template;
 v8::Local<v8::Value> BooleanOperation::NewInstance(BOPAlgo_Operation op)
 {
 
-  v8::Local<v8::Object> instance = Nan::New<v8::FunctionTemplate>(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(), 0, 0).ToLocalChecked();
+  v8::Local<v8::Object> instance = makeInstance(_template);
   BooleanOperation* pThis = ObjectWrap::Unwrap<BooleanOperation>(instance);
   return instance;
 }
 
+
+inline bool _isEqual(v8::Local<v8::String> a,const std::string txt) {
+  return txt == *Nan::Utf8String(a);
+}
+
 BOPAlgo_Operation ReadOperationType(const v8::Local<v8::Value>& arg)
 {
-  if (arg->ToString()->Equals(Nan::New("SECTION").ToLocalChecked()))  return BOPAlgo_SECTION;
-  if (arg->ToString()->Equals(Nan::New("COMMON").ToLocalChecked()))   return BOPAlgo_COMMON;
-  if (arg->ToString()->Equals(Nan::New("FUSE").ToLocalChecked()))     return BOPAlgo_FUSE;
-  if (arg->ToString()->Equals(Nan::New("CUT").ToLocalChecked()))      return BOPAlgo_CUT;
-  if (arg->ToString()->Equals(Nan::New("CUT21").ToLocalChecked()))    return BOPAlgo_CUT21;
+
+  v8::Local<v8::String> str = Nan::To<v8::String>(arg).ToLocalChecked();
+  if (_isEqual(str,"SECTION"))  return BOPAlgo_SECTION;
+  if (_isEqual(str,"COMMON"))   return BOPAlgo_COMMON;
+  if (_isEqual(str,"FUSE"))     return BOPAlgo_FUSE;
+  if (_isEqual(str,"CUT"))      return BOPAlgo_CUT;
+  if (_isEqual(str,"CUT21"))    return BOPAlgo_CUT21;
   return BOPAlgo_UNKNOWN;
 }
 

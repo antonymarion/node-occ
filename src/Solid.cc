@@ -9,10 +9,12 @@
 Nan::Persistent<v8::FunctionTemplate> Solid::_template;
 
 /*static*/
-void Solid::Init(v8::Handle<v8::Object> target)
+void Solid::Init(v8::Local<v8::Object> target)
 {
+
+
   // Prepare constructor template
-  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(Solid::New);  
+  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(Solid::New);
   tpl->SetClassName(Nan::New("Solid").ToLocalChecked());
 
   // object has one internal filed ( the C++ object)
@@ -26,14 +28,14 @@ void Solid::Init(v8::Handle<v8::Object> target)
   Base::InitProto(proto);
 
   EXPOSE_METHOD(Solid,getEdges);
-  EXPOSE_METHOD(Solid,getVertices); 
+  EXPOSE_METHOD(Solid,getVertices);
   EXPOSE_METHOD(Solid,getFaces);
   EXPOSE_METHOD(Solid,getOuterShell);
   EXPOSE_METHOD(Solid,getShells);
   EXPOSE_METHOD(Solid,getSolids);
   EXPOSE_METHOD(Solid,getShapeName);
   EXPOSE_METHOD(Solid,getAdjacentFaces);
-  EXPOSE_METHOD(Solid,getCommonEdges);	
+  EXPOSE_METHOD(Solid,getCommonEdges);
   EXPOSE_METHOD(Solid,createMesh);
 
 
@@ -315,7 +317,7 @@ NAN_METHOD(Solid::getCommonVertices)
   Face* pFace2 = 0 ;
   if (info.Length()<2 || !extractArg(info[0],pFace1) || !extractArg(info[1],pFace2) ) {
     return Nan::ThrowError("invalid arguments getCommonEdges : expecting <FACE>,<FACE>");
-  }	
+  }
   v8::Local<v8::Array> arr = v8::Array::New(0);
   Nan::ThrowError("Not Implemented ");
   info.GetReturnValue().Set(arr);
