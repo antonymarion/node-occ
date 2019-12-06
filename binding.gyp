@@ -24,10 +24,10 @@
                         ]
                    },
                     "library_dirs": [
-                      "<!(pwd)/occt-7.3.0/lib",
+                      "<!(pwd)/occt-7.2.0/lib",
                     ],
                     "include_dirs": [
-                      "<!(pwd)/occt-7.3.0/include/opencascade",
+                      "<!(pwd)/occt-7.2.0/include/opencascade",
                       "<!(node -e \"require('nan')\")"
                     ],},
               ],

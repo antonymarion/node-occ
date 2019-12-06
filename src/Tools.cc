@@ -159,7 +159,7 @@ static int extractSubShape(const TopoDS_Shape& shape, std::list<v8::Local<v8::Ob
   case TopAbs_COMPSOLID:
   case TopAbs_SOLID:
   {
-    shapes.push_back(Solid::NewInstance(shape)->ToObject());
+    shapes.push_back(Nan::To<v8::Object>(Solid::NewInstance(shape)).ToLocalChecked());
     break;
   }
   case TopAbs_FACE:

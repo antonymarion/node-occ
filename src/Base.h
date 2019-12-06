@@ -49,7 +49,10 @@ size_t extractArgumentList(_NAN_METHOD_ARGS, std::vector<ClassType*>& elements)
 
   for (int i = 0; i < info.Length(); i++) {
     if (IsInstanceOf<ClassType>(info[i])) {
-      elements.push_back(Nan::ObjectWrap::Unwrap<ClassType>(info[i]->ToObject()));
+
+      auto o = Nan::To<v8::Object>(info[i]).ToLocalChecked();
+
+      elements.push_back(Nan::ObjectWrap::Unwrap<ClassType>(o));
     }
   }
   return elements.size();

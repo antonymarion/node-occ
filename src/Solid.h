@@ -64,13 +64,13 @@ public:
   static NAN_METHOD(getCommonVertices);
 
   // Methods exposed to JavaScripts
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   static NAN_METHOD(New);
   static NAN_METHOD(NewInstance);
 
-  static v8::Handle<v8::Value>     NewInstance(TopoDS_Shape shape);
-  static v8::Handle<v8::Value>     NewInstance();
+  static v8::Local<v8::Value>     NewInstance(TopoDS_Shape shape);
+  static v8::Local<v8::Value>     NewInstance();
 
   static Nan::Persistent<v8::FunctionTemplate> _template;
 

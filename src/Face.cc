@@ -175,12 +175,13 @@ NAN_PROPERTY_GETTER(Face::_mesh)
   info.GetReturnValue().Set(Nan::New(pThis->m_cacheMesh));
 }
 
-v8::Handle<v8::Object> Face::createMesh(double factor, double angle, bool qualityNormals)
+v8::Local<v8::Object> Face::createMesh(double factor, double angle, bool qualityNormals)
 {
   Nan::EscapableHandleScope scope;
   const unsigned argc = 0;
-  v8::Handle<v8::Value> argv[1] = {  };
-  v8::Local<v8::Object> theMesh = Nan::New(Mesh::_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),argc, argv).ToLocalChecked();
+  v8::Local<v8::Value> argv[1] = {  };
+
+  v8::Local<v8::Object> theMesh = makeInstance(Mesh::_template);
 
   Mesh *mesh =  Mesh::Unwrap<Mesh>(theMesh);
 

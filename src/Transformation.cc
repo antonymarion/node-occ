@@ -108,7 +108,7 @@ NAN_METHOD(Transformation::makeRotation)
 // Methods exposed to JavaScripts
 Nan::Persistent<v8::FunctionTemplate> Transformation::_template;
 
-void Transformation::Init(v8::Handle<v8::Object> target)
+void Transformation::Init(v8::Local<v8::Object> target)
 {
   v8::Local<v8::FunctionTemplate> tpl =  Nan::New<v8::FunctionTemplate>(Transformation::New);
   // Prepare constructor template

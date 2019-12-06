@@ -68,10 +68,7 @@ inline int ArrayTypeSize(ArrayType type) {
 
 inline v8::Local<v8::Value> makeArrayBuffer(int length) {
 
-  v8::Local<v8::Object> global = Nan::GetCurrentContext()->Global();
-  v8::Local<v8::Value> val;
-  // make ArrayBuffer
-  val = global->Get(Nan::New("ArrayBuffer").ToLocalChecked());
+  v8::Local<v8::Value> val = Nan::New("ArrayBuffer").ToLocalChecked();
 
   if (val.IsEmpty() || !val->IsFunction()) {
     Nan::ThrowError("Error getting ArrayBuffer constructor");

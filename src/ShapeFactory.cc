@@ -92,13 +92,9 @@ NAN_METHOD(ShapeFactory::makeBox)
       dx = extract_double(info[0]);
       dy = extract_double(info[1]);
       dz = extract_double(info[2]);
-
       BRepPrimAPI_MakeBox  tool(dx, dy, dz);
       pThis->setShape(tool.Shape());
       registerMakeBoxFaces(pThis, tool);
-
-
-
     }
     else if (info.Length() == 2) {
 

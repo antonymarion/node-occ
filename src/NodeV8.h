@@ -37,7 +37,7 @@ template<class T> bool IsInstanceOf(Nan::Local<v8::Value> obj) {
 	return _template->HasInstance(obj);
 
 }
-template<class T> bool IsInstanceOf(v8::Handle<v8::Object> obj) {
+template<class T> bool IsInstanceOf(Nan::Handle<v8::Object> obj) {
 	v8::Local<v8::FunctionTemplate> _template = Nan::New(T::_template);
 	return _template->HasInstance(obj);
 }
