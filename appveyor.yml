@@ -132,7 +132,7 @@ build_script:
 # - npm install --build-from-source --target_arch=%npm_config_arch%
 
 cache:
-  # - c:\projects\node-occ\occt-7.2.0
+  # - c:\projects\node-occ\occt-7.3.0
 
 
 configuration:
