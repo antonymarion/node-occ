@@ -106,6 +106,6 @@ void Vertex::Init(v8::Local<v8::Object> target)
   EXPOSE_READ_ONLY_PROPERTY_DOUBLE(Vertex, y);
   EXPOSE_READ_ONLY_PROPERTY_DOUBLE(Vertex, z);
 
-  target->Set(Nan::New("Vertex").ToLocalChecked(), tpl->GetFunction());
+  Nan::Set(target,Nan::New("Vertex").ToLocalChecked(),Nan::GetFunction(tpl).ToLocalChecked());
 }
 

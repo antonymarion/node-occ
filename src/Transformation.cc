@@ -130,7 +130,7 @@ void Transformation::Init(v8::Local<v8::Object> target)
   EXPOSE_METHOD(Transformation,makeScale);
   EXPOSE_READ_ONLY_PROPERTY_DOUBLE(Transformation,scaleFactor);
 
-  target->Set(Nan::New("Transformation").ToLocalChecked(), tpl->GetFunction());
+  Nan::Set(target,Nan::New("Transformation").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 NAN_METHOD(Transformation::New)
@@ -149,6 +149,6 @@ NAN_METHOD(Transformation::New)
 
 NAN_METHOD(Transformation::NewInstance)
 {
-  v8::Local<v8::Object> instance = Nan::New<v8::FunctionTemplate>(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext(),0,0).ToLocalChecked();
+  v8::Local<v8::Object> instance = makeInstance(_template);
   info.GetReturnValue().Set(instance);
 }

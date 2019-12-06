@@ -14,10 +14,10 @@ packet:
 	npm install mocha
 	npm install assert
 	npm install should
-	npm install node-pre-gyp		
-	
+	npm install node-pre-gyp
 
-copy: 
+
+copy:
 	COPY D:\projet\oce-build\bin\Debug\*.dll build\Release
 
 format:

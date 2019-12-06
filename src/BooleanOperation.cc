@@ -84,7 +84,7 @@ void BooleanOperation::Init(v8::Local<v8::Object> target)
 
   // object has one internal filed ( the C++ object)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-
+  
   _template.Reset(tpl);
 
 
@@ -98,5 +98,5 @@ void BooleanOperation::Init(v8::Local<v8::Object> target)
   //XX    EXPOSE_READ_ONLY_PROPERTY(BooleanOperation,_shape1,shape1);
   //XX    EXPOSE_READ_ONLY_PROPERTY(BooleanOperation,_shape2,shape2);
 
-  target->Set(Nan::New("BooleanOperation").ToLocalChecked(), tpl->GetFunction());
+  Nan::Set(target, Nan::New("BooleanOperation").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }

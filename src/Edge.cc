@@ -133,7 +133,7 @@ int Edge::createCircle(const gp_Pnt& center, const gp_Dir& normal, double radius
 }
 
 template <class T> T* my_unwrap(v8::MaybeLocal<v8::Value> value) {
-
+  
   auto a = Nan::To<v8::Object>(value.ToLocalChecked()).ToLocalChecked();
   return Nan::ObjectWrap::Unwrap<T>(a);
 }
@@ -144,7 +144,6 @@ Vertex* getOrCreateVertex(v8::Local<v8::Value> arg)
 
   if (arg->IsArray()) {
     auto objV = Nan::NewInstance(Constructor<Vertex>(), 1, &arg).ToLocalChecked();
-    // v8::MaybeLocal<v8::Value> objV = Nan::New<v8::FunctionTemplate>(Vertex::_template)->GetFunction()->CallAsConstructor(Nan::GetCurrentContext(), 1, &arg);
     if (!IsInstanceOf<Vertex>(objV)) {
       return 0;
     }
@@ -153,11 +152,11 @@ Vertex* getOrCreateVertex(v8::Local<v8::Value> arg)
   }
   else if (arg->IsObject()) {
 
-    v8::Local<v8::Value> obj = arg->ToObject();
+    v8::Local<v8::Value> obj = Nan::To<v8::Object>(arg).ToLocalChecked();
     if (!IsInstanceOf<Vertex>(obj)) {
       return 0;
     }
-    Vertex* vertex = Nan::ObjectWrap::Unwrap<Vertex>(obj->ToObject());
+    Vertex* vertex = Nan::ObjectWrap::Unwrap<Vertex>(Nan::To<v8::Object>(obj).ToLocalChecked());
     return vertex;
   }
   else {
@@ -181,12 +180,9 @@ NAN_METHOD(Edge::static_createLine)
     return Nan::ThrowError("expecting 2 arguments : <vertex|point> , <vertex|point> ");
   }
 
-  auto instance = Nan::NewInstance(Constructor<Edge>(), 0, 0).ToLocalChecked();
-  Edge* pThis = Nan::ObjectWrap::Unwrap<Edge>(instance->ToObject());
-  //xx  Edge* pThis = new Edge();
-    //xx v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
-    //xx pThis->Wrap(instance);
-
+  v8::Local<v8::Object> instance = Nan::NewInstance(Constructor<Edge>()).ToLocalChecked();
+  Edge* pThis = Nan::ObjectWrap::Unwrap<Edge>(Nan::To<v8::Object>(instance).ToLocalChecked());
+  
   pThis->createLine(v1, v2);
   info.GetReturnValue().Set(instance);
 }
@@ -219,7 +215,7 @@ NAN_METHOD(Edge::static_createCircle)
 
 
   Edge* pThis = new Edge();
-  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = makeInstance(_template);
   pThis->Wrap(instance);
 
   pThis->createCircle(center, normal, radius);
@@ -246,7 +242,7 @@ NAN_METHOD(Edge::static_createArc3P)
 
 
   Edge* pThis = new Edge();
-  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = makeInstance(_template);
   pThis->Wrap(instance);
 
   pThis->createArc3P(v1, v3, p2);
@@ -281,7 +277,7 @@ v8::Local<v8::Object>  Edge::Clone() const
 {
 
   Edge* obj = new Edge();
-  v8::Local<v8::Object> instance = Nan::New(_template)->GetFunction()->NewInstance(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> instance = makeInstance(_template);
   obj->Wrap(instance);
   obj->setShape(this->shape());
   return instance;
@@ -364,7 +360,7 @@ void Edge::Init(v8::Local<v8::Object> target)
   //xx  EXPOSE_METHOD(Edge, polygonOnTriangulation);
 
 
-  target->Set(Nan::New("Edge").ToLocalChecked(), tpl->GetFunction());
+  Nan::Set(target, Nan::New("Edge").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 
   //xx EXPOSE_STATIC_METHOD(Edge,createLine);
   //xx EXPOSE_STATIC_METHOD(Edge,createCircle);
@@ -456,9 +452,8 @@ NAN_METHOD(Edge::polygonize)
       info.GetReturnValue().Set(makeFloat32Array(pThis->m_positions.data(), length));
       return;
     }
-    catch (Standard_Failure&) {
-      Handle_Standard_Failure e = Standard_Failure::Caught();
-      const Standard_CString msg = e->GetMessageString();
+    catch (Standard_Failure& e) {
+      const Standard_CString msg = e.GetMessageString();
       if (msg != NULL && strlen(msg) > 1) {
         //xx cout << " message =" << msg << "\n";// setErrorMessage(msg);
       }
@@ -471,6 +466,7 @@ NAN_METHOD(Edge::polygonize)
   if (info.Length() >= 1) {
     ReadDouble(info[0], factor);
   }
-  info.GetReturnValue().Set(pThis->polygonize(factor));
+  v8::Local<v8::Object> ret = pThis->polygonize(factor);
+  info.GetReturnValue().Set(ret);
 }
 

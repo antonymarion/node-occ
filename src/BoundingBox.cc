@@ -10,7 +10,7 @@ v8::Local<v8::Value> BoundingBox::NewInstance(const Bnd_Box& box)
 {
 
   v8::Local<v8::Object> instance = makeInstance(_template);
-
+  
   BoundingBox* pThis = ObjectWrap::Unwrap<BoundingBox>(instance);
 
   pThis->m_box = box;
@@ -32,8 +32,11 @@ void BoundingBox::Update(BoundingBox* pThis,_NAN_METHOD_ARGS)
   // or a array of point
   for (int i=0; i<info.Length(); i++) {
     if (info[i]->IsArray()) {
-      v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(info[i]);
-      if ( arr->Get(0)->IsArray() || arr->Get(0)->IsObject()) {
+      v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(info[i]);
+
+      v8::Local<v8::Value> element0 = Nan::Get(arr,0).ToLocalChecked();
+      
+      if ( element0->IsArray() || element0->IsObject()) {
         // probably an array of point
       } else {
         // a single point
@@ -72,7 +75,7 @@ NAN_METHOD(BoundingBox::addPoint)
 }
 
 bool checkCoerceToPoint(const v8::Local<v8::Value>& v)
-{
+{ 
   // TODO ...
   return true;
 }
@@ -89,7 +92,7 @@ NAN_METHOD(BoundingBox::isOut)
   gp_Pnt point;
   ReadPoint(info[0],&point);
 
-  bool retVal = pThis->m_box.IsOut(point)?true:false;
+  bool retVal = pThis->m_box.IsOut(point) ? true : false;
 
   info.GetReturnValue().Set(Nan::New<v8::Boolean>(retVal));
 }
@@ -116,7 +119,7 @@ void BoundingBox::Init(v8::Local<v8::Object> target)
   EXPOSE_TEAROFF(BoundingBox,farPt);
   EXPOSE_READ_ONLY_PROPERTY_BOOLEAN(BoundingBox,isVoid);
 
-  target->Set(Nan::New("BoundingBox").ToLocalChecked(), tpl->GetFunction());
+  Nan::Set(target, Nan::New("BoundingBox").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 void BoundingBox::InitNew(_NAN_METHOD_ARGS)

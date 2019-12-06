@@ -64,7 +64,7 @@ public:
 
     auto f = Nan::GetFunction(Nan::New(Wrapper::_template)).ToLocalChecked();
     v8::Local<v8::Object> instance = Nan::NewInstance(f).ToLocalChecked();
-
+    
     // NewInstance(Nan::GetCurrentContext(),0, 0).ToLocalChecked();
     Accessor* pThis = new Accessor(parent);
     pThis->Wrap(instance);
@@ -73,21 +73,19 @@ public:
 };
 
 
-
 #define TEAROFF_POINT(THISTYPE,ACCESSOR,WRAPPER,CLASS)                         \
   typedef Accessor<THISTYPE,WRAPPER,CLASS,&THISTYPE::ACCESSOR> t##ACCESSOR;  \
-
 
 
 
 #define EXPOSE_TEAROFF(THISTYPE,ACCESSOR)                                            \
   Nan::SetAccessor(proto,                                                            \
 			Nan::New<v8::String>(#ACCESSOR).ToLocalChecked(),                        \
-					&t##ACCESSOR::getter,  0,v8::Handle<v8::Value>(),v8::DEFAULT,(v8::PropertyAttribute)(v8::ReadOnly|v8::DontDelete))
+					&t##ACCESSOR::getter,  0,v8::Local<v8::Value>(),v8::DEFAULT,(v8::PropertyAttribute)(v8::ReadOnly|v8::DontDelete))
 
 
 #define REXPOSE_TEAROFF(THISTYPE,ACCESSOR)                                            \
     Nan::SetAccessor(info.This(),                                                 \
     Nan::New(#ACCESSOR).ToLocalChecked(),                                         \
-     &t##ACCESSOR::getter,  0,v8::Handle<v8::Value>(),v8::DEFAULT,v8::ReadOnly)
+     &t##ACCESSOR::getter,  0,v8::Local<v8::Value>(),v8::DEFAULT,v8::ReadOnly)
 

@@ -141,7 +141,7 @@ NAN_METHOD(Base::mirror)
 {
   CHECK_THIS_DEFINED(Base);
   const Base* pThis = ObjectWrap::Unwrap<Base>(info.This());
-  // TODO
+  // TODO 
   v8::Local<v8::Object> copy    = pThis->Clone();
   info.GetReturnValue().Set(copy);
 }
@@ -157,7 +157,7 @@ NAN_METHOD(Base::applyTransform)
   }
   try {
 
-    Transformation* pTrans =  ObjectWrap::Unwrap<Transformation>(info[0]->ToObject());
+    Transformation* pTrans =  ObjectWrap::Unwrap<Transformation>(Nan::To<v8::Object>(info[0]).ToLocalChecked());
 
     const gp_Trsf& transformation = pTrans->m_trsf;
     pThis->setShape(BRepBuilderAPI_Transform(pThis->shape(), transformation).Shape());

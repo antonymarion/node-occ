@@ -31,7 +31,7 @@ public:
   )
     : Nan::AsyncWorker(callback) , _progressCallback(progressCallback)
   {
-    _filename = *pfilename;
+    _filename = *pfilename; 
     delete pfilename;
     async.data = this;
     uv_async_init(Nan::GetCurrentEventLoop(), &async, AsyncProgress_);
@@ -70,36 +70,30 @@ public:
   * main loop in the near future.
   */
   void send_notify_progress() {
-    uv_async_send(this->async);
+    uv_async_send(&this->async);
   };
 
-#if NODE_MODULE_VERSION >= 14 // 12
-static void notify_progress(uv_async_t* handle)
-#else
-static void notify_progress(uv_async_t* handle,int status/*unused*/)
-#endif
-  {
-    AsyncWorkerWithProgress *worker = static_cast<AsyncWorkerWithProgress*>(handle->data);
-    worker->notify_progress();
+
+  static NAUV_WORK_CB(AsyncProgress_) {
+    AsyncWorkerWithProgress *worker = static_cast<AsyncWorkerWithProgress*>(async->data);
+    worker->notify_progress1();
   }
 
   /**
-  *
+  * 
   * Note:
   *    - this method is called in the main loop thread.
   *    - there is no garanty that this method will be called for each send_notify_progress
   */
-  void notify_progress() {
-
+  void notify_progress1() {
+  
     Nan::HandleScope scope;
-    //xx printf("notify_progress %lf %d\n",m_data.percent,m_data.progress);
     if (_progressCallback && !_progressCallback->IsEmpty()) {
-      //xx printf("notify_progress %lf %d\n",m_data.percent,m_data.progress);
       v8::Local<v8::Value> argv[2] = {
         Nan::New<v8::Number>(this->m_data.m_progress),
         Nan::New<v8::Integer>((int)this->m_data.m_percent)
       };
-      _progressCallback->Call(2,argv);
+      _progressCallback->Call(2,argv, async_resource);
     }
   }
 };

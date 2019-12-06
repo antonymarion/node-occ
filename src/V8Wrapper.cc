@@ -81,7 +81,7 @@ void Initialize(v8::Local<v8::Object> target)
     //xx Nan::SetMethod(target,"oceVersion",NanNew("0.13"));
     Nan::Set(target,Nan::New("oceVersion").ToLocalChecked(),  Nan::New("0.13").ToLocalChecked());
 
-    Nan::SetMethod(target,"gc",ForceGC);
+    Nan::SetMethod(target,"gc",ForceGC); 
 
 
 }
