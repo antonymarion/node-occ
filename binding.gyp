@@ -61,10 +61,10 @@
                         ],
 
                       "library_dirs": [
-                        "<!(pwd)/occt-7.3.0/lib",
+                        "<!(pwd)/occt-7.2.0/lib",
                       ],
                       "include_dirs": [
-                        "<!(pwd)/occt-7.3.0/include/opencascade",
+                        "<!(pwd)/occt-7.2.0/include/opencascade",
                         "<!(node -e \"require('nan')\")"
                       ],}
               ],
@@ -72,10 +72,10 @@
                 "OS=='win'",
                 {
                       "library_dirs": [
-                        "./occt-7.3.0/win64/vc14/lib",
+                        "./occt-7.2.0/win64/vc14/lib",
                       ],
                       "include_dirs": [
-                        "./occt-7.3.0/inc",
+                        "./occt-7.2.0/inc",
                         "<!(node -e \"require('nan')\")"
                       ],}
               ]
@@ -193,7 +193,7 @@
         ["OS=='mac'",
         {
                 "variables": {
-                   "bin_folder": "./occt-7.3.0/lib"
+                   "bin_folder": "./occt-7.2.0/lib"
                 },
                 "copies": [
                   {
@@ -256,7 +256,7 @@
         ["OS=='linux'",
         {
           "variables": {
-             "bin_folder": "./occt-7.3.0/lib"
+             "bin_folder": "./occt-7.2.0/lib"
           },
           "copies": [
             {
@@ -315,7 +315,7 @@
         ["OS=='win'",
         {
           "variables": {
-             "bin_folder": 'occt-7.3.0/win64/vc14/bin'
+             "bin_folder": 'occt-7.2.0/win64/vc14/bin'
           },
           "copies": [
             {

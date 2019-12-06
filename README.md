@@ -92,7 +92,7 @@ sudo apt-get install cmake cmake-curses-gui g++ build-essential libtbb2
 # ------------------------------------
 git clone --recursive https://github.com/erossignon/node-occ.git
 cd node-occ
-export OCCT_PACKAGE=occt-7.3.0
+export OCCT_PACKAGE=occt-7.2.0
 export LD_LIBRARY_PATH=`pwd`/${OCCT_PACKAGE}/lib:$LD_LIBRARY_PATH
 npm install --build-from-source
 make test
