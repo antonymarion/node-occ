@@ -3,7 +3,7 @@
 
 OpenCascade nodejs extension for solid modeling.
 
-This nodejs extension provides *solid construction* to nodejs. 
+This nodejs extension provides _solid construction_ to nodejs.
 It provides a simple yet powerful javascript api to construct 3D geometry models.
 
 This project comes with a set of V8 wrappers around OpenCascade API and a sample web application.
@@ -75,9 +75,7 @@ $npm install node-occ
    
 ### on Linux
 
-#### on ubuntu
-
-(use nodejs 12.0)
+(use nodejs 12 or 14)
 
 ```bash
 
