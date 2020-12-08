@@ -11,7 +11,7 @@ jobs:
       - checkout
       - run:
           name: add freecad precompiled packages && update-npm
-          command: 'sudo add-apt-repository universe && sudo add-apt-repository multiverse && sudo apt-add-repository -y ppa:freecad-maintainers/freecad-daily && sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev && sudo npm install -g npm'
+          command: 'sudo apt-get install software-properties-common && sudo add-apt-repository 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main' && sudo apt-get update && sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo add-apt-repository universe && sudo add-apt-repository multiverse && sudo apt-add-repository -y ppa:freecad-maintainers/freecad-daily && sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev && sudo npm install -g npm'
       - run: 
           name: node-pre-gyp
           command: 'sudo npm install node-pre-gyp -g'
