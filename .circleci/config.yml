@@ -23,7 +23,7 @@ jobs:
           command: 'sudo apt-get install cmake cmake-curses-gui g++ build-essential libtbb2'
       - run: 
           name: go to node-occ root dir.
-          command: 'cd ~/node-occ'
+          command: 'ls ~ && ls ~/project/ && cd ~/project/node-occ'
       - run: 
           name: node bash script for linux
           command: 'bash ./prepare_node.sh'
