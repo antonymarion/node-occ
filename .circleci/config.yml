@@ -30,9 +30,9 @@ jobs:
       - run: 
           name: update apts 
           command: 'sudo apt-get update -qq'
-      - run:
-          name: libocct
-          command: 'sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev'
+#       - run:
+#           name: libocct-data-exchange
+#           command: 'sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev'
       - run:
           name: libtbb 
           command: 'sudo npm install -g npm && sudo apt-get install g++ libtbb2 libtbb-dev'
