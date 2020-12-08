@@ -10,8 +10,8 @@ jobs:
             - "69:28:b6:cb:12:62:a0:0c:66:f7:b3:fc:0d:9e:46:77"
       - checkout
       - run:
-          name: update-npm
-          command: 'sudo npm install -g npm'
+          name: add freecad precompiled packages && update-npm
+          command: 'sudo add-apt-repository universe && sudo add-apt-repository multiverse && sudo apt-add-repository -y ppa:freecad-maintainers/freecad-daily && sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev && sudo npm install -g npm'
       - run: 
           name: node-pre-gyp
           command: 'sudo npm install node-pre-gyp -g'
