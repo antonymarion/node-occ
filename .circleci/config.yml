@@ -23,7 +23,7 @@ jobs:
           command: 'sudo apt-get update -y && sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test'
       - run:
           name: update
-          command:  sudo apt-get update -y'
+          command:  'sudo apt-get update -y'
       - run:
           name: universe multiverse freecad
           command: 'sudo add-apt-repository -y universe && sudo add-apt-repository -y multiverse && sudo apt-add-repository -y ppa:freecad-maintainers/freecad-daily'
