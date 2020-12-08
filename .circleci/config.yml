@@ -7,7 +7,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "56:b5:cb:a1:71:be:d4:a6:62:8a:36:6e:a6:43:a0:ed"
+            - "69:28:b6:cb:12:62:a0:0c:66:f7:b3:fc:0d:9e:46:77"
       - checkout
       - run:
           name: update-npm
