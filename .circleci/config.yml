@@ -12,28 +12,28 @@ jobs:
       - run:
           name: update-npm
           command: 'sudo npm install -g npm'
-      -run: 
+      - run: 
           name: node-pre-gyp
           command: 'sudo npm install node-pre-gyp -g'
-      -run: 
+      - run: 
           name: mocha global
           command: 'sudo npm install mocha@7 -g'
-      -run: 
+      - run: 
           name: install tbb2 w/ cmake
           command: 'sudo apt-get install cmake cmake-curses-gui g++ build-essential libtbb2'
-      -run: 
+      - run: 
           name: go to node-occ root dir.
           command: 'cd node-occ'
-      -run: 
+      - run: 
           name: node bash script for linux
           command: 'bash ./prepare_node.sh'
-      -run: 
+      - run: 
           name: export occt package name
           command: 'export OCCT_PACKAGE=occt-7.4.0'
-      -run:
+      - run:
           name: libs export
-          command: ' export LD_LIBRARY_PATH=`pwd`/${OCCT_PACKAGE}/lib:$LD_LIBRARY_PATH'
-      -run:
+          command: 'export LD_LIBRARY_PATH=`pwd`/${OCCT_PACKAGE}/lib:$LD_LIBRARY_PATH'
+      - run:
           name: final tests
           command: 'make test'
       - store_artifacts:
