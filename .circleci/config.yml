@@ -10,8 +10,8 @@ jobs:
             - "69:28:b6:cb:12:62:a0:0c:66:f7:b3:fc:0d:9e:46:77"
       - checkout
       - run:
-          name: cat sources
-          command: 'sudo apt-get install -y apt-transport-https ca-certificates && cat /etc/apt/sources.list'
+          name: https, ca-certificates
+          command: 'sudo apt-get install -y apt-transport-https ca-certificates'
       - run:
           name: add software-properties-common
           command: 'sudo apt-get install software-properties-common'
@@ -29,7 +29,7 @@ jobs:
           command: 'sudo sed -i "/^# deb.*multiverse/ s/^# //" /etc/apt/sources.list && sudo sed -i "/^# deb.*universe/ s/^# //" /etc/apt/sources.list && sudo apt-add-repository -y ppa:freecad-maintainers/freecad-daily'
       - run: 
           name: update apts 
-          command: 'sudo apt-get update -qq'
+          command: 'cat /etc/apt/sources.list && sudo apt-get update -qq'
 #       - run:
 #           name: libocct-data-exchange
 #           command: 'sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev'
