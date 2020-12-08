@@ -3,14 +3,62 @@ jobs:
   build:
     working_directory: ~
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "69:28:b6:cb:12:62:a0:0c:66:f7:b3:fc:0d:9e:46:77"
       - checkout
       - run:
-          name: update-npm
-          command: 'sudo npm install -g npm'
+          name: https, ca-certificates
+          command: 'sudo apt-get install -y apt-transport-https ca-certificates'
       - run:
-          name: build-from-source
-          command: npm install --build-from-source
+          name: add software-properties-common
+          command: 'sudo apt-get install software-properties-common'
+      - run:
+          name: llvm
+          command: 'sudo add-apt-repository -y "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"'
+      - run:
+          name: ubuntu-toolchain-r/test
+          command: 'sudo apt-get update -y && sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test'
+      - run:
+          name: update
+          command:  'sudo apt-get update -y'
+      - run:
+          name: universe multiverse freecad
+          command: 'wget --no-check-certificate -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add - && sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse" && sudo apt-add-repository -y ppa:freecad-maintainers/freecad-daily'
+      - run: 
+          name: update apts 
+          command: 'sudo apt-key adv --keyserver http://ppa.launchpad.net/freecad-maintainers/freecad-daily/ubuntu --recv-keys 005EAE8119BB5BCA && cat /etc/apt/sources.list && sudo apt-get update -qq'
+#       - run:
+#           name: libocct-data-exchange
+#           command: 'sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev'
+      - run:
+          name: libtbb 
+          command: 'sudo npm install -g npm && sudo apt-get install g++ libtbb2 libtbb-dev'
+      - run: 
+          name: node-pre-gyp
+          command: 'sudo npm install node-pre-gyp -g'
+      - run: 
+          name: mocha global
+          command: 'sudo npm install mocha@7 -g'
+      - run: 
+          name: install tbb2 w/ cmake
+          command: 'sudo apt-get install cmake cmake-curses-gui g++ build-essential libtbb2'
+      - run: 
+          name: go to node-occ root dir.
+          command: 'cd ~/project/ && ls'
+      - run: 
+          name: node bash script for linux
+          command: 'bash ./prepare_node.sh'
+      - run: 
+          name: export occt package name
+          command: 'export OCCT_PACKAGE=occt-7.4.0'
+      - run:
+          name: libs export
+          command: 'export LD_LIBRARY_PATH=`pwd`/${OCCT_PACKAGE}/lib:$LD_LIBRARY_PATH'
+      - run:
+          name: final tests
+          command: 'make test'
       - store_artifacts:
           path: /home/circleci/project/build
