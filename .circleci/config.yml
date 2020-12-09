@@ -27,12 +27,9 @@ jobs:
       - run:
           name: universe multiverse freecad
           command: 'wget --no-check-certificate -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add - && sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse" && sudo apt-add-repository -y ppa:freecad-maintainers/freecad-daily'
-      - run: 
-          name: update apts 
-          command: 'sudo apt-key adv --keyserver http://ppa.launchpad.net/freecad-maintainers/freecad-daily/ubuntu --recv-keys 005EAE8119BB5BCA && cat /etc/apt/sources.list && sudo apt-get update -qq'
-#       - run:
-#           name: libocct-data-exchange
-#           command: 'sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev'
+       - run:
+           name: libocct-data-exchange
+           command: 'sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev'
       - run:
           name: libtbb 
           command: 'sudo npm install -g npm && sudo apt-get install g++ libtbb2 libtbb-dev'
