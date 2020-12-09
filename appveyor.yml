@@ -118,7 +118,7 @@ install:
     true;
 
 
-- cmd: mocha@7 https://github.com/OpenWebCAD/node-pre-gyp-github.git -g
+- cmd: npm i -g mocha@7 https://github.com/OpenWebCAD/node-pre-gyp-github.git
 - cmd: setenv.bat 64
 - cmd: build.bat %PLATFORM%
 
