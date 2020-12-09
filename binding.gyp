@@ -35,6 +35,32 @@
                         "variables": {
                            "bin_folder": "/usr/lib/x86_64-linux-gnu"
                         },
+                        "libraries": [
+
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKBO.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKBool.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKBRep.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKernel.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKFillet.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKFeat.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKIGES.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKG2d.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKG3d.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKGeomAlgo.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKGeomBase.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKMath.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKMesh.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKOffset.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKPrim.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKShHealing.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTEP.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTEP209.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTEPAttr.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTEPBase.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTL.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKTopAlgo.so.7",
+                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKXSBase.so.7"
+                                            ],
                         "copies": [
                           {
                             "files": [
@@ -227,7 +253,6 @@
         "<(module_name)"
       ],
       "conditions": [
-
         ["OS=='win'",
         {
           "variables": {

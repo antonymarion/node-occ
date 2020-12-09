@@ -4,7 +4,7 @@ const { exec }= require("child_process");
 
 if (process.platform === "linux") {
 
-    const cmd = "export VERSION_FILE=/usr/include/opencascade/Standard_Version.hxx && (cd lib/binding && echo 'linux libs directory' && pwd && ls * && echo $VERSION_FILE && ls *.so.$VERSION_FILE | sed sP^libPPg | sed sp.so.$VERSION_FILEpp | xargs -i ln -sf lib{}.so.$VERSION_FILE lib{}.so.7)";
+    const cmd = "export vOCC=$(export VERSION_FILE=/usr/include/opencascade/Standard_Version.hxx && grep -i \"#define OCC_VERSION_COMPLETE\" $VERSION_FILE | awk '{gsub(/\"/, \"\", $0); print $3}') && (cd lib/binding && echo 'linux libs directory' && pwd && ls * && echo $vOCC && ls *.so.$vOCC | sed sP^libPPg | sed sp.so.$vOCCpp | xargs -i ln -sf lib{}.so.$vOCC lib{}.so.7)";
 
     exec(cmd, (error, stdout, stderr)  => {
 
@@ -12,7 +12,7 @@ if (process.platform === "linux") {
         if (error) {
             console.log(error.code);
         } else {
-            console.log("done");
+            console.log("done post install rename libs");
         }
     });
 
