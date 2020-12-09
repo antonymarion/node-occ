@@ -91,6 +91,10 @@ before_install:
 git:
   submodules: false
 install:
+- export vOCC=$(export VERSION_FILE=/usr/include/opencascade/Standard_Version.hxx && grep -i "#define OCC_VERSION_COMPLETE" $VERSION_FILE | awk '{gsub(/"/, "", $0); print $3}')
+- echo $vOCC
+- cat binding.gyp |  sed -e "s/vOCC/$vOCC/" > binding$vOCC.gyp
+- cp binding$vOCC.gyp binding.gyp
 - npm install --build-from-source
 
 script:
