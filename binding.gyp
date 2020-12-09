@@ -71,9 +71,12 @@
                 {
                       "library_dirs": [
                         "./occt-7.2.0/win64/vc14/lib",
+                        "./occt-7.3.0/win64/vc14/lib",
+                        "./occt-7.4.0/win64/vc14/lib"
                       ],
                       "include_dirs": [
                         "./occt-7.4.0/inc",
+                        "./occt-7.3.0/inc",
                         "./occt-7.2.0/inc",
                         "<!(node -e \"require('nan')\")"
                       ],}
