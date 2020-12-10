@@ -415,7 +415,8 @@ NAN_METHOD(ShapeFactory::makeCone)
     ReadDouble(info[1], R2);
     ReadDouble(info[2], H);
 
-    if (R1 < epsilon || H < epsilon) { // R2 = 0 is OK
+    if (R1 < epsilon || H < epsilon) {
+      // R2 = 0 is OK
       return Nan::ThrowError("invalid value for arguments");
     }
     try {

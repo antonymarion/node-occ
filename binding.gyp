@@ -24,9 +24,17 @@
                         ]
                    },
                     "library_dirs": [
+                    "<!(pwd)/occt-7.5.0/lib",
+                    "<!(pwd)/occt-7.4.0/lib",
+                    "<!(pwd)/occt-7.3.0/lib",
+                    "<!(pwd)/occt-7.2.0/lib"
                     ],
                     "include_dirs": [
                       "/usr/local/include/opencascade",
+                      "<!(pwd)/occt-7.5.0/include/opencascade",
+                      "<!(pwd)/occt-7.4.0/include/opencascade",
+                      "<!(pwd)/occt-7.3.0/include/opencascade",
+                      "<!(pwd)/occt-7.2.0/include/opencascade",
                       "<!(node -e \"require('nan')\")"
                     ],},
               ],
@@ -135,9 +143,11 @@
                       "library_dirs": [
                         "./occt-7.2.0/win64/vc14/lib",
                         "./occt-7.3.0/win64/vc14/lib",
-                        "./occt-7.4.0/win64/vc14/lib"
+                        "./occt-7.4.0/win64/vc14/lib",
+                        "./occt-7.5.0/win64/vc14/lib"
                       ],
                       "include_dirs": [
+                        "./occt-7.5.0/inc",
                         "./occt-7.4.0/inc",
                         "./occt-7.3.0/inc",
                         "./occt-7.2.0/inc",
@@ -173,6 +183,7 @@
         "src/OCC.h",
         "src/Point3Wrap.h",
         "src/Point3Wrap.cc",
+        "src/Standard_Version.hxx",
         "src/Shape.h",
         "src/Shape.cc",
         "src/ShapeFactory.h",
@@ -258,7 +269,7 @@
         ["OS=='win'",
         {
           "variables": {
-             "bin_folder": 'occt-7.4.0/win64/vc14/bin'
+             "bin_folder": 'occt-7.5.0/win64/vc14/bin'
           },
           "copies": [
             {
