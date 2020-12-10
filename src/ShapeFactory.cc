@@ -415,7 +415,7 @@ NAN_METHOD(ShapeFactory::makeCone)
     ReadDouble(info[1], R2);
     ReadDouble(info[2], H);
 
-    if (R1 < epsilon || R2 < epsilon || H < epsilon) {
+    if (R1 < epsilon || H < epsilon) { // R2 = 0 is OK
       return Nan::ThrowError("invalid value for arguments");
     }
     try {
@@ -443,8 +443,8 @@ NAN_METHOD(ShapeFactory::makeCone)
 
   }
   else if (info.Length() == 4 && info[0]->IsArray() && info[1]->IsNumber() && info[2]->IsArray() && info[3]->IsNumber()) {
-    // Point, point , R1,R2);
     // variation 3 ( 2 points and a radius  )
+    // point1, R1, point2, R2);
     gp_Pnt p1;
     ReadPoint(info[0], &p1);
 
@@ -455,7 +455,7 @@ NAN_METHOD(ShapeFactory::makeCone)
     gp_Pnt p2;
     ReadPoint(info[2], &p2);
 
-    double R2 = 11;
+    double R2 = 0; // init. à cône non tronqué
     ReadDouble(info[3], R2);
 
     const double dx = p2.X() - p1.X();

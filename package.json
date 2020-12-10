@@ -47,6 +47,7 @@
     "url": "https://github.com/antonymarion/node-occ.git"
   },
   "scripts": {
+    "preinstall": "node pre-install.js",
     "install": "node-pre-gyp install --fallback-to-build",
     "test": "mocha -R spec",
     "lint": "eslint lib test bin",

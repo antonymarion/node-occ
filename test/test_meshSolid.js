@@ -8,6 +8,20 @@ function debugLog() {
     arguments;
     /* implement me*/
 }
+
+describe("TBugLinux- testing mesh on a simple cone shape with radius2 = 0 returns 2 Faces (latteral+bottom)", function () {
+    let shape, mesh;
+    before(function () {
+        shape = occ.makeCone([0,0,0], 2, [0,0,2],  0);
+        mesh = shape.createMesh(0.1);
+    });
+    it("solid should have 2 faces", function () {
+        const myFaces = shape.getFaces();
+        console.log("cone Faces", myFaces);
+        myFaces.length.should.eql(2);
+    });
+});
+
 describe("T1- testing mesh on a simple box shape", function () {
 
     let shape, mesh;
