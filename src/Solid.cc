@@ -475,7 +475,9 @@ v8::Local<v8::Object> Solid::createMesh(double factor, double angle, bool qualit
                 if (face.IsNull()) continue;
                 try {
                     mesh->extractFaceMesh(face, qualityNormals);
-                }    CATCH_AND_RETHROW_NO_RETURN("IgnoreExceptionExtractFaceMesh");
+                }  catch(Standard_Failure const& anException) {
+
+                                      }
           }
         }
 
