@@ -417,7 +417,7 @@ NAN_PROPERTY_GETTER(Solid::_mesh)
 {
   Solid* pThis = UNWRAP(Solid);
   if (pThis->m_cacheMesh.IsEmpty()) {
-      pThis->m_cacheMesh.Reset(pThis->createMesh(1,0.5,true));
+      pThis->m_cacheMesh.Reset(pThis->createMesh(0.5,0.5,true));
   }
   info.GetReturnValue().Set(Nan::New(pThis->m_cacheMesh));
 }
