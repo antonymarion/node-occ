@@ -170,7 +170,7 @@ NAN_PROPERTY_GETTER(Face::_mesh)
   Face* pThis = UNWRAP(Face)
 
   if (pThis->m_cacheMesh.IsEmpty()) {
-	  pThis->m_cacheMesh.Reset(pThis->createMesh(0.5, 5, true));
+	  pThis->m_cacheMesh.Reset(pThis->createMesh(1,0.5, true));
   }
   info.GetReturnValue().Set(Nan::New(pThis->m_cacheMesh));
 }
@@ -246,6 +246,6 @@ void Face::Init(v8::Local<v8::Object> target)
 NAN_METHOD(Face::createMesh)
 {
   Face* pThis = UNWRAP(Face);
-  v8::Local<v8::Object> mesh = pThis->createMesh(0.5, 5,true);
+  v8::Local<v8::Object> mesh = pThis->createMesh(1,0.5,true);
   info.GetReturnValue().Set(mesh);
 }
