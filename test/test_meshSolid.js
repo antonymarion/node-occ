@@ -32,6 +32,21 @@ describe("TBugLinux- testing mesh on a simple cone shape with radius2 = 0 return
         shape.faces["bottom"]
             .hasMesh
             .should.be.eql(true);
+        
+        // computing face normals gives wrong values for normals [0] and [2]
+        // check that normals of lateral face are not malformed (values for 0 and 2 were wrong)
+        // normals[0] and [3] should be eql to -707
+        
+        const lateralNormals = shape.faces["lateral"].mesh.normals;
+        //console.log("lateral normals ",lateralNormals);
+        const firstNormal = lateralNormals[0].toFixed(3);
+        const thirdNormal = lateralNormals[2].toFixed(3);
+
+        //console.log("1st normal ",firstNormal);
+        //console.log("3rd normal ",thirdNormal);
+
+        firstNormal.should.be.eql(-0.707);
+        thirdNormal.should.be.eql(-0.707);
 
     });
 });
