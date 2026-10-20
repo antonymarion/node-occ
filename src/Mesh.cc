@@ -104,7 +104,7 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
     StdFail_NotDone::Raise("Face is Null");
   }
   auto& hashMap = this->_faceHashMap;
-  int hash = face.HashCode(std::numeric_limits<int>::max());
+  int hash = occHashCode(face);
   // find hash in edgehash.push_back(hash);
   if (hashMap.end() != hashMap.find(hash)) {
     return 0;
@@ -132,11 +132,10 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
   // ------------------------------------------------------------------------------
   // import face points into index 
   // ------------------------------------------------------------------------------
-  const TColgp_Array1OfPnt&   nodes = triangulation->Nodes();
   Coord3f vert;
   double x, y, z;
   for (int i = 1; i <= nb_points; i++) {
-    const gp_Pnt& pnt = nodes(i);
+    const gp_Pnt pnt = triangulation->Node(i);
     x = pnt.X();
     y = pnt.Y();
     z = pnt.Z();
@@ -163,13 +162,9 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
 
     if (triangulation->HasNormals()) {
 
-      const TShort_Array1OfShortReal& normals = triangulation->Normals();
-      for (int i = 0; i < nb_points; i++) {
-        const Standard_ShortReal& nx = normals( i*3 + 1);
-        const Standard_ShortReal& ny = normals( i*3 + 2);
-        const Standard_ShortReal& nz = normals( i*3 + 3);
-
-        local_normals.push_back(gp_Vec(nx,ny,nz));
+      for (int i = 1; i <= nb_points; i++) {
+        const gp_Dir normal = triangulation->Normal(i);
+        local_normals.push_back(gp_Vec(normal.X(), normal.Y(), normal.Z()));
 
       }
     }
@@ -180,9 +175,8 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
 
       if (triangulation->HasUVNodes()) {
 
-        const TColgp_Array1OfPnt2d& uvnodes = triangulation->UVNodes();
         for (int i = 0; i < nb_points; i++) {
-          const gp_Pnt2d& uv = uvnodes(i + 1);
+          const gp_Pnt2d uv = triangulation->UVNode(i + 1);
           double fU = uv.X();
           double fV = uv.Y();
 
@@ -207,7 +201,7 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
         for (int i = 0; i < nb_points; i++) {
 
           //------------------------------------------------
-          const gp_Pnt& vertex = nodes(i + 1);
+          const gp_Pnt vertex = triangulation->Node(i + 1);
           GeomAPI_ProjectPointOnSurf SrfProp(vertex, surface);
           
           Standard_Real fU, fV;
@@ -242,7 +236,6 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
   // Navigate triangles
   //---------------------------------------------------------------------------------
 
-  const Poly_Array1OfTriangle& triarr = triangulation->Triangles();
   this->_triangles.reserve(triangulation->NbTriangles());
 
   Triangle3i tri;
@@ -250,7 +243,7 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
   int _effective_number_of_triangle = 0;
   for (int i = 1; i <= nb_triangles; i++) {
 
-    const Poly_Triangle& pt = triarr(i);
+    const Poly_Triangle& pt = triangulation->Triangle(i);
     Standard_Integer n1, n2, n3;
     if (reversed) {
       pt.Get(n2, n1, n3);
@@ -264,9 +257,9 @@ int Mesh::extractFaceMesh(const TopoDS_Face& face, bool qualityNormals)
       continue;
 
     // Calculate face normal
-    const gp_Pnt& P1 = nodes(n1);
-    const gp_Pnt& P2 = nodes(n2);
-    const gp_Pnt& P3 = nodes(n3);
+    const gp_Pnt P1 = triangulation->Node(n1);
+    const gp_Pnt P2 = triangulation->Node(n2);
+    const gp_Pnt P3 = triangulation->Node(n3);
 
     gp_Vec V1(P3.X() - P1.X(), P3.Y() - P1.Y(), P3.Z() - P1.Z());
     if (V1.SquareMagnitude() < 1.0e-10) {
@@ -365,7 +358,7 @@ int Mesh::extractEdge(const TopoDS_Edge& edge, const occHandle(Poly_Triangulatio
 {
 
   auto& hashMap = this->_edgeHashMap;
-  int hash = edge.HashCode(std::numeric_limits<int>::max());
+  int hash = occHashCode(edge);
 
   if (hashMap.end() != hashMap.find(hash)) {
     return 0; // already seen
@@ -445,7 +438,7 @@ NAN_METHOD(Mesh::getFaceTriangles)
     return Nan::ThrowError("expecting one argument : face");
   }
   auto& hashMap = pThis->_faceHashMap;
-  int hash = pFace->m_face.HashCode(std::numeric_limits<int>::max());
+  int hash = occHashCode(pFace->m_face);
   // find hash in edgehash.push_back(hash);
   if (hashMap.end() == hashMap.find(hash)) {
     return Nan::ThrowError("Cannot find indices for this face");
@@ -483,7 +476,7 @@ NAN_METHOD(Mesh::getFaceTriangleNormals)
     return Nan::ThrowError("expecting one argument : face");
   }
   auto& hashMap = pThis->_faceHashMap;
-  int hash = pFace->m_face.HashCode(std::numeric_limits<int>::max());
+  int hash = occHashCode(pFace->m_face);
   // find hash in edgehash.push_back(hash);
   if (hashMap.end() == hashMap.find(hash)) {
     return Nan::ThrowError("Cannot find indices for this face");
@@ -526,7 +519,7 @@ NAN_METHOD(Mesh::getEdgeIndices)
     return Nan::ThrowError("expecting one argument : edge");
   }
 
-  int hash = pEdge->m_edge.HashCode(std::numeric_limits<int>::max());
+  int hash = occHashCode(pEdge->m_edge);
 
   auto& hashMap = pThis->_edgeHashMap;
 

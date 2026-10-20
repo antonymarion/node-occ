@@ -1,0 +1,6 @@
+.git
+node_modules
+build
+lib/binding
+*.node
+agent-transcripts

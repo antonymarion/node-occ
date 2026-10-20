@@ -86,7 +86,7 @@ public:
   *    - there is no garanty that this method will be called for each send_notify_progress
   */
   void notify_progress1() {
-  
+    this->PrepareMainThread();
     Nan::HandleScope scope;
     if (_progressCallback && !_progressCallback->IsEmpty()) {
       v8::Local<v8::Value> argv[2] = {

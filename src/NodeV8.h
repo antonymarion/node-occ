@@ -12,9 +12,9 @@
 #undef Handle
 #endif
 
-#include <v8.h>
-#include <node.h>
-#include <nan.h>
+#include <cassert>
+
+#include "nan.h"
 
 #ifdef Handle_was_defined
 #define   Handle(ClassName)      Handle_##ClassName
@@ -79,7 +79,7 @@ NAN_GETTER(ee)
 
 // proto is an ObjectTemplate
 #define EXPOSE_METHOD(ClassName,staticMethod) \
-  Nan::SetTemplate(proto,#staticMethod, Nan::New<v8::FunctionTemplate>(staticMethod))
+  Nan::SetTemplate(proto,#staticMethod, Nan::New<v8::FunctionTemplate>(static_cast<Nan::Method>(staticMethod)))
 
 // proto->Set(#staticMethod,v8::FunctionTemplate::New(staticMethod));
 // NODE_SET_PROTOTYPE_METHOD(proto,#staticMethod,staticMethod);

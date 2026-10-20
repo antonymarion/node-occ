@@ -3,7 +3,6 @@
 
 #include <Standard_Version.hxx>
 
-#include "BSplCLib.hxx"  
 #include <Bnd_Box.hxx>
 
 #include <BRep_Tool.hxx>
@@ -11,7 +10,6 @@
 
 //#include <BRepMesh.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
-#include <BRepMesh_FastDiscret.hxx>
 
 #include <BRepTools.hxx>
 #include <BRepLib.hxx>
@@ -112,11 +110,6 @@
 
 // #include <StdPrs_ToolShadedShape.hxx>
 
-#include <Storage_Data.hxx>
-#include <Storage_HSeqOfRoot.hxx>
-#include <Storage_HSeqOfRoot.hxx>
-#include <Storage_Root.hxx>
-
 #include <StlAPI_Writer.hxx>
 //xx #include <StlAPI_Reader.hxx>
 
@@ -174,5 +167,11 @@
 #include <BRepClass3d.hxx>
 #define OUTER_SHELL(x)  BRepClass3d::OuterShell(x)
 #endif
+
+#include <functional>
+
+inline int occHashCode(const TopoDS_Shape& shape) {
+  return static_cast<int>(std::hash<TopoDS_Shape>{}(shape) & 0x7fffffff);
+}
 
 #undef Handle

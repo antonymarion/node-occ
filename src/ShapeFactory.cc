@@ -415,7 +415,8 @@ NAN_METHOD(ShapeFactory::makeCone)
     ReadDouble(info[1], R2);
     ReadDouble(info[2], H);
 
-    if (R1 < epsilon || R2 < epsilon || H < epsilon) {
+    if (R1 < epsilon || H < epsilon) {
+      // R2 = 0 is a valid untrimmed cone (antonymarion fix).
       return Nan::ThrowError("invalid value for arguments");
     }
     try {
@@ -455,7 +456,7 @@ NAN_METHOD(ShapeFactory::makeCone)
     gp_Pnt p2;
     ReadPoint(info[2], &p2);
 
-    double R2 = 11;
+    double R2 = 0;
     ReadDouble(info[3], R2);
 
     const double dx = p2.X() - p1.X();
@@ -704,7 +705,7 @@ void ShapeClassifier::_classifyRemainingSubShape(TopAbs_ShapeEnum shapeType)
     else {
       // provide a default name based on hashCode
       std::stringstream s;
-      s << shapeType << "tmp" << current.HashCode(std::numeric_limits<int>::max());
+      s << shapeType << "tmp" << occHashCode(current);
       s << std::ends;
       m_nameSetter->setShapeName(current, s.str().c_str());
     }

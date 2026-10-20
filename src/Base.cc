@@ -358,5 +358,5 @@ void  Base::InitProto(v8::Local<v8::ObjectTemplate>& proto)
 
 int Base::hashCode()
 {
-  return shape().HashCode(std::numeric_limits<int>::max());
+  return occHashCode(shape());
 }

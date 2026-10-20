@@ -109,7 +109,7 @@ v8::Local<v8::Object> Solid::Clone() const
 
 
     for (int i=0; i<nbSubShapes; i++)  {
-      int hc = shapeMap(i+1).HashCode(std::numeric_limits<int>::max());
+      int hc = occHashCode(shapeMap(i + 1));
 
       // TODO pClone->_registerNamedShape(name,
     }
@@ -523,7 +523,7 @@ std::string Solid::_getShapeName(const TopoDS_Shape& shape)
     auto _rm = Nan::Get(pJhis,Nan::New("_reversedMap").ToLocalChecked()).ToLocalChecked();     
     v8::Local<v8::Object> reversedMap = Nan::To<v8::Object>(_rm).ToLocalChecked();
 
-  v8::Local<v8::Value> hashCode = Nan::New<v8::Integer>(shape.HashCode(std::numeric_limits<int>::max()));
+  v8::Local<v8::Value> hashCode = Nan::New<v8::Integer>(occHashCode(shape));
   v8::Local<v8::Value> value = Nan::Get(reversedMap,hashCode).ToLocalChecked();
 
   Nan::Utf8String s(value);
@@ -549,7 +549,7 @@ void Solid::_registerNamedShape(const char* name,const TopoDS_Shape& shape)
   auto _rm = Nan::Get(pJhis,Nan::New("_reversedMap").ToLocalChecked()).ToLocalChecked();     
   v8::Local<v8::Object> reversedMap = Nan::To<v8::Object>(_rm).ToLocalChecked();
 
-  Nan::Set(reversedMap,shape.HashCode(std::numeric_limits<int>::max()),Nan::New(name).ToLocalChecked());
+  Nan::Set(reversedMap, occHashCode(shape), Nan::New(name).ToLocalChecked());
 }
 
 

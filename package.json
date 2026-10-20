@@ -1,14 +1,14 @@
 {
   "name": "node-occ",
-  "version": "1.0.1",
-  "description": "OpenCascade OCCT Wrapper for Node js",
+  "version": "2.0.0",
+  "description": "OpenCascade OCCT wrapper for Node.js (Node-API)",
   "preferGlobal": true,
   "dependencies": {
     "async": "^3.2.4",
     "colors": "*",
     "gettemporaryfilepath": "1.0.1",
-    "nan": "^2.16.0",
-    "node-pre-gyp": "^0.15.0",
+    "node-addon-api": "^8.3.1",
+    "node-gyp": "^11.2.0",
     "pace": "~0.0.4",
     "progress": "~2.0.3"
   },
@@ -44,10 +44,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/openwebcad/node-occ.git"
+    "url": "https://github.com/antonymarion/node-occ.git"
   },
   "scripts": {
-    "install": "node-pre-gyp install --fallback-to-build",
+    "install": "node-gyp rebuild",
     "test": "mocha -R spec",
     "lint": "eslint lib test bin",
     "doc": "grunt doc",
@@ -62,7 +62,7 @@
   },
   "gypfile": true,
   "bugs": {
-    "url": "https://github.com/openwebcad/node-occ/issues"
+    "url": "https://github.com/antonymarion/node-occ/issues"
   },
   "directories": {
     "test": "test"

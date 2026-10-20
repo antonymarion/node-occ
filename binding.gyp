@@ -1,11 +1,16 @@
 {
   "variables": {
     "dbg%": "",
-    "OOO%": "\$${ORIGIN}"
+    "OOO%": "\$${ORIGIN}",
+    "module_name": "occ",
+    "module_path": "<(module_root_dir)/lib/binding"
   },
   "targets": [
     {
       "target_name": "occ",
+      "include_dirs": [
+        "<!@(node -p \"require('node-addon-api').include\")"
+      ],
          "conditions": [
               [
                 "OS=='mac'",
@@ -26,8 +31,7 @@
                     "library_dirs": [
                     ],
                     "include_dirs": [
-                      "/usr/include/opencascade",
-                      "<!(node -e \"require('nan')\")"
+                      "/usr/include/opencascade"
                     ],},
               ],
               [
@@ -37,7 +41,8 @@
                         "-fno-exceptions"
                       ],
                       "cflags_cc!": [
-                        "-fno-exceptions"
+                        "-fno-exceptions",
+                        "-fno-rtti"
                       ],
                       "cflags": [
                         "-O3",
@@ -49,7 +54,9 @@
                       ],
                       "cflags_cc": [
                         "-O3",
+                        "-std=c++17",
                         "-frtti",
+                        "-fexceptions",
                         "-Wno-ignored-qualifiers",
                         "-Wno-unused-variable",
                         "-Wno-reorder",
@@ -62,8 +69,10 @@
                         "/usr/lib/x86_64-linux-gnu",
                       ],
                       "include_dirs": [
-                      "/usr/include/opencascade",
-                        "<!(node -e \"require('nan')\")"
+                      "/usr/include/opencascade"
+                      ],
+                      "libraries": [
+                        "<!@(node scripts/occt-libs.js)"
                       ],
                       "_libraries": [
                         "/usr/lib/x86_64-linux-gnu/libTKMath.so",
@@ -78,8 +87,7 @@
                         "./occt-7.5.0/win64/vc14/lib",
                       ],
                       "include_dirs": [
-                        "./occt-7.5.0/inc",
-                        "<!(node -e \"require('nan')\")"
+                        "./occt-7.5.0/inc"
                       ],}
               ]
          ],
@@ -136,40 +144,9 @@
       "defines": [
         "OCE_HAVE_IOMANIP",
         "OCE_HAVE_IOSTREAM",
-        "OCE_HAVE_CLIMITS"
-      ],
-      "libraries+": [
-        "-lTKBO<(dbg)",
-        "-lTKMath<(dbg)",
-        "-lTKBool<(dbg)",
-        "-lTKBRep<(dbg)",
-        "-lTKernel<(dbg)",
-        "-lTKFeat<(dbg)",
-        "-lTKFillet<(dbg)",
-        "-lTKG2d<(dbg)",
-        "-lTKG3d<(dbg)",
-        "-lTKGeomAlgo<(dbg)",
-        "-lTKGeomBase<(dbg)",
-        "-lTKIGES<(dbg)",
-        "-lTKernel<(dbg)",
-        "-lTKMesh<(dbg)",
-        "-lTKOffset<(dbg)",
-        "-lTKPrim<(dbg)",
-        "-lTKShHealing<(dbg)",
-        "-lTKTopAlgo<(dbg)",
-        "-lTKSTEP<(dbg)",
-        "-lTKSTEPAttr<(dbg)",
-        "-lTKSTEPBase<(dbg)",
-        "-lTKSTEP209<(dbg)",
-        "-lTKFillet<(dbg)",
-        "-lTKFeat<(dbg)",
-        "-lTKXSBase<(dbg)",
-        "-lTKSTL<(dbg)",
-      ],
-      "other_libraries": [
-        "-lTKTObj<(dbg)",
-        "-lTKMath<(dbg)",
-        "-lTKLCAF<(dbg)"
+        "OCE_HAVE_CLIMITS",
+        "NAPI_VERSION=8",
+        "NAPI_DISABLE_CPP_EXCEPTIONS"
       ],
     },
     {

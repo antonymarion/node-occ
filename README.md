@@ -50,40 +50,22 @@ alt="node occ" width="240" height="180" border="10" /></a>
 $npm install node-occ
 ```
 
-## building node-occ from source : prerequisites
+## Node-API
 
-#### on (linux Ubuntu
+The native addon is built with Node-API (N-API), not NAN. The same `.node` binary loads on a regular Node.js build and on a build with V8 pointer compression ([node-caged](https://github.com/platformatic/node-caged)).
 
-(use nodejs 12 or 14)
+On Debian or Ubuntu with OpenCascade 7.8:
 
 ```bash
-# installing nodejs and gyp utility to build extensions
-sudo apt-get install nodejs npm
-sudo npm install node-pre-gyp -g
-sudo npm install mocha@7 -g
-
-#installing cmake
-sudo apt-get install cmake cmake-curses-gui g++ build-essential libtbb2
-
-# ------------------------------------
-git clone --recursive https://github.com/erossignon/node-occ.git
-cd node-occ
-
-# download prebuild OpenCascade Library and header files
-bash ./prepare_node.sh
-
-#
-export OCCT_PACKAGE=occt-7.2.0
-export LD_LIBRARY_PATH=`pwd`/${OCCT_PACKAGE}/lib:$LD_LIBRARY_PATH
-npm install --build-from-source
-
-# verify that everything is working OK
-make test
+sudo apt-get install build-essential python3 pkg-config \
+  libocct-foundation-dev libocct-modeling-data-dev \
+  libocct-modeling-algorithms-dev libocct-data-exchange-dev \
+  libocct-ocaf-dev
+npm install
+npm test
 ```
 
-### on windows
-
-- follow the tutorial in the [wiki](https://github.com/erossignon/node-occ/wiki)
+`Dockerfile` builds that addon and runs `bench/memory.js` on official Node and on `platformatic/node-caged`. The write-up is in `ARTICLE.md`.
 
 ## dependencies:
 
