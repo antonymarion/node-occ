@@ -25,7 +25,13 @@ jobs:
               libocct-ocaf-dev
             curl -fsSL https://nodejs.org/dist/v22.21.0/node-v22.21.0-linux-x64.tar.xz \
               | tar -xJ -C /usr/local --strip-components=1
-      - checkout
+      - run:
+          name: Checkout code
+          command: |
+            git init
+            git remote add origin "https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git"
+            git fetch --depth 1 origin "${CIRCLE_SHA1}"
+            git checkout --force FETCH_HEAD
       - run:
           name: Build and test
           command: npm ci && npm test
