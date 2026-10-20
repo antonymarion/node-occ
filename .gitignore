@@ -54,6 +54,6 @@ extrudedFace.step
 lib/binding
 *.tgz
 npm-debug*
-occt-*
+/occt-*
 
 bower_components
