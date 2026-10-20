@@ -1,39 +1,48 @@
-# Node-API, compression de pointeurs et un modeleur 3D dans Node.js
+# Node-API, pointer compression, and Node OpenCascade
 
-Un addon natif écrit avec NAN ne démarre pas dans un Node.js compilé avec la compression de pointeurs V8. Le même code, exposé via Node-API, se charge. Sur 4 000 solides OpenCascade et leurs 32 000 sommets, le tas V8 passe de 246 Mo à 138 Mo.
+A native addon built with NAN does not start on a Node.js compiled with V8 pointer compression. The same code, built with Node-API, loads. With 4,000 [OpenCascade](https://dev.opencascade.org/) solids and their 32,000 vertices, the V8 heap goes from 246 MB to 138 MB.
 
-## Deux Node.js, un seul binaire
+Source code: [antonymarion/node-occ](https://github.com/antonymarion/node-occ), branch `node-api`.
 
-[node-occ](https://github.com/antonymarion/node-occ) enveloppe OpenCascade (OCCT) pour construire des solides, faire des booléens et lire du STEP ou du BREP depuis JavaScript. Le dépôt d’Etienne Rossignon (OpenWebCAD/node-occ, commit `e135bd1`) parlait encore à V8 à travers NAN.
+## node-occ and node-caged
 
-NAN inclut les en-têtes V8. La disposition des pointeurs y est figée à la compilation. [node-caged](https://github.com/platformatic/node-caged), le Node.js de Platformatic compilé avec `--experimental-enable-pointer-compression`, range ces pointeurs sur 32 bits. Un addon NAN charge mal, ou pas du tout. Node-API ne voit pas cette disposition : l’ABI est stable, le même `.node` tourne des deux côtés.
+[node-occ](https://github.com/antonymarion/node-occ) (Node OpenCascade) wraps [OpenCascade](https://dev.opencascade.org/) ([OCCT](https://github.com/Open-Cascade-SAS/OCCT)) so JavaScript can build solids, run booleans, and read STEP or BREP. [Etienne Rossignon](https://medium.com/@etienne.rossignon) wrote that binding. This migration starts from his tree, [OpenWebCAD/node-occ](https://github.com/OpenWebCAD/node-occ) at commit `e135bd1`, which still called V8 through NAN.
 
-La migration part du fork antonymarion, reprend l’arbre OpenWebCAD (OCCT 7.5 à l’origine, toujours en NAN), puis remplace NAN par un shim `src/nan.h` écrit au-dessus de `node-addon-api`. Les classes C++ (`Nan::ObjectWrap`, `NAN_METHOD`, les templates) restent en place. Le shim n’inclut ni `v8.h` ni `nan`. Le correctif du cône non tronqué (`R2 = 0`) du fork est conservé. Le code est aussi adapté à OpenCascade 7.8, livré par Debian : triangulation (`Poly_Triangulation::Node`), et `TopoDS_Shape::HashCode`, retiré au profit de `std::hash`.
+NAN includes the V8 headers, so the pointer layout is fixed at compile time. [node-caged](https://github.com/platformatic/node-caged) is the Node.js build [Matteo Collina](https://www.linkedin.com/in/matteocollina/) publishes at Platformatic with `--experimental-enable-pointer-compression`. Those pointers are 32 bits. He wrote up the memory result in [We cut Node.js' memory in half](https://blog.platformatic.dev/we-cut-nodejs-memory-in-half). His [LinkedIn post](https://www.linkedin.com/posts/matteocollina_ive-just-updated-node-caged-to-nodejs-2610-activity-7460721601806942209-hnq3) is the later update of that image to Node.js 26. A NAN addon loads badly, or not at all. Node-API does not see that pointer layout. The ABI stays stable, so the same `.node` file runs on both binaries.
 
-## Comment la mesure est faite
+I started from the antonymarion fork and took the OpenWebCAD tree, originally OCCT 7.5 and still on NAN. I replaced NAN with a `src/nan.h` shim on top of `node-addon-api`. The C++ classes stay: `Nan::ObjectWrap`, `NAN_METHOD`, and the templates. The shim includes neither `v8.h` nor `nan`. I kept the fork's untrimmed-cone fix (`R2 = 0`). I adapted the code to OpenCascade 7.8, the version Debian ships. Triangulation uses `Poly_Triangulation::Node`. `TopoDS_Shape::HashCode` is removed in that version, so the hash uses `std::hash`.
 
-L’image Docker `Dockerfile` part de `platformatic/node-caged:26`, installe OpenCascade, puis le Node.js officiel 22.21.0. L’addon est compilé une fois, contre les en-têtes de ce Node 22, avec `NAPI_VERSION=8`.
+## The measurement
 
-Le même processus `bench/memory.js` crée 4 000 boîtes (`makeBox`), puis récupère leurs sommets (32 000 objets), avec `--expose-gc` avant chaque relevé. On lit `process.memoryUsage().heapUsed` et `rss`.
+The Docker image in `Dockerfile` starts from `platformatic/node-caged:26`, installs OpenCascade, then official Node.js 22.21.0. The addon is compiled once, against that Node 22's headers, with `NAPI_VERSION=8`.
 
-| | Node 22.21.0 | node-caged 26.10.0 |
-| --- | ---: | ---: |
-| Compression de pointeurs | non | oui |
-| Plafond du tas V8 | 4,05 Go | 4,00 Go |
-| Tas après 4 000 solides | 131,27 Mo | 74,27 Mo |
-| RSS après 4 000 solides | 261,09 Mo | 204,61 Mo |
-| Tas après les 32 000 sommets | 245,78 Mo | 138,49 Mo |
-| RSS après les 32 000 sommets | 394,53 Mo | 317,36 Mo |
+The same `bench/memory.js` process creates 4,000 boxes (`makeBox`), then collects their vertices (32,000 objects), with `--expose-gc` before each sample. It reads `process.memoryUsage().heapUsed` and `rss`.
 
-Le tas des solides baisse de 43 %. Celui des solides plus les sommets baisse de 44 % (246 Mo → 138 Mo). On n’atteint pas 50 % : un objet JavaScript n’est pas fait que de pointeurs, et les nombres (doubles) ne rétrécissent pas.
+**Node 22.21.0.** Pointer compression off. V8 heap limit 4.05 GB.
 
-Le RSS baisse moins, et c’est le point utile. Entre les deux runs, la baisse de RSS des 4 000 boîtes est de 56 Mo, soit presque exactement la baisse du tas V8 (57 Mo). La mémoire native des B-Rep OpenCascade, elle, ne change pas. La compression de pointeurs allège les objets JavaScript qui enveloppent la géométrie. Elle ne compresse pas les allocations C++ d’OCCT.
+- Heap after 4,000 solids: 131.27 MB
+- RSS after 4,000 solids: 261.09 MB
+- Heap after the 32,000 vertices: 245.78 MB
+- RSS after the 32,000 vertices: 394.53 MB
 
-node-caged plafonne aussi chaque isolate à 4 Go. Ici les deux processus sont sous ce plafond (le Node officiel de la mesure annonce 4,05 Go sur cette machine). Le gain observé est bien celui de la largeur des pointeurs, pas un effet de limite.
+**node-caged 26.10.0.** Pointer compression on. V8 heap limit 4.00 GB.
 
-Les 265 tests Mocha du dépôt passent sur le Node officiel, avec cet addon.
+- Heap after 4,000 solids: 74.27 MB
+- RSS after 4,000 solids: 204.61 MB
+- Heap after the 32,000 vertices: 138.49 MB
+- RSS after the 32,000 vertices: 317.36 MB
 
-## Reproduire
+The solids heap drops by 43%. Solids plus vertices drop by 44%, from 246 MB to 138 MB. The drop stays under 50% because a JavaScript object holds more than pointers, and doubles do not shrink.
+
+RSS for the 4,000 boxes drops by 56 MB. The V8 heap drops by 57 MB on that same step. The OpenCascade B-Rep is the same size in both runs. Pointer compression shrinks the JavaScript objects that wrap the geometry. OCCT's C++ allocations stay the same size. On Node OpenCascade, most of the RSS is that native geometry. The heap change is in the thousands of wrappers, vertices, and arrays.
+
+node-caged caps each isolate at 4 GB. The official Node in this measurement reports 4.05 GB, and both processes sit under the cap. The smaller heap is the width of the pointers. Node-API is what keeps this addon running across Node versions, including the compressed build. NAN stays tied to one V8 layout.
+
+All 265 Mocha tests in the repository pass on official Node, with this addon.
+
+## Reproduce
+
+From [antonymarion/node-occ](https://github.com/antonymarion/node-occ), branch `node-api`:
 
 ```bash
 docker build -t node-occ-napi .
@@ -41,21 +50,17 @@ docker run --rm node-occ-napi /opt/node-stock/bin/node --expose-gc bench/memory.
 docker run --rm node-occ-napi sh -c '"$(cat /opt/caged-node-path)" --expose-gc bench/memory.js'
 ```
 
-Le champ `pointerCompression` du JSON vaut `0` ou `1`. `binding` vaut `node-api`.
-
-## Ce qu’il faut en retenir
-
-Pour un addon qui doit vivre sur plusieurs versions de Node, et sur un Node à pointeurs compressés, Node-API est le contrat. NAN reste lié à une disposition V8. Sur un modeleur, le gros de la RSS est natif : la compression se voit dans le tas, sur les milliers de wrappers, de sommets et de tableaux, pas dans les solides OCCT eux-mêmes.
+The JSON field `pointerCompression` is `0` or `1`. `binding` is `node-api`.
 
 ---
 
-### Note LinkedIn
+### LinkedIn note
 
-Migrer un addon Node de NAN vers Node-API ne sert pas qu’à suivre les versions de Node. C’est ce qui permet de le charger dans un Node compilé avec la compression de pointeurs V8 (node-caged).
+I moved node-occ from NAN to Node-API so it loads on a Node binary built with V8 pointer compression. That binary is [node-caged](https://github.com/platformatic/node-caged). [Matteo Collina](https://www.linkedin.com/posts/matteocollina_ive-just-updated-node-caged-to-nodejs-2610-activity-7460721601806942209-hnq3) posted the update to Node.js 26.
 
-Sur node-occ (OpenCascade), le même binaire Node-API fait tourner 4 000 solides et 32 000 sommets :
+node-occ is [Etienne Rossignon](https://medium.com/@etienne.rossignon)'s Node OpenCascade binding for [OpenCascade](https://dev.opencascade.org/). The same Node-API binary runs 4,000 solids and 32,000 vertices:
 
-- tas V8 : 246 Mo → 138 Mo (−44 %)
-- la mémoire native des B-Rep, elle, ne bouge pas
+- V8 heap: 246 MB to 138 MB (−44%)
+- native B-Rep memory stays the same
 
-265 tests Mocha passent. L’article détaillé est sur Medium.
+265 Mocha tests pass. The full write-up is on Medium.
