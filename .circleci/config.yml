@@ -1,0 +1,38 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: debian:trixie
+    steps:
+      - run:
+          name: Install git, OpenCascade 7.8, and Node.js 22
+          command: |
+            apt-get update
+            apt-get install -y --no-install-recommends \
+              git \
+              ca-certificates \
+              openssh-client \
+              curl \
+              xz-utils \
+              build-essential \
+              python3 \
+              pkg-config \
+              libocct-data-exchange-dev \
+              libocct-foundation-dev \
+              libocct-modeling-algorithms-dev \
+              libocct-modeling-data-dev \
+              libocct-ocaf-dev
+            curl -fsSL https://nodejs.org/dist/v22.21.0/node-v22.21.0-linux-x64.tar.xz \
+              | tar -xJ -C /usr/local --strip-components=1
+      - checkout
+      - run:
+          name: Build and test
+          command: npm ci && npm test
+          environment:
+            LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu
+
+workflows:
+  test:
+    jobs:
+      - test
