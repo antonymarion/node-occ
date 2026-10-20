@@ -475,12 +475,12 @@ v8::Local<v8::Object> Solid::createMesh(double factor, double angle, bool qualit
                 if (face.IsNull()) continue;
                 try {
                     mesh->extractFaceMesh(face, qualityNormals);
-                }  catch(Standard_Failure const& anException) {
+                }    catch(Standard_Failure const& anException) {
                         Standard_SStream aMsg;	
-                                     aMsg << "EXCEPTION in mesh->extractFaceMesh" << endl;	
-                                     aMsg << anException << endl;	
-                                     Nan::ThrowError(aMsg.str().c_str());
-                                      }
+                       aMsg << "EXCEPTION in mesh->extractFaceMesh" << endl;	
+                       aMsg << anException << endl;	
+                       Nan::ThrowError(aMsg.str().c_str());
+                     }
           }
         }
 
@@ -501,6 +501,7 @@ v8::Local<v8::Object> Solid::createMesh(double factor, double angle, bool qualit
 NAN_METHOD(Solid::getShapeName)
 {
   Solid* pThis = UNWRAP(Solid); 
+  pThis;
 
   v8::Local<v8::Object> pShape = Nan::To<v8::Object>(info[0]).ToLocalChecked();
 

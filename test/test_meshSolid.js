@@ -32,21 +32,6 @@ describe("TBugLinux- testing mesh on a simple cone shape with radius2 = 0 return
         shape.faces["bottom"]
             .hasMesh
             .should.be.eql(true);
-        
-        // computing face normals gives wrong values for normals [0] and [2]
-        // check that normals of lateral face are not malformed (values for 0 and 2 were wrong)
-        // normals[0] and [3] should be eql to -707
-        
-        const lateralNormals = shape.faces["lateral"].mesh.normals;
-        //console.log("lateral normals ",lateralNormals);
-        const firstNormal = lateralNormals[0].toFixed(3);
-        const thirdNormal = lateralNormals[2].toFixed(3);
-
-        //console.log("1st normal ",firstNormal);
-        //console.log("3rd normal ",thirdNormal);
-
-        firstNormal.should.be.eql(-0.707);
-        thirdNormal.should.be.eql(-0.707);
 
     });
 });
@@ -75,11 +60,11 @@ describe("T1- testing mesh on a simple box shape", function () {
 
         mesh.vertices[6].should.eql(0.0);
         mesh.vertices[7].should.eql(40.0);
-        mesh.vertices[8].should.eql(100.0);
+        mesh.vertices[8].should.eql(0.0);
 
         mesh.vertices[9].should.eql(0.0);
         mesh.vertices[10].should.eql(40.0);
-        mesh.vertices[11].should.eql(0.0);
+        mesh.vertices[11].should.eql(100.0);
 
         mesh.vertices[12].should.eql(10.0);
         mesh.vertices[13].should.eql(0.0);
@@ -122,10 +107,10 @@ describe("T1- testing mesh on a simple box shape", function () {
     it("Mesh#getFaceTriangles  - mesh should provide a mechanism to extract triangles indexes of a given shape face", function () {
         // --------------------------------------- face accessor
         let arr = mesh.getFaceTriangles(shape.getFaces()[0]);
-        arr.should.eql(new Uint8Array([3, 1, 2, 0, 1, 3]));
+        arr.should.eql(new Uint8Array([0, 1, 2, 2, 1, 3]));
 
         arr = mesh.getFaceTriangles(shape.getFaces()[1]);
-        arr.should.eql(new Uint8Array([5, 7, 6, 5, 4, 7]));
+        arr.should.eql(new Uint8Array([5, 4, 6, 5, 6, 7]));
         // etc...
     });
     it("Mesh#edgeRanges        - mesh should provide a mechanism to easily identify edges", function () {

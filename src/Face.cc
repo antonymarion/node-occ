@@ -201,7 +201,7 @@ v8::Local<v8::Object> Face::createMesh(double factor, double angle, bool quality
     mesh->extractFaceMesh(this->face(), qualityNormals);
     mesh->optimize();
 
-  } CATCH_AND_RETHROW_NO_RETURN("Failed to mesh solid (Face)! ");
+  } CATCH_AND_RETHROW_NO_RETURN("Failed to mesh solid ");
   return scope.Escape(theMesh);
 }
 

@@ -5,14 +5,13 @@ init:
   - git config --global core.autocrlf input
 
 environment:
-  api-key:
-    secure: cpvFwWkIEifS+fdhr2elA4trhGD460CNWcD72arIiSu+3CUr4v5s3yopJgKkL1em
+
   node_pre_gyp_accessKeyId:
     secure: 6NwB/CPB/FsDOcPZUoJIQQc751Vkj3LYc2oPxGXo/Uw=
   node_pre_gyp_secretAccessKey:
     secure: FcV0jIJp3lNZR/6fGNf8xNjZ13s2pkubaYlmtFkplZYfGQgSPguUMS/CqjjRWteD
   NODE_PRE_GYP_GITHUB_TOKEN:
-    secure: QLn52YaMzobrIzERHGZ3AL32uLr6RN9FfkMwenFOA8SXjGecZ8WXBZq+xg3QLwW/rRb4FWO2Dd83Djrbj5X+NfW82H6YXoLRWKmTxRfqeIJ47BdXi8DYXLrEAOZs6LcIcJ/A2oM64UIJtb4gKnKze3dfxGAIciBQA+tjNqfc6kvtzUGnXDJ/9HSOG6YbqZiZtUtPTK1f5OElhPFeQL1OkqMLQp5E0lqzQG/+b0Rkx6AX+kDSga7vSmG7CWjXanHjaeCvy6lIAAzLpRWuE43oN0USWMAynAlZ9bWt2Fj7KNv63wUmIgK2ykOFCGZK15HEJjoT4TVmEa6FH6A76KLUFm/sSEgLpGe8C3mWpIjQdoLQbw5xEl1bFWfM/3Yyg7Qx/b6bAnuhnocqsEd+eoYE80KdxC2CUziRSq0dwzhvWT92SJKyuOVHPMnij/vGKeRup4jcuzdRwwyibD0osQG3JiPkSwVeQQ4gtPHvRdfo8I/8KV55UX0wdhq29HMkh7o4bBMd/ywiw5LZb5yXPhIXGfUn2hh1ODo+N7zb3NZt03TTE/igFL1exZIn6eiSrTzcUtkEiQKrSnVTq1Afom2slOoTpE+LtrWPKIlXde6fF50wKvu6x8KpwmikZUMsCNdTDGI9Xfh3Zx0O+PsEn7/HkRv8Wy5E3hGTn1piksypqXU=
+    secure: qa898q4P1jnKsCJ507wNDTaQV52i/qDV0mp9DxsC321ZujDEZDvHKR+pOqRT6GJY
 
   # these variables are common to all jobs
   # -------------- 14 Visual Studio 2015
@@ -22,66 +21,46 @@ environment:
   VisualStudioVersion: "12"
   matrix:
 
-    # - nodejs_version: 6
-    #   platform: x86
+    - electron_version: "7.3.2"
+      nodejs_version: 12
+      platform: x64
+    
+    # - electron_version: "8.5.0" // not working yet =< GetBackingStore missing
+    #   nodejs_version: 12
+    #   platform: x64
 
-#     - nodejs_version: 6
-#       platform: x64
+    # - electron_version: "9.2.0"
+    #   nodejs_version: 12
+    #   platform: x64
+    
+    - nodejs_version: 8
+      platform: x64
+  
+    - nodejs_version: 10
+      platform: x64
 
-    # - nodejs_version: 7
-    #   platform: x86
-
-#     - nodejs_version: 7
-#       platform: x64
-
-#     - nodejs_version: 8
-#       platform: x64
-
-#     - nodejs_version: 9
-#       platform: x64
-
-#     - nodejs_version: 10
-#       platform: x64
-
-#     - nodejs_version: 12
-#       platform: x64
+    - nodejs_version: 12
+      platform: x64
+    
+    - nodejs_version: 14
+      platform: x64
 
     # - electron_version: "1.4.14"
     #   nodejs_version: 6
     #   platform: x86
 
-#     - electron_version: "1.4.14"
-#       nodejs_version: 6
-#       platform: x64
+    # - electron_version: "1.4.14"
+    #   nodejs_version: 6
+    #   platform: x64
 
     # - electron_version: "1.6.10"
     #   nodejs_version: 6
     #   platform: x86
 
-#     - electron_version: "1.6.10"
-#       nodejs_version: 6
-#       platform: x64
+    # - electron_version: "1.6.10"
+    #   nodejs_version: 6
+    #   platform: x64
 
-#     - electron_version: "2.0.16"
-#       nodejs_version: 8
-#       platform: x64
-
-#     - electron_version: "4.0.3"
-#       nodejs_version: 10
-#       platform: x64
-
-
-#     - electron_version: "4.2.2"
-#       nodejs_version: 10
-#       platform: x64
-
-#     - electron_version: "7.1.2"
-#       nodejs_version: 12
-#       platform: x64
-      
-    - electron_version: "8.1.1"
-      nodejs_version: 12
-      platform: x64
 
 
 # clone directory
@@ -118,7 +97,7 @@ install:
     true;
 
 
-- cmd: npm i -g mocha@7 https://github.com/OpenWebCAD/node-pre-gyp-github.git
+- cmd: npm install mocha@7 https://github.com/OpenWebCAD/node-pre-gyp-github.git -g
 - cmd: setenv.bat 64
 - cmd: build.bat %PLATFORM%
 
@@ -128,7 +107,7 @@ build_script:
 # - npm install --build-from-source --target_arch=%npm_config_arch%
 
 cache:
-  # - c:\projects\node-occ\occt-7.4.0
+  # - c:\projects\node-occ\occt-7.1.0
 
 
 configuration:

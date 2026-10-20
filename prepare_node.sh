@@ -34,7 +34,7 @@ PUBLISH_BINARY=false
 # if we are building a tag then publish
 echo $TRAVIS_BRANCH
 export CURRENT BRANCH=`git describe --tags --always HEAD`
-echo "CURRENT BRANCH  = $CURRENT_BRANCH"
+echo "CURRENT BRANCH  = $CURRENT_BRANCH" 
 if [[ "$TRAVIS_BRANCH" == "$CURRENT_BRANCH" ]]; then PUBLISH_BINARY=true; fi;
 
 
@@ -59,4 +59,5 @@ if [[ ! -z $TRAVIS_ELECTRON_VERSION ]]; then
 fi
 
 #  git submodule update --depth 50 --init --recursive
-npm install --build-from-source
+npm install --build-from-source 
+

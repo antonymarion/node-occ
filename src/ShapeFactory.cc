@@ -416,7 +416,7 @@ NAN_METHOD(ShapeFactory::makeCone)
     ReadDouble(info[2], H);
 
     if (R1 < epsilon || H < epsilon) {
-      // R2 = 0 is OK
+      // R2 = 0 is a valid untrimmed cone (antonymarion fix).
       return Nan::ThrowError("invalid value for arguments");
     }
     try {
@@ -444,8 +444,8 @@ NAN_METHOD(ShapeFactory::makeCone)
 
   }
   else if (info.Length() == 4 && info[0]->IsArray() && info[1]->IsNumber() && info[2]->IsArray() && info[3]->IsNumber()) {
+    // Point, point , R1,R2);
     // variation 3 ( 2 points and a radius  )
-    // point1, R1, point2, R2);
     gp_Pnt p1;
     ReadPoint(info[0], &p1);
 
@@ -456,7 +456,7 @@ NAN_METHOD(ShapeFactory::makeCone)
     gp_Pnt p2;
     ReadPoint(info[2], &p2);
 
-    double R2 = 0; // init. à cône non tronqué
+    double R2 = 0;
     ReadDouble(info[3], R2);
 
     const double dx = p2.X() - p1.X();
@@ -705,7 +705,7 @@ void ShapeClassifier::_classifyRemainingSubShape(TopAbs_ShapeEnum shapeType)
     else {
       // provide a default name based on hashCode
       std::stringstream s;
-      s << shapeType << "tmp" << current.HashCode(std::numeric_limits<int>::max());
+      s << shapeType << "tmp" << occHashCode(current);
       s << std::ends;
       m_nameSetter->setShapeName(current, s.str().c_str());
     }
@@ -1397,6 +1397,7 @@ NAN_METHOD(ShapeFactory::makePipe)
 {
   return Nan::ThrowError("makePipe is currently unimplemented");
 }
+
 
 
 

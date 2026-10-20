@@ -24,83 +24,12 @@
                         ]
                    },
                     "library_dirs": [
-                    "<!(pwd)/occt-7.5.0/lib",
-                    "<!(pwd)/occt-7.4.0/lib",
-                    "<!(pwd)/occt-7.3.0/lib",
-                    "<!(pwd)/occt-7.2.0/lib"
                     ],
                     "include_dirs": [
-                      "/usr/local/include/opencascade",
-                      "<!(pwd)/occt-7.5.0/include/opencascade",
-                      "<!(pwd)/occt-7.4.0/include/opencascade",
-                      "<!(pwd)/occt-7.3.0/include/opencascade",
-                      "<!(pwd)/occt-7.2.0/include/opencascade",
+                      "/usr/include/opencascade",
                       "<!(node -e \"require('nan')\")"
                     ],},
               ],
-                      ["OS=='linux'",
-                      {
-                        "variables": {
-                           "bin_folder": "/usr/lib/x86_64-linux-gnu"
-                        },
-                        "libraries": [
-
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKBO.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKBool.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKBRep.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKernel.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKFillet.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKFeat.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKIGES.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKG2d.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKG3d.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKGeomAlgo.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKGeomBase.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKMath.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKMesh.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKOffset.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKPrim.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKShHealing.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTEP.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTEP209.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTEPAttr.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTEPBase.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKSTL.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKTopAlgo.so.vOCC",
-                          "-L/home/travis/antonymarion/node-occ/lib/binding/libTKXSBase.so.vOCC"
-                                            ],
-                        "copies": [
-                          {
-                            "files": [
-
-                              "<(bin_folder)/libTKBO.so.vOCC",
-                              "<(bin_folder)/libTKBool.so.vOCC",
-                              "<(bin_folder)/libTKBRep.so.vOCC",
-                              "<(bin_folder)/libTKernel.so.vOCC",
-                              "<(bin_folder)/libTKFillet.so.vOCC",
-                              "<(bin_folder)/libTKFeat.so.vOCC",
-                              "<(bin_folder)/libTKIGES.so.vOCC",
-                              "<(bin_folder)/libTKG2d.so.vOCC",
-                              "<(bin_folder)/libTKG3d.so.vOCC",
-                              "<(bin_folder)/libTKGeomAlgo.so.vOCC",
-                              "<(bin_folder)/libTKGeomBase.so.vOCC",
-                              "<(bin_folder)/libTKMath.so.vOCC",
-                              "<(bin_folder)/libTKMesh.so.vOCC",
-                              "<(bin_folder)/libTKOffset.so.vOCC",
-                              "<(bin_folder)/libTKPrim.so.vOCC",
-                              "<(bin_folder)/libTKShHealing.so.vOCC",
-                              "<(bin_folder)/libTKSTEP.so.vOCC",
-                              "<(bin_folder)/libTKSTEP209.so.vOCC",
-                              "<(bin_folder)/libTKSTEPAttr.so.vOCC",
-                              "<(bin_folder)/libTKSTEPBase.so.vOCC",
-                              "<(bin_folder)/libTKSTL.so.vOCC",
-                              "<(bin_folder)/libTKTopAlgo.so.vOCC",
-                              "<(bin_folder)/libTKXSBase.so.vOCC"
-                              
-                            ] ,
-                            "destination": "<(module_path)"
-                        }]
-                      }],
               [
                 "OS=='linux'",
                 {
@@ -129,28 +58,27 @@
                       "ldflags": [
                         "-Wl,-rpath,\$$ORIGIN",
                         ],
-
                       "library_dirs": [
+                        "/usr/lib/x86_64-linux-gnu",
                       ],
                       "include_dirs": [
                       "/usr/include/opencascade",
                         "<!(node -e \"require('nan')\")"
-                      ],}
+                      ],
+                      "_libraries": [
+                        "/usr/lib/x86_64-linux-gnu/libTKMath.so",
+                        "/usr/lib/x86_64-linux-gnu/libTKG2d.so"
+                      ]
+                      }
               ],
               [
                 "OS=='win'",
                 {
                       "library_dirs": [
-                        "./occt-7.2.0/win64/vc14/lib",
-                        "./occt-7.3.0/win64/vc14/lib",
-                        "./occt-7.4.0/win64/vc14/lib",
-                        "./occt-7.5.0/win64/vc14/lib"
+                        "./occt-7.5.0/win64/vc14/lib",
                       ],
                       "include_dirs": [
                         "./occt-7.5.0/inc",
-                        "./occt-7.4.0/inc",
-                        "./occt-7.3.0/inc",
-                        "./occt-7.2.0/inc",
                         "<!(node -e \"require('nan')\")"
                       ],}
               ]
@@ -183,7 +111,6 @@
         "src/OCC.h",
         "src/Point3Wrap.h",
         "src/Point3Wrap.cc",
-        "src/Standard_Version.hxx",
         "src/Shape.h",
         "src/Shape.cc",
         "src/ShapeFactory.h",
@@ -213,6 +140,7 @@
       ],
       "libraries+": [
         "-lTKBO<(dbg)",
+        "-lTKMath<(dbg)",
         "-lTKBool<(dbg)",
         "-lTKBRep<(dbg)",
         "-lTKernel<(dbg)",
@@ -224,7 +152,6 @@
         "-lTKGeomBase<(dbg)",
         "-lTKIGES<(dbg)",
         "-lTKernel<(dbg)",
-        "-lTKMath<(dbg)",
         "-lTKMesh<(dbg)",
         "-lTKOffset<(dbg)",
         "-lTKPrim<(dbg)",
@@ -241,6 +168,7 @@
       ],
       "other_libraries": [
         "-lTKTObj<(dbg)",
+        "-lTKMath<(dbg)",
         "-lTKLCAF<(dbg)"
       ],
     },
@@ -266,10 +194,11 @@
         "<(module_name)"
       ],
       "conditions": [
+
         ["OS=='win'",
         {
           "variables": {
-             "bin_folder": 'occt-7.5.0/win64/vc14/bin'
+             "bin_folder": 'occt-7.2.0/win64/vc14/bin'
           },
           "copies": [
             {
